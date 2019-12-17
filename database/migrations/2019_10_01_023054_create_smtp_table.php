@@ -25,9 +25,6 @@ class CreateSmtpTable extends Migration
             $table->integer('timeout');
             $table->tinyInteger('active')->default(1);
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

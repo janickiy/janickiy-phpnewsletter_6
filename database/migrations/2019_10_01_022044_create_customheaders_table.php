@@ -18,9 +18,6 @@ class CreateCustomheadersTable extends Migration
             $table->string('name');
             $table->string('value');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

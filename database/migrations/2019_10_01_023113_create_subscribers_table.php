@@ -17,13 +17,11 @@ class CreateSubscribersTable extends Migration
             $table->increments('id');
             $table->string('name', 100)->nullable();
             $table->string('email')->index('email');
+            $table->string('ip', 100)->nullable();
             $table->tinyInteger('active')->default(1);
             $table->string('token', 32);
             $table->timestamp('timeSent')->nullable();
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

@@ -15,8 +15,9 @@ class AdminPanelMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $user = $request->user('web');
-
+        if (file_exists(base_path('.env'))) {
+            $user = $request->user('web');
+        }
 
         return $next($request);
     }

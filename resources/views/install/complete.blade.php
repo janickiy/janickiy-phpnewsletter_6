@@ -12,19 +12,18 @@
     ]])
 
     <div class="step-content">
-        <h3>Complete!</h3>
+        <h3>{{ trans('install.str.complete') }}!</h3>
         <hr>
-        <p><strong>Well Done!</strong></p>
-        <p>You application is now successfully installed! You can login by clicking on "Log In" button below.</p>
+        <p><strong>{{ trans('install.str.well_done') }}!</strong></p>
+        <p>{{ trans('install.str.app_is_successfully_installed') }}</p>
 
         @if (is_writable(base_path()))
-            <p><strong>Important!</strong> Since your root directory is still writable,
-            you can change the permissions to 755 to make it writable only by root user.</p>
+            <p>{!! trans('install.str.important') !!}</p>
         @endif
 
         <a class="btn btn-primary float-right" href="{{ url('login') }}">
             <i class="fa fa-sign-in"></i>
-            Log In
+            {{ trans('install.str.log_in') }}
         </a>
         <div class="clearfix"></div>
     </div>

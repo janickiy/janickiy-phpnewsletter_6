@@ -16,9 +16,6 @@ class CreateCharsetTable extends Migration
         Schema::create('charset', function (Blueprint $table) {
             $table->increments('id');
             $table->string('charset');
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

@@ -19,9 +19,6 @@ class CreateTemplatesTable extends Migration
             $table->mediumText('body');
             $table->tinyInteger('prior');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

@@ -16,9 +16,6 @@ class CreateScheduleCategoryTable extends Migration
         Schema::create('schedule_category', function (Blueprint $table) {
             $table->integer('scheduleId')->index('scheduleId');
             $table->integer('categoryId')->index('categoryId');
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

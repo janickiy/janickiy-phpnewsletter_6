@@ -18,9 +18,6 @@ class CreateRedirectLogTable extends Migration
             $table->string('url')->index('url');
             $table->string('email')->index('email');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 

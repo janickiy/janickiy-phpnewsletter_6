@@ -11,7 +11,7 @@ class MiscellaneousController extends Controller
      */
     public function cron_job_list()
     {
-        return view('admin.miscellaneous.cron_job_list')->with('title', '');
+        return view('admin.miscellaneous.cron_job_list')->with('title', 'Crontab');
     }
 
     /**

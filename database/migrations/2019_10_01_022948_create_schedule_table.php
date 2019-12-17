@@ -15,13 +15,9 @@ class CreateScheduleTable extends Migration
     {
         Schema::create('schedule', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamp('start')->nullable();
-            $table->timestamp('end')->nullable();
+            $table->timestamp('date')->nullable();
             $table->integer('templateId')->index('templateId');
             $table->timestamps();
-            $table->charset = 'utf8';
-            $table->collation = 'utf8_unicode_ci';
-            $table->engine = 'MyISAM';
         });
     }
 
