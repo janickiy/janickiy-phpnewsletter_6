@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Attach, Process, Schedule, ScheduleCategory, Robots};
-use App\Helpers\{SendEmailHelpers,StringHelpers,ResponseHelpers};
-use Cookie;
+use App\Models\{Attach, Schedule, ScheduleCategory};
+use App\Helpers\{SendEmailHelpers,StringHelpers,ResponseHelpers, UpdateHelpers};
 
 class AjaxController extends Controller
 {
@@ -13,6 +12,24 @@ class AjaxController extends Controller
     {
         if ($request->input('action')) {
             switch ($request->input('action')) {
+
+                case 'alert_update':
+
+                    $update = new UpdateHelpers(config('app.locales'), env('VERSION'));
+
+                    if ($update->checkNewVersion()) {
+                        $update_warning = str_replace('%SCRIPTNAME%', trans('frontend.str.script_name'), trans('frontend.str.update_warning'));
+                        $update_warning = str_replace('%VERSION%', $update->getVersion(), $update_warning);
+                        $update_warning = str_replace('%CREATED%', $update->getCreated(), $update_warning);
+                        $update_warning = str_replace('%DOWNLOADLINK%', $update->getDownloadLink(), $update_warning);
+                        $update_warning = str_replace('%MESSAGE%', $update->getMessage(), $update_warning);
+
+                        return ResponseHelpers::jsonResponse([
+                            ["msg" => $update_warning]
+                        ]);
+                    }
+
+                    break;
 
                 case 'daemonstat':
 

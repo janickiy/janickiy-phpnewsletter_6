@@ -1,7 +1,7 @@
 @if (isset($infoAlert))
     <div class="alert alert-info">
         <i class="fa-fw fa fa-warning"></i>
-        {{ $infoAlert }}
+        {!! $infoAlert !!}
     </div>
 @endif
 

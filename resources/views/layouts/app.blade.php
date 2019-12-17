@@ -473,6 +473,20 @@ Use search to find needed section.
 <script>
 
     $(function() {
+
+        $.ajax({
+            cache: false,
+            url: './?t=ajax&action=alert_update',
+            dataType: "json",
+            success: function(data){
+                if (data.msg != '' && $.cookie('alertshow') != 'no'){
+                    $('#alert_msg_block').fadeIn('700');
+                    $("#alert_warning_msg").append(data.msg);
+                }
+            }
+        });
+
+
         $('ul.dropdown-menu li').on('click', function() {
             $(this).parent().find('li.active').removeClass('active');
             $(this).addClass('active');

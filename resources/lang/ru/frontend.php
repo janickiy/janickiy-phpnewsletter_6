@@ -85,6 +85,9 @@ return [
         'excel_report' => 'Отчёт в формате excel',
         'back' => 'Вернуться обратно',
         'redirect_number' => 'Количество переходов',
+        'script_name' => 'PHP Newsletter',
+        'update_warning' => 'Доступна более новая версия %SCRIPTNAME% и вам предлагается её использовать. Новейшая версия %VERSION%, выпущена %CREATED%. <a href="%DOWNLOADLINK%">Скачать</a> %MESSAGE%',
+
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

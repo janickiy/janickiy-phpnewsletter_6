@@ -4,6 +4,12 @@ namespace App\Helpers;
 
 class ResponseHelpers
 {
+    /**
+     * @param $data
+     * @param int $code
+     * @param bool $cors
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public static function jsonResponse($data, $code = 200, $cors=false)
     {
         $host = str_replace(['http://', 'https://', '/'], '', request()->headers->get('Origin'));
