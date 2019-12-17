@@ -74,7 +74,7 @@ class LogController extends Controller
             ->setCellValue('A2', trans('frontend.str.email'))
             ->setCellValue('B2', trans('frontend.str.time'))
             ->setCellValue('C2', trans('frontend.str.status'))
-            ->setCellValue('A2', trans('frontend.str.mailer'))
+            ->setCellValue('A2', trans('frontend.str.newsletter'))
             ->setCellValue('B2', trans('frontend.str.email'))
             ->setCellValue('C2', trans('frontend.str.time'))
             ->setCellValue('D2', trans('frontend.str.status'))

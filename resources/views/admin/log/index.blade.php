@@ -8,7 +8,6 @@
 
 @section('content')
 
-
     @if(Helpers::has_permission(Auth::user()->login,'admin'))
 
     <div class="row">
@@ -32,16 +31,15 @@
                 <!-- widget div-->
                 <div>
 
-
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
-                            <th>Время</th>
-                            <th>Всего</th>
-                            <th>Отправлено</th>
-                            <th>Неотправленых</th>
-                            <th>Прочитано</th>
-                            <th>Отчёт в формате excel</th>
+                            <th>{{ trans('frontend.str.time') }}</th>
+                            <th>{{ trans('frontend.str.total') }}</th>
+                            <th>{{ trans('frontend.str.sent') }}</th>
+                            <th>{{ trans('frontend.str.unsent') }}</th>
+                            <th>{{ trans('frontend.str.read') }}</th>
+                            <th>{{ trans('frontend.str.excel_report') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -57,7 +55,6 @@
         <!-- end widget -->
 
     </div>
-
 
 @endsection
 

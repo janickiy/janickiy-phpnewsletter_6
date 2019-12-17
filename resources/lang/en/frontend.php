@@ -67,7 +67,7 @@ return [
         'mailing_report' => 'Newsletter report',
         'email' => 'E-mail',
         'time' => 'Time',
-        'mailer' => 'Newsletter',
+        'newsletter' => 'Newsletter',
         'read' => 'Read',
         'error' => 'Error',
         'total' => 'Total',
@@ -85,6 +85,10 @@ return [
         'address_has_been_deleted' => 'Mailing to this email address has been deleted',
         'sendmail_path' => 'Sendmail path',
         'subscribe' => 'subscribe',
+        'unsent' => 'Unsent',
+        'excel_report' => 'Excel report',
+        'back' => 'Back',
+        'redirect_number' => 'Redirect number',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -225,5 +229,6 @@ return [
         'log_index' => 'Here you can view statistics for each newsletter. Important! Accounting for the number of letters read is possible only for outgoing letters in html format, as well as if email clients do not block the automatic downloading of images.',
         'redirect_log_index' => 'Here you can view click statistics on links, number of redirects followed.',
         'smtp_index' => 'Add SMTP servers for mailing. If you have added more than one SMTP server, mailing will be done through the SMTP server list randomly.',
+        'cron_job_list' => 'Please note that all the cron jobs below must be added on your server in order for the application to work properly.<br>Please consult your web hosting support in order to understand how these cron jobs must be added on your server.',
     ],
 ];

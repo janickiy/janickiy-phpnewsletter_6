@@ -34,8 +34,8 @@
                         <thead>
                         <tr>
                             <th>URL</th>
-                            <th>Количество переходов</th>
-                            <th>Отчёт в формате excel</th>
+                            <th>{{ trans('frontend.str.redirect_number') }}</th>
+                            <th>{{ trans('frontend.str.excel_report') }}</th>
                         </tr>
                         </thead>
                         <tbody>

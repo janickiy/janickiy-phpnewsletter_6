@@ -18,14 +18,14 @@
                 <!-- widget div-->
                 <div>
 
-                    <p>« <a href="{{ URL::route('admin.redirect_log.index') }}">Вернуться обратно</a></p>
+                    <p>« <a href="{{ URL::route('admin.redirect_log.index') }}">{{ trans('frontend.str.back') }}</a></p>
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
                             <th>ID</th>
                             <th>Email</th>
-                            <th>Время</th>
+                            <th>{{ trans('frontend.str.time') }}</th>
                         </tr>
                         </thead>
                         <tbody>

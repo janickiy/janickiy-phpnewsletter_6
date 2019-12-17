@@ -11,7 +11,10 @@ class MiscellaneousController extends Controller
      */
     public function cron_job_list()
     {
-        return view('admin.miscellaneous.cron_job_list')->with('title', 'Crontab');
+        $cronJob[] = ['description' => 'Email sender, runs each minute', 'cron' => '/usr/bin/php -q /home/phpnewsletter/artisan email:send >/dev/null 2>&1'];
+        $cronJob[] = ['description' => 'Resending unsent emails, runs each 10 minutes', 'cron' => '/usr/bin/php -q /home/phpnewsletter/artisan email:unsent >/dev/null 2>&1'];
+
+        return view('admin.miscellaneous.cron_job_list', compact('cronJob'))->with('title', 'Crontab');
     }
 
     /**

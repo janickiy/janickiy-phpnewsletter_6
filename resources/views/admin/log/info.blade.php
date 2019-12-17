@@ -18,17 +18,17 @@
                 <!-- widget div-->
                 <div>
 
-                    <p>« <a href="{{ URL::route('admin.log.index') }}">Вернуться обратно</a></p>
+                    <p>« <a href="{{ URL::route('admin.log.index') }}">{{ trans('frontend.str.back') }}</a></p>
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
-                        <tr>
-                            <th>Рассылка</th>
+                        <tr>t
+                            <th>{{ trans('frontend.str.newsletter') }}</th>
                             <th>E-mail</th>
-                            <th>Время</th>
-                            <th>Статус</th>
-                            <th>Прочитано</th>
-                            <th>Ошибка</th>
+                            <th>{{ trans('frontend.str.time') }}</th>
+                            <th>{{ trans('frontend.str.status') }}</th>
+                            <th>{{ trans('frontend.str.read') }}</th>
+                            <th>{{ trans('frontend.str.error') }}</th>
                         </tr>
                         </thead>
                         <tbody>
