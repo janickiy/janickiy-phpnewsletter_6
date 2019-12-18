@@ -38,7 +38,7 @@ class UpdateHelpers
      */
     public function getUrlInfo()
     {
-        return $this->url . '?id=1&version=' . $this->currenversion . '&lang=' . $this->language . '&ip=' . $this->getIP();
+        return $this->url . '?id=3&version=' . $this->currenversion . '&lang=' . $this->language . '&ip=' . $this->getIP();
     }
 
     /**
