@@ -15,7 +15,7 @@ class AjaxController extends Controller
 
                 case 'alert_update':
 
-                    $update = new UpdateHelpers(config('app.locales'), env('VERSION'));
+                    $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($update->checkNewVersion()) {
                         $update_warning = str_replace('%SCRIPTNAME%', trans('frontend.str.script_name'), trans('frontend.str.update_warning'));

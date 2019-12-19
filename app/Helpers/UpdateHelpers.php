@@ -6,6 +6,8 @@ class UpdateHelpers
 {
     private $language;
     private $url = 'http://license.janicky.com/';
+
+    // private $url = 'http://site1.loc/';
     private $currenversion;
 
     public function __construct($language, $currenversion)
@@ -38,7 +40,7 @@ class UpdateHelpers
      */
     public function getUrlInfo()
     {
-        return $this->url . '?id=3&version=' . $this->currenversion . '&lang=' . $this->language . '&ip=' . $this->getIP();
+        return $this->url . '?id=3&version=' . urlencode($this->currenversion) . '&lang=' . $this->language . '&ip=' . $this->getIP();
     }
 
     /**
@@ -86,7 +88,7 @@ class UpdateHelpers
     public function getVersion()
     {
         $out = $this->getDataNewVersion($this->getUrlInfo());
-        return $out['version'];
+        return $out["version"];
     }
 
     /**
