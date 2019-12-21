@@ -37,7 +37,6 @@
                     <!-- widget edit box -->
                     <div class="jarviswidget-editbox">
                         <!-- This area used as dropdown edit box -->
-
                     </div>
                     <!-- end widget edit box -->
 

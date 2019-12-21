@@ -87,8 +87,13 @@ return [
         'subscribe' => 'subscribe',
         'unsent' => 'Unsent',
         'excel_report' => 'Excel report',
+        'script_name' => 'PHP Newsletter',
         'back' => 'Back',
         'redirect_number' => 'Redirect number',
+        'update_warning' => 'A new version of %SCRIPTNAME% is already available and you can use it. The newest version is %VERSION%, created %CREATED% <a href="%DOWNLOADLINK%">Download</a> %MESSAGE%',
+        'error_alert' => 'Error!',
+        'warning_alert' => 'Warning!',
+        'button_update' => 'Update to %SCRIPT_NAME% %NEW_VERSION%',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -100,6 +105,7 @@ return [
         'try_again' => 'Try again',
         'email_sent' => 'Email was sent',
         'email_wasnt_sent' => 'Email was not sent',
+        'no_updates' => 'There are no updates at this time. You already have the latest version of %SCRIPT_NAME%, %NEW_VERSION%.',
     ],
     'form' => [
         'required_fields' => 'required fields',

@@ -418,7 +418,6 @@ Use search to find needed section.
 <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)
 <script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>-->
 
-
 <!-- #PLUGINS -->
 <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -470,22 +469,28 @@ Use search to find needed section.
 
 {!! Html::script('/admin/js/plugin/jquery-treeview-master/jquery.treeview.js') !!}
 
+{!! Html::script('/admin/js/plugin/cookie/jquery.cookie.js') !!}
+
 <script>
 
     $(function() {
 
         $.ajax({
             cache: false,
-            url: './?t=ajax&action=alert_update',
+            url: '{{ URL::route('admin.ajax.action') }}',
+            method: "POST",
+            data: {
+                action: "alert_update",
+            },
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             dataType: "json",
             success: function(data){
                 if (data.msg != '' && $.cookie('alertshow') != 'no'){
                     $('#alert_msg_block').fadeIn('700');
-                    $("#alert_warning_msg").append(data.msg);
+                    $("#alert_warning_msg").append(data[0].msg);
                 }
             }
         });
-
 
         $('ul.dropdown-menu li').on('click', function() {
             $(this).parent().find('li.active').removeClass('active');
@@ -494,7 +499,6 @@ Use search to find needed section.
             var Lng = $(this).attr('data-id');
 
             var request = $.ajax({
-
                 url: '{{ URL::route('admin.ajax.action') }}',
                 method: "POST",
                 data: {
@@ -510,7 +514,32 @@ Use search to find needed section.
                     location.reload();
                 }
             });
+        });
 
+        $('.close').on('click', function(){
+            var deleted_block = $(this).parent(),
+                bl_h = deleted_block.outerHeight(),
+                bk_index = deleted_block.index(),
+                next_bl = deleted_block.siblings(':eq('+bk_index+')'),
+                marg = parseInt(deleted_block.css('margin-bottom'));
+
+            deleted_block.fadeOut(500);
+
+            setTimeout(function(){
+                $(next_bl).css('margin-top', bl_h+marg);
+                $(next_bl).animate({
+                    marginTop: 0
+                },400);
+            }, 505);
+
+            setTimeout(function(){
+                deleted_block.remove();
+            }, 700);
+            return false;
+        });
+
+        setTimeout(function(){
+            setTimeout(function(){$('.alert-success').fadeOut('700')},5000);
         });
     });
 

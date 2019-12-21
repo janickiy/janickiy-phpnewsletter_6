@@ -1,3 +1,10 @@
+
+<div class="alert alert-warning alert-dismissable" id="alert_msg_block" style="display:none;">
+    <button class="close" aria-hidden="true" data-dismiss="alert" onClick="$.cookie('alertshow', 'no');" type="button">×</button>
+    <strong>{{ trans('frontend.str.warning_alert') }}</strong>
+    <span id="alert_warning_msg"></span>
+</div>
+
 @if (isset($infoAlert))
     <div class="alert alert-info">
         <i class="fa-fw fa fa-warning"></i>
@@ -32,7 +39,7 @@
             ×
         </button>
         <i class="fa-fw fa fa-times"></i>
-        <strong>Ошибка!</strong>
+        <strong>{{ trans('frontend.str.error_alert') }}</strong>
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>

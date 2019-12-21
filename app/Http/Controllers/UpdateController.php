@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UpdateHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use URL;
@@ -13,7 +14,22 @@ class UpdateController extends Controller
      */
     public function index()
     {
-        return view('admin.update.index')->with('title', trans('frontend.title.update'));
+        $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
+
+        $button_update = '';
+        $msg_no_update = '';
+
+        if ($update->checkUpgrade() && $update->checkTree()){
+            $button_update = trans('frontend.str.button_update');
+            $button_update = str_replace('%NEW_VERSION%', $update->getUpgradeVersion(), $button_update);
+            $button_update = str_replace('%SCRIPT_NAME%', trans('frontend.str.script_name'), $button_update);
+        } else {
+            $msg_no_update = trans('frontend.str.no_updates');
+            $msg_no_update = str_replace('%SCRIPT_NAME%', trans('frontend.str.script_name'), $msg_no_update);
+            $msg_no_update = str_replace('%NEW_VERSION%', env('VERSION'), $msg_no_update);
+        }
+
+        return view('admin.update.index', compact('button_update','msg_no_update'))->with('title', trans('frontend.title.update'));
     }
 
     /**

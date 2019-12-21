@@ -6,8 +6,6 @@ class UpdateHelpers
 {
     private $language;
     private $url = 'http://license.janicky.com/';
-
-    // private $url = 'http://site1.loc/';
     private $currenversion;
 
     public function __construct($language, $currenversion)
@@ -22,6 +20,25 @@ class UpdateHelpers
     public function checkNewVersion()
     {
         $newversion = $this->getVersion();
+
+        preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
+        preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
+
+        $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
+        $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
+
+        if ($v2 > $v1)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkUpgrade()
+    {
+        $newversion = $this->getUpgradeVersion();
 
         preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
         preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);

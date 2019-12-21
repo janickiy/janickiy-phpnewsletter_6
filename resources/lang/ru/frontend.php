@@ -87,7 +87,9 @@ return [
         'redirect_number' => 'Количество переходов',
         'script_name' => 'PHP Newsletter',
         'update_warning' => 'Доступна более новая версия %SCRIPTNAME% и вам предлагается её использовать. Новейшая версия %VERSION%, выпущена %CREATED%. <a href="%DOWNLOADLINK%">Скачать</a> %MESSAGE%',
-
+        'error_alert' => 'Ошибка!',
+        'warning_alert' => 'Внимание!',
+        'button_update' => 'Обновить до %SCRIPT_NAME% %NEW_VERSION%',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -99,6 +101,7 @@ return [
         'try_again' => 'Попробуйте еще раз',
         'email_sent' => 'Письмо отправлено',
         'email_wasnt_sent' => 'Письмо не было отправлено',
+        'no_updates' => 'Нет Обновлений. У вас уже установлена последняя версия %SCRIPT_NAME%, %NEW_VERSION%.',
     ],
     'form' => [
         'required_fields' => 'обязательные поля',

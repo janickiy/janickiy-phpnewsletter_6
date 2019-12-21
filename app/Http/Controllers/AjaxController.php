@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Attach, Schedule, ScheduleCategory};
 use App\Helpers\{SendEmailHelpers,StringHelpers,ResponseHelpers, UpdateHelpers};
+use Cookie;
 
 class AjaxController extends Controller
 {
@@ -30,30 +31,6 @@ class AjaxController extends Controller
                     }
 
                     break;
-
-                case 'daemonstat':
-
-                    $process = Robots::select('robots.id as id','process.status as status')->join('process','robots.id','=','process.robotId')->get();
-
-                    return ResponseHelpers::jsonResponse(
-                        $process
-                    );
-
-                    break;
-
-                case 'process':
-
-                    $result = Process::where('robotId',$request->input('id'));
-
-                    if ($result->first()) {
-                        $result->status = $request->input('status');
-                        $result->save();
-                    } else {
-                        Process::create(['robotId' => $request->input('id'), 'status' => $request->input('status')]);
-                    }
-
-                    break;
-
 
                 case 'remove_schedule':
 
@@ -128,5 +105,4 @@ class AjaxController extends Controller
             }
         }
     }
-
 }
