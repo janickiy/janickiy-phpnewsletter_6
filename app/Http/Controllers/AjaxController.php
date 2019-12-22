@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Attach, Schedule, ScheduleCategory};
 use App\Helpers\{SendEmailHelpers,StringHelpers,ResponseHelpers, UpdateHelpers};
+use Illuminate\Support\Facades\Storage;
 use Cookie;
 
 class AjaxController extends Controller
@@ -13,6 +14,28 @@ class AjaxController extends Controller
     {
         if ($request->input('action')) {
             switch ($request->input('action')) {
+
+                case 'start_update':
+
+                    $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
+                    $newversion = $update->getVersion();
+
+                    if ($request->p == 'start') {
+                        if (Storage::disk('public')->get($update->getUpdateLink())){
+                            $content['status'] = 'download_completed';
+                            $content['result'] = 'yes';
+                        } else {
+                            $content['status'] = 'failed_to_update';
+                            $content['result'] = 'no';
+                        }
+                    }
+
+                    return ResponseHelpers::jsonResponse([
+                        $content
+                    ]);
+
+
+                    break;
 
                 case 'alert_update':
 

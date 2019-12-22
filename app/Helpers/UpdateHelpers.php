@@ -8,7 +8,7 @@ class UpdateHelpers
     private $url = 'http://license.janicky.com/';
     private $currenversion;
 
-    public function __construct($language, $currenversion)
+    public function _construct($language, $currenversion)
     {
         $this->language = $language;
         $this->currenversion = $currenversion;
@@ -115,6 +115,15 @@ class UpdateHelpers
     {
         $out = $this->getDataNewVersion($this->getUrlInfo());
         return $out['download'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdateLink()
+    {
+        $out = $this->getDataNewVersion($this->getUrlInfo());
+        return $out['update'];
     }
 
     /**
