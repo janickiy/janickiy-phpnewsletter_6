@@ -8,7 +8,7 @@ class UpdateHelpers
     private $url = 'http://license.janicky.com/';
     private $currenversion;
 
-    public function _construct($language, $currenversion)
+    public function __construct($language, $currenversion)
     {
         $this->language = $language;
         $this->currenversion = $currenversion;

@@ -118,8 +118,104 @@
 
 @endsection
 
-
 @section('js')
 
+    <script>
+
+        $(document).ready(function(){
+
+            $("#start_update").on("click", function(){
+                $("#btn_refresh").html('<div id="progress_bar" class="progress progress-striped active"><div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 1%;"></div></div><span style="padding: 10px" id="status_process">{{ trans('frontend.str.start_update') }}</span>');
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "{{ URL::route('admin.ajax.action') }}",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "start_update",
+                        p: "start",
+                    },
+                    success: function(data){
+                        if (data.result == true) {
+                            $('.progress-bar').css('width', '20%');
+                            $("#status_process").text(data.status);
+                            updateFiles();
+                        } else {
+                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                        }
+                    }
+                });
+            });
+        });
+
+        function updateFiles()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_files",
+                },
+                success: function(data){
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '60%');
+                        updateBD();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function updateBD()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_bd",
+                },
+                success: function(data){
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '80%');
+                        clearCache();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function clearCache()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "clear_cache",
+                },
+                success: function(data){
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '100%');
+                        $('#progress_bar').delay(3000).fadeOut();
+                        $('#status_process').delay(3000).text('${MSG_UPDATE_COMPLETED}');
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+    </script>
 
 @endsection

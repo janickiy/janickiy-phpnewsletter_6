@@ -90,6 +90,8 @@ return [
         'error_alert' => 'Ошибка!',
         'warning_alert' => 'Внимание!',
         'button_update' => 'Обновить до %SCRIPT_NAME% %NEW_VERSION%',
+        'start_update' => 'Идёт обновление ... Загрузка архива',
+        'no_updates' => 'Нет обновлений',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -102,6 +104,11 @@ return [
         'email_sent' => 'Письмо отправлено',
         'email_wasnt_sent' => 'Письмо не было отправлено',
         'no_updates' => 'Нет Обновлений. У вас уже установлена последняя версия %SCRIPT_NAME%, %NEW_VERSION%.',
+        'files_unzipped_successfully' => 'Файлы успешно распакованы',
+        'directory_not_writeable' => 'Ошибка! Каталог не доступен для записи веб-сервером',
+        'cannot_read_zip_archive' => 'Ошибка! Невозможно прочитать .zip архив',
+        'update_completed' => 'Обновление завершено.',
+        'cache_cleared' => 'Кеш очищен',
     ],
     'form' => [
         'required_fields' => 'обязательные поля',

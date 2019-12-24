@@ -94,6 +94,9 @@ return [
         'error_alert' => 'Error!',
         'warning_alert' => 'Warning!',
         'button_update' => 'Update to %SCRIPT_NAME% %NEW_VERSION%',
+        'start_update' => 'Updating ... Downloading archive',
+        'update_completed' => 'Update completed',
+
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -106,6 +109,12 @@ return [
         'email_sent' => 'Email was sent',
         'email_wasnt_sent' => 'Email was not sent',
         'no_updates' => 'There are no updates at this time. You already have the latest version of %SCRIPT_NAME%, %NEW_VERSION%.',
+        'files_unzipped_successfully' => 'Files unzipped successfully',
+        'directory_not_writeable' => 'Error! Directory not writeable',
+        'cannot_read_zip_archive' => 'Error! Cannot read .zip archive',
+        'update_completed' => 'Update is completed.',
+        'cache_cleared' => 'Cache cleared',
+        'no_updates' => 'No updates',
     ],
     'form' => [
         'required_fields' => 'required fields',
