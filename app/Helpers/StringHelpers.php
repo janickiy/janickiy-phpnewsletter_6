@@ -704,7 +704,7 @@ class StringHelpers
         $str = preg_replace("/^windows\-1252$/i", trans('frontend.str.windows1252'), $str);
         $str = preg_replace("/^windows\-1253$/i", trans('frontend.str.windows1253'), $str);
         $str = preg_replace("/^windows\-1254$/i", trans('frontend.str.windows1254'), $str);
-        $str = preg_replace("/^windows\-1255$/i", trans('frontend.str.windows125'), $str);
+        $str = preg_replace("/^windows\-1255$/i", trans('frontend.str.windows1255'), $str);
         $str = preg_replace("/^windows\-1256$/i", trans('frontend.str.windows1256'), $str);
         $str = preg_replace("/^windows\-1257$/i", trans('frontend.str.windows1257'), $str);
         $str = preg_replace("/^windows\-1258$/i", trans('frontend.str.windows1258'), $str);
