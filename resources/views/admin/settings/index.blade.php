@@ -44,13 +44,11 @@
                                     <span class="hidden-mobile hidden-tablet">{{ trans('frontend.str.mailing_options') }}</span>
                                 </a>
                             </li>
-
                             <li>
                                 <a data-toggle="tab" href="#s3"><i class="fa fa-file-code-o"></i>
                                     <span class="hidden-mobile hidden-tablet">{{ trans('frontend.str.additional_headers') }}</span>
                                 </a>
                             </li>
-
                         </ul>
 
                     </header>

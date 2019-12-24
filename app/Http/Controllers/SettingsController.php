@@ -16,7 +16,7 @@ class SettingsController extends Controller
     {
         $option_charset = [];
         foreach (Charset::orderBy('charset')->get() as $row) {
-            $option_charset[$row->charset] = $row->charset;
+            $option_charset[$row->charset] = StringHelpers::charsetList($row->charset);
         }
 
         $customheaders = Customheaders::get();
@@ -61,10 +61,10 @@ class SettingsController extends Controller
                     $value[$i] = str_replace(';', '', $value[$i]);
                     $value[$i] = str_replace(':', '', $value[$i]);
                     if ($name[$i] && $value[$i]) {
-                        $fields = array(
+                        $fields = [
                             'name' => $name[$i],
                             'value'  => $value[$i]
-                        );
+                        ];
 
                         Customheaders::create($fields);
                     }

@@ -150,7 +150,7 @@ class SubscribersController extends Controller
         $charsets = [];
 
         foreach (Charset::get() as $row) {
-            $charsets[$row->charset] = $row->charset;
+            $charsets[$row->charset] = StringHelpers::charsetList($row->charset);
         }
 
         $category_options = [];

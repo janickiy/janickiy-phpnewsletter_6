@@ -21,15 +21,18 @@ class UpdateHelpers
     {
         $newversion = $this->getVersion();
 
-        preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
-        preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
+        if ($newversion) {
+            preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
+            preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
 
-        $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
-        $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
+            $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
+            $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
 
-        if ($v2 > $v1)
-            return true;
-        else
+            if ($v2 > $v1)
+                return true;
+            else
+                return false;
+        } else
             return false;
     }
 
@@ -40,15 +43,18 @@ class UpdateHelpers
     {
         $newversion = $this->getUpgradeVersion();
 
-        preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
-        preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
+        if ($newversion) {
+            preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
+            preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
 
-        $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
-        $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
+            $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
+            $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
 
-        if ($v2 > $v1)
-            return true;
-        else
+            if ($v2 > $v1)
+                return true;
+            else
+                return false;
+        } else
             return false;
     }
 
@@ -91,9 +97,9 @@ class UpdateHelpers
      */
     public function checkTree()
     {
-        preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
+        preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out);
 
-        if ($out1[1] < $out1[2])
+        if ($out[1] < $out[2])
             return false;
         else
             return true;
