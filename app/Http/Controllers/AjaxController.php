@@ -59,11 +59,9 @@ class AjaxController extends Controller
 
                     if ($request->p == 'clear_cache') {
                         Artisan::call('cache:clear');
-                        Artisan::call('optimize');
                         Artisan::call('route:cache');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');
-                        Artisan::call('config:cache');
                         $content['status'] = trans('frontend.msg.cache_cleared');
                     }
 
