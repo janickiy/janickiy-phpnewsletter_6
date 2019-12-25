@@ -21,11 +21,15 @@ class DataTableController extends Controller
         $row = Templates::with('attach')->get();
 
         return Datatables::of($row)
+
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" class="check" value="' . $row->id . '" name="activate[]">';
+            })
+
             ->addColumn('action', function ($row) {
                 $editBtn = '<a title="' . trans('frontend.str.edit') . '" class="btn btn-xs btn-primary"  href="' . URL::route('admin.template.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+                return $editBtn;
 
-                return '<div class="nobr"> ' .$editBtn . $deleteBtn . '</div>';
             })
 
             ->editColumn('name', function ($row) {
@@ -41,7 +45,7 @@ class DataTableController extends Controller
                 return isset($row->attach) && count($row->attach) > 0 ? trans('frontend.str.yes') : trans('frontend.str.no');
             })
 
-            ->rawColumns(['action', 'name'])->make(true);
+            ->rawColumns(['action', 'name', 'checkbox'])->make(true);
     }
 
     /**
@@ -74,7 +78,7 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('checkbox', function ($row) {
-                return '<input type="checkbox" value="' . $row->id . '" name="activate[]">';
+                return '<input type="checkbox" class="check" value="' . $row->id . '" name="activate[]">';
             })
 
             ->editColumn('active', function ($row) {
@@ -87,7 +91,7 @@ class DataTableController extends Controller
                 return $editBtn;
             })
 
-            ->rawColumns(['action', 'checkbox','ip'])->make(true);
+            ->rawColumns(['action', 'checkbox', 'check'])->make(true);
     }
 
     /**

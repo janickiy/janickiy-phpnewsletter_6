@@ -102,6 +102,8 @@ Use search to find needed section.
 -->
 <body class="">
 
+<div id="overlay"></div>
+
 <!-- #HEADER -->
 <header id="header">
     <div id="logo-group">
@@ -357,6 +359,8 @@ Use search to find needed section.
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
+
+
 
     <!-- RIBBON -->
     <div id="ribbon">

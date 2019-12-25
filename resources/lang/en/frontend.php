@@ -128,6 +128,8 @@ return [
         "ksc56011987" => "Korean",
         "euckr" => "Korean (EUC)",
         "windows874" => "Thai (Windows)",
+        'select_action' => 'Select action!',
+        'confirm_remove' => 'Are you sure you want to delete?',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -145,7 +147,6 @@ return [
         'cannot_read_zip_archive' => 'Error! Cannot read .zip archive',
         'update_completed' => 'Update is completed.',
         'cache_cleared' => 'Cache cleared',
-        'no_updates' => 'No updates',
     ],
     'form' => [
         'required_fields' => 'required fields',

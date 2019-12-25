@@ -152,4 +152,37 @@ class TemplateController extends Controller
             $q->delete();
         }
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function status(Request $request)
+    {
+        $temp = [];
+
+        foreach ($request->activate as $id) {
+            if (is_numeric($id)) {
+                $temp[] = $id;
+            }
+        }
+
+        switch ($request->action) {
+            case  1 :
+
+                $templates = Templates::whereIN('id', $temp)->get();
+
+                foreach ($templates as $template) {
+                    foreach ($template->attach as $a) {
+                        if (isset($a->id) && $a->id) Attach::Remove($a->id);
+                    }
+                }
+
+                Templates::whereIN('id', $temp)->delete();
+
+                break;
+        }
+
+        return redirect(URL::route('admin.template.index'))->with('success', trans('message.actions_completed'));
+    }
 }

@@ -6,7 +6,6 @@ use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{ReadySent, RedirectLog, Subscribers, Category, Subscriptions};
-use App\Helpers\ResponseHelpers;
 
 class FrontendController extends Controller
 {

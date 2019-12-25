@@ -31,6 +31,7 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('edit/{id}', 'TemplateController@edit')->name('admin.template.edit')->where('id', '[0-9]+');
             Route::put('update', 'TemplateController@update')->name('admin.template.update');
             Route::delete('destroy/{id}', 'TemplateController@destroy')->name('admin.template.destroy')->where('id', '[0-9]+');
+            Route::post('status', 'TemplateController@status')->name('admin.template.status');
         });
 
         Route::group(['prefix' => 'subscribers'], function () {
@@ -46,7 +47,6 @@ Route::group(['middleware' => ['install']], function () {
             Route::post('export-subscribers', 'SubscribersController@exportSubscribers')->name('admin.subscribers.export_subscribers')->middleware(['permission:admin|moderator']);
             Route::get('remove-all', 'SubscribersController@removeAll')->name('admin.subscribers.remove_all')->middleware(['permission:admin|moderator']);
             Route::post('status', 'SubscribersController@status')->name('admin.subscribers.status')->middleware(['permission:admin|moderator']);
-            Route::get('whois/{ip}', 'SubscribersController@whois')->name('admin.subscribers.whois');
         });
 
         Route::group(['prefix' => 'category'], function () {

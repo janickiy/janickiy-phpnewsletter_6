@@ -92,7 +92,7 @@ return [
         'button_update' => 'Обновить до %SCRIPT_NAME% %NEW_VERSION%',
         'start_update' => 'Идёт обновление ... Загрузка архива',
         'no_updates' => 'Нет обновлений',
-        "charutf8" => "Юникод (UTF-8)",
+        "utf8" => "Юникод (UTF-8)",
         "iso88591" => "Западноевропейская (ISO)",
         "iso88592" => "Центральноевропейская (ISO)",
         "iso88593" => "Южноевропейская (ISO)",
@@ -124,6 +124,8 @@ return [
         "ksc56011987" => "Корейская",
         "euckr" => "Корейская (EUC)",
         "windows874" => "Тайская (Windows)",
+        'select_action' => 'Выберите действие!',
+        'confirm_remove' => 'Вы действительно хотите удалить?',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\RedirectLog;
+use App\Helpers\StringHelpers;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use \App\Helpers\StringHelpers;
 
 class RedirectLogController extends Controller
 {
