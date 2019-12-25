@@ -15,13 +15,16 @@ class SettingsController extends Controller
     public function index()
     {
         $option_charset = [];
+
         foreach (Charset::orderBy('charset')->get() as $row) {
             $option_charset[$row->charset] = StringHelpers::charsetList($row->charset);
         }
 
         $customheaders = Customheaders::get();
 
-        return view('admin.settings.index', compact('option_charset', 'customheaders'))->with('title', trans('frontend.title.settings_index'));
+        $infoAlert = trans('frontend.hint.settings_index') ? trans('frontend.hint.settings_index') : null;
+
+        return view('admin.settings.index', compact('option_charset', 'customheaders', 'infoAlert'))->with('title', trans('frontend.title.settings_index'));
     }
 
     /**

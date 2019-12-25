@@ -26,7 +26,9 @@ class TemplateController extends Controller
      */
     public function create()
     {
-        return view('admin.template.create_edit')->with('title', trans('frontend.title.template_create'));
+        $infoAlert = trans('frontend.hint.template_create') ? trans('frontend.hint.template_create') : null;
+
+        return view('admin.template.create_edit', compact('infoAlert'))->with('title', trans('frontend.title.template_create'));
     }
 
     /**
@@ -84,7 +86,9 @@ class TemplateController extends Controller
 
         $attachment = $template->attach;
 
-        return view('admin.template.create_edit', compact('template','attachment'))->with('title', trans('frontend.title.template_edit'));
+        $infoAlert = trans('frontend.hint.template_edit') ? trans('frontend.hint.template_edit') : null;
+
+        return view('admin.template.create_edit', compact('template','attachment', 'infoAlert'))->with('title', trans('frontend.title.template_edit'));
     }
 
     /**

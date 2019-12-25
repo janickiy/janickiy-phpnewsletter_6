@@ -14,7 +14,9 @@ class RedirectLogController extends Controller
      */
     public function index()
     {
-        return view('admin.redirect_log.index')->with('title',trans('frontend.title.redirect_log_index'));
+        $infoAlert = trans('frontend.hint.redirect_log_index') ? trans('frontend.hint.redirect_log_index') : null;
+
+        return view('admin.redirect_log.index', compact('infoAlert'))->with('title',trans('frontend.title.redirect_log_index'));
     }
 
     /**
@@ -87,6 +89,8 @@ class RedirectLogController extends Controller
      */
     public function info($url)
     {
-        return view('admin.redirect_log.info', compact('url'))->with('title', trans('frontend.title.redirect_log_inf'));
+        $infoAlert = trans('frontend.hint.redirectlog_info') ? trans('frontend.hint.redirectlog_info') : null;
+
+        return view('admin.redirect_log.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_log_inf'));
     }
 }

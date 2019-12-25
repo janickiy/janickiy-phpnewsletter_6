@@ -29,7 +29,9 @@ class UpdateController extends Controller
             $msg_no_update = str_replace('%NEW_VERSION%', env('VERSION'), $msg_no_update);
         }
 
-        return view('admin.update.index', compact('button_update','msg_no_update'))->with('title', trans('frontend.title.update'));
+        $infoAlert = trans('frontend.hint.update_index') ? trans('frontend.hint.update_index') : null;
+
+        return view('admin.update.index', compact('button_update','msg_no_update', 'infoAlert'))->with('title', trans('frontend.title.update'));
     }
 
     /**
@@ -49,7 +51,6 @@ class UpdateController extends Controller
         } else {
 
             $path = base_path('.env');
-
             $env = file_get_contents($path);
             $env = str_replace( env('LICENSE_KEY'), $request->input('license_key'), $env);
 
