@@ -86,10 +86,14 @@
             <div id="onlinelog"></div>
             <h3>Онлайн журнал рассылки</h3>
             <p><span id="leftsend">0</span>% Осталось: <span id="timer2">00:00:00</span></p>
-            <form>
-                <input type="text" name="">
-                <button>Отправить</button>
-            </form>
+            <div class="progress progress-sm progress-striped active">
+                <div class="progress-bar bg-color-darken"  role="progressbar" style="width: 1%"></div>
+            </div>
+            <div class="online_statistics">Всего: <span id="totalsendlog">0</span>
+            <span style="color: green">Хорошо: </span><span style="color: green" id="successful">0</span> <span style="color: red">Плохо: </span><span style="color: red" id="unsuccessful">0</span><br><br>
+            <span id="divStatus" class="error"></span>
+            <button onClick="sendout();" id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" title="Разосдлать рассылку подписчикам"><i class="fa fa-play"></i></button>
+            <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled" disabled="disabled" title="Отстановить рассылку"><i class="fa fa-stop"></i></button></div>
         </div>
 
     </div>
