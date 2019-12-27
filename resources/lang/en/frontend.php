@@ -130,6 +130,13 @@ return [
         "windows874" => "Thai (Windows)",
         'select_action' => 'Select action!',
         'confirm_remove' => 'Are you sure you want to delete?',
+        'left' => 'Left',
+        'online_newsletter_log' => 'Online newsletter log',
+        'select_template' => 'Select a template',
+        'good' => 'Good',
+        'bad' => 'Bad',
+        'send_out_newsletter' => 'Send out email newsletter to subscribers',
+        'stop_newsletter' => 'Stop email newsletter',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -296,5 +303,6 @@ return [
         'schedule_edit' => '',
         'template_create' => '',
         'template_edit' => '',
+        'log_info' => '',
     ],
 ];

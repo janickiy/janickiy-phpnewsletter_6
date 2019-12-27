@@ -125,7 +125,6 @@ class SendEmails extends Command
             }
 
             foreach ($subscribers as $subscriber) {
-
                 SendEmailHelpers::setBody($row->template->body);
                 SendEmailHelpers::setSubject($row->template->name);
                 SendEmailHelpers::setPrior($row->template->prior);
@@ -177,5 +176,6 @@ class SendEmails extends Command
 
         $this->line("sent: " . $mailcount);
         $this->line("no sent: " . $mailcountno);
+
     }
 }

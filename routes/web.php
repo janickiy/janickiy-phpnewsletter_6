@@ -119,7 +119,6 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('phpinfo', 'MiscellaneousController@phpinfo')->name('admin.miscellaneous.phpinfo')->middleware(['permission:admin|moderator']);
         });
 
-
         Route::group(['prefix' => 'datatable'], function () {
             Route::any('templates', 'DataTableController@getTemplates')->name('admin.datatable.templates');
             Route::any('category', 'DataTableController@getCategory')->name('admin.datatable.category')->middleware(['permission:admin|moderator']);

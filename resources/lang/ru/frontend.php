@@ -126,6 +126,13 @@ return [
         "windows874" => "Тайская (Windows)",
         'select_action' => 'Выберите действие!',
         'confirm_remove' => 'Вы действительно хотите удалить?',
+        'left' => 'Осталось',
+        'online_newsletter_log' => 'Онлайн журнал рассылки',
+        'select_template' => 'Выберите шаблон',
+        'good' => 'Хорошо',
+        'bad' => 'Плохо',
+        'send_out_newsletter' => 'Разослать рассылку подписчикам',
+        'stop_newsletter' => 'Остановить рассылку',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -296,5 +303,6 @@ return [
         'schedule_edit' => '',
         'template_create' => '',
         'template_edit' => '',
+        'log_info' => '',
     ],
 ];

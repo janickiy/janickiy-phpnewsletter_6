@@ -34,7 +34,7 @@ class DataTableController extends Controller
 
             ->editColumn('name', function ($row) {
                 $body = preg_replace('/(<.*?>)|(&.*?;)/', '', $row->body);
-                return $row->name . '<br><br>' . StringHelpers::shortText($body, 500);
+                return $row->name . '<br><br><small class="text-muted">' . StringHelpers::shortText($body, 500) . '</small>';
             })
 
             ->editColumn('prior', function ($row) {
@@ -144,10 +144,11 @@ class DataTableController extends Controller
      */
     public function getLog()
     {
-        $row = Schedule::selectRaw('schedule.id, schedule.date, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
+        $row = Schedule::selectRaw('schedule.id, schedule.start, schedule.end, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
             ->join('ready_sent', 'schedule.id', '=', 'ready_sent.scheduleId')
             ->groupBy('ready_sent.scheduleId')
-            ->groupBy('schedule.date')
+            ->groupBy('schedule.start')
+            ->groupBy('schedule.end')
             ->groupBy('schedule.id')
         ;
 
@@ -233,4 +234,3 @@ class DataTableController extends Controller
             ->make(true);
     }
 }
-

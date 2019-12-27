@@ -84,16 +84,41 @@
         <div id="sendmail" class="modal_div">
             <span class="modal_close">X</span>
             <div id="onlinelog"></div>
-            <h3>Онлайн журнал рассылки</h3>
-            <p><span id="leftsend">0</span>% Осталось: <span id="timer2">00:00:00</span></p>
-            <div class="progress progress-sm progress-striped active">
-                <div class="progress-bar bg-color-darken"  role="progressbar" style="width: 1%"></div>
+            <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
+
+            <div class="row">
+                <div class="col-sm-12 padding-bottom-10">
+                    <div class="form-inline">
+                        <div class="control-group">
+
+                            {!! Form::select('templateId', $options, null, ['id' => 'templateId' ,'placeholder' => trans('frontend.str.select_template'), 'class' => 'form-control custom-scroll', 'style' => 'width: 100%']) !!}
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 padding-bottom-10">
+                    <div class="form-inline" >
+                        <div class="control-group">
+
+                            {!! Form::select('categoryId[]', $category_options, null, ['id' => 'categoryId','multiple'=>'multiple', 'placeholder' => trans('frontend.form.select_category'), 'class' => 'form-control custom-scroll', 'style' => 'width: 100%']) !!}
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="online_statistics">Всего: <span id="totalsendlog">0</span>
-            <span style="color: green">Хорошо: </span><span style="color: green" id="successful">0</span> <span style="color: red">Плохо: </span><span style="color: red" id="unsuccessful">0</span><br><br>
-            <span id="divStatus" class="error"></span>
-            <button onClick="sendout();" id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" title="Разосдлать рассылку подписчикам"><i class="fa fa-play"></i></button>
-            <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled" disabled="disabled" title="Отстановить рассылку"><i class="fa fa-stop"></i></button></div>
+            <p><span id="leftsend">0</span>% {{ trans('frontend.str.left') }}: <span id="timer2">00:00:00</span></p>
+            <div class="progress progress-sm progress-striped active">
+                <div class="progress-bar bg-color-darken" role="progressbar" style="width: 1%"></div>
+            </div>
+            <div class="online_statistics">{{ trans('frontend.str.total')  }}: <span id="totalsendlog">0</span>
+                <span style="color: green">{{ trans('frontend.str.good') }}: </span><span style="color: green" id="successful">0</span>
+                <span style="color: red">{{ trans('frontend.str.bad') }}: </span><span style="color: red" id="unsuccessful">0</span><br><br>
+                <span id="divStatus" class="error"></span>
+                <button onClick="sendout();" id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" style="margin-right: 15px;" title="{{ trans('frontend.str.send_out_newsletter') }}"><i class="fa fa-play"></i></button>
+                <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled" disabled="disabled" title="{{ trans('frontend.str.stop_newsletter') }}"><i class="fa fa-stop"></i></button>
+            </div>
         </div>
 
     </div>

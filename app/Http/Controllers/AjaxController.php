@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Attach, Schedule, ScheduleCategory};
-use App\Helpers\{SendEmailHelpers,StringHelpers,ResponseHelpers, UpdateHelpers};
+use App\Models\{Attach, Schedule, ScheduleCategory, Subscribers, Templates};
+use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, UpdateHelpers};
 use Illuminate\Support\Facades\Storage;
 use Cookie;
 use Artisan;
@@ -23,7 +23,7 @@ class AjaxController extends Controller
 
                     if ($request->p == 'start') {
 
-                        if ($update->getUpdateLink() && Storage::disk('public')->put('update.zip', file_get_contents($update->getUpdateLink()))){
+                        if ($update->getUpdateLink() && Storage::disk('public')->put('update.zip', file_get_contents($update->getUpdateLink()))) {
                             $content['status'] = 'download_completed';
                             $content['result'] = true;
                         } else {
@@ -91,8 +91,8 @@ class AjaxController extends Controller
 
                 case 'remove_schedule':
 
-                    Schedule::where('id',$request->input('id'))->delete();
-                    ScheduleCategory::where('scheduleId',$request->input('id'))->delete();
+                    Schedule::where('id', $request->input('id'))->delete();
+                    ScheduleCategory::where('scheduleId', $request->input('id'))->delete();
 
                     return ResponseHelpers::jsonResponse([
                         'result' => true, 'id' => $request->input('id')
@@ -146,7 +146,7 @@ class AjaxController extends Controller
                         SendEmailHelpers::setEmail($email);
                         SendEmailHelpers::setToken(md5($email));
                         $result = SendEmailHelpers::sendEmail();
-                        $result_send = ['result' => $result['result'] === true ? 'success':'error', 'msg' => $result['error'] ? trans('msg.email_wasnt_sent') : trans('msg.email_sent') ];
+                        $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('msg.email_wasnt_sent') : trans('msg.email_sent')];
 
                     } else {
                         $msg = implode(",", $errors);
@@ -159,6 +159,105 @@ class AjaxController extends Controller
 
                     break;
 
+                case 'send_out':
+
+                    $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+
+                    switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
+                        case "minute":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' MINUTE)";
+                            break;
+                        case "hour":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' HOUR)";
+                            break;
+                        case "day":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' DAY)";
+                            break;
+                        default:
+                            $interval = null;
+                    }
+
+                    $categoryId = [];
+
+                    foreach ($request->categoryId as $id) {
+                        if (is_numeric($id)) {
+                            $categoryId[] = $id;
+                        }
+                    }
+
+                    $templateId = $request->input('templateId');
+
+                    if (!$templateId) {
+                        return ResponseHelpers::jsonResponse([
+                            'result' => false,
+                        ]);
+                    }
+
+                    $template = Templates::where('id', $templateId)->first();
+
+                    if ($interval) {
+                        $subscribers = Subscribers::select('*')
+                            ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                            ->whereIN('subscriptions.categoryId', $categoryId)
+                            ->where('subscribers.active', 1)
+                            ->whereRaw($interval)
+                            ->groupBy('subscribers.id')
+                            ->groupBy('subscribers.email')
+                            ->groupBy('subscribers.token')
+                            ->groupBy('subscribers.name')
+                            ->orderByRaw($order)
+                            ->limit($limit)
+                            ->get();
+                    } else {
+                        $subscribers = Subscribers::select('*')
+                            ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                            ->whereIN('subscriptions.categoryId', $categoryId)
+                            ->where('subscribers.active', 1)
+                            ->groupBy('subscribers.id')
+                            ->groupBy('subscribers.email')
+                            ->groupBy('subscribers.token')
+                            ->groupBy('subscribers.name')
+                            ->orderByRaw($order)
+                            ->limit($limit)
+                            ->get();
+                    }
+
+                    foreach ($subscribers as $subscriber) {
+                        SendEmailHelpers::setBody($template->body);
+                        SendEmailHelpers::setSubject($template->name);
+                        SendEmailHelpers::setPrior($template->prior);
+                        SendEmailHelpers::setEmail($subscriber->email);
+                        SendEmailHelpers::setToken($subscriber->token);
+                        SendEmailHelpers::setSubscriberId($subscriber->id);
+                        SendEmailHelpers::setName($subscriber->name);
+
+                        $result = SendEmailHelpers::sendEmail($template->id);
+
+                        $data = [];
+
+                        if ($result['result'] === true) {
+                            $data['subscriberId'] = $subscriber->id;
+                            $data['email'] = $subscriber->email;
+                            $data['templateId'] = $template->id;
+                            $data['template'] = $template->name;
+                            $data['success'] = 1;
+                            $data['scheduleId'] = 0;
+
+                            Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
+
+                        } else {
+                            $data['subscriberId'] = $subscriber->id;
+                            $data['email'] = $subscriber->email;
+                            $data['templateId'] = $template->templateId;
+                            $data['template'] = $template->name;
+                            $data['success'] = 0;
+                            $data['errorMsg'] = $result['error'];
+                            $data['scheduleId'] = 0;
+                        }
+                    }
+
+                    break;
             }
         }
     }

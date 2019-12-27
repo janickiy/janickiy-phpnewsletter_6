@@ -104,7 +104,7 @@
                 },
 
                 columns: [
-                    {data: 'date', name: 'date'},
+                    {data: 'start', name: 'start'},
                     {data: 'count', name: 'count', searchable: false},
                     {data: 'sent', name: 'sent', searchable: false},
                     {data: 'unsent', name: 'unsent', searchable: false},

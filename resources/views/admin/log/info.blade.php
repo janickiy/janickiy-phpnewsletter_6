@@ -22,7 +22,7 @@
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
-                        <tr>t
+                        <tr>
                             <th>{{ trans('frontend.str.newsletter') }}</th>
                             <th>E-mail</th>
                             <th>{{ trans('frontend.str.time') }}</th>
