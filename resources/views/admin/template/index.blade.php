@@ -82,21 +82,11 @@
         <!-- end widget -->
 
         <div id="sendmail" class="modal_div">
+            <input id="logId" type="hidden" value="0">
             <span class="modal_close">X</span>
             <div id="onlinelog"></div>
             <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
-
             <div class="row">
-                <div class="col-sm-12 padding-bottom-10">
-                    <div class="form-inline">
-                        <div class="control-group">
-
-                            {!! Form::select('templateId', $options, null, ['id' => 'templateId' ,'placeholder' => trans('frontend.str.select_template'), 'class' => 'form-control custom-scroll', 'style' => 'width: 100%']) !!}
-
-                        </div>
-                    </div>
-                </div>
-
                 <div class="col-sm-12 padding-bottom-10">
                     <div class="form-inline" >
                         <div class="control-group">

@@ -24,13 +24,7 @@ class TemplateController extends Controller
             $category_options[$row->id] = $row->name;
         }
 
-        $options = [];
-
-        foreach (Templates::get() as $row) {
-            $options[$row->id] = $row->name;
-        }
-
-        return view('admin.template.index', compact('infoAlert','category_options', 'options'))->with('title', trans('frontend.title.template_index'));
+        return view('admin.template.index', compact('infoAlert','category_options'))->with('title', trans('frontend.title.template_index'));
     }
 
     /**

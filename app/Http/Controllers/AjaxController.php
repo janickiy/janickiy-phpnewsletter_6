@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Attach, Schedule, ScheduleCategory, Subscribers, Templates};
+use App\Models\{Attach, Logs, ReadySent, Schedule, ScheduleCategory, Subscribers, Subscriptions, Templates};
 use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, UpdateHelpers};
 use Illuminate\Support\Facades\Storage;
 use Cookie;
@@ -127,10 +127,10 @@ class AjaxController extends Controller
 
                 case 'send_test_email':
 
-                    $subject = $request->name;
-                    $body = $request->body;
-                    $prior = $request->prior;
-                    $email = $request->email;
+                    $subject = $request->input('name');
+                    $body = $request->input('body');
+                    $prior = $request->input('prior');
+                    $email = $request->input('email');
 
                     $errors = [];
 
@@ -161,6 +161,31 @@ class AjaxController extends Controller
 
                 case 'send_out':
 
+                    $fh = fopen(__FILE__, 'r');
+
+                    if (! flock($fh, LOCK_EX | LOCK_NB)) {
+                        exit('Script is already running');
+                    }
+
+                    if (!$request->input('categoryId')) {
+                        return ResponseHelpers::jsonResponse([
+                            'result' => false,
+                        ]);
+                    }
+
+                    if (!$request->input('templateId')) {
+                        return ResponseHelpers::jsonResponse([
+                            'result' => false,
+                        ]);
+                    }
+
+                    $logId = $request->input('logId');
+
+                    if ($logId == 0) {
+                        $log = Logs::create(['time' => date('Y-m-d H:i:s')]);
+                        $logId = $log->id;
+                    }
+
                     $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
                     $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
@@ -188,17 +213,20 @@ class AjaxController extends Controller
 
                     $templateId = $request->input('templateId');
 
-                    if (!$templateId) {
-                        return ResponseHelpers::jsonResponse([
-                            'result' => false,
-                        ]);
-                    }
-
                     $template = Templates::where('id', $templateId)->first();
 
                     if ($interval) {
-                        $subscribers = Subscribers::select('*')
+                        $subscribers = Subscribers::select('subscribers.email','subscribers.token','subscribers.id','subscribers.name')
                             ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                            ->leftJoin('ready_sent', function ($join) use ($template,$logId) {
+                                $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
+                                    ->where('ready_sent.templateId', '=', $template->id)
+                                    ->where('ready_sent.logId', '=', $logId)
+                                    ->where(function ($query) {
+                                        $query->where('ready_sent.success', '=', 1)
+                                            ->orWhere('ready_sent.success', '=', 0);
+                                    });
+                            })
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->where('subscribers.active', 1)
                             ->whereRaw($interval)
@@ -210,8 +238,17 @@ class AjaxController extends Controller
                             ->limit($limit)
                             ->get();
                     } else {
-                        $subscribers = Subscribers::select('*')
+                        $subscribers = Subscribers::select('subscribers.email','subscribers.token','subscribers.id','subscribers.name')
                             ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                            ->leftJoin('ready_sent', function ($join) use ($template,$logId) {
+                                $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
+                                    ->where('ready_sent.templateId', '=', $template->id)
+                                    ->where('ready_sent.logId', '=', $logId)
+                                    ->where(function ($query) {
+                                        $query->where('ready_sent.success', '=', 1)
+                                            ->orWhere('ready_sent.success', '=', 0);
+                                    });
+                            })
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->where('subscribers.active', 1)
                             ->groupBy('subscribers.id')
@@ -243,6 +280,8 @@ class AjaxController extends Controller
                             $data['template'] = $template->name;
                             $data['success'] = 1;
                             $data['scheduleId'] = 0;
+                            $data['logId'] = $logId;
+
 
                             Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
@@ -254,10 +293,102 @@ class AjaxController extends Controller
                             $data['success'] = 0;
                             $data['errorMsg'] = $result['error'];
                             $data['scheduleId'] = 0;
+                            $data['logId'] = $logId;
                         }
+
+                        ReadySent::create($data);
+
+                        unset($data);
+                    }
+
+                    return ResponseHelpers::jsonResponse([
+                        'result' => true,
+                        'completed' => true,
+                    ]);
+
+                    break;
+
+                case 'count_send':
+
+                    if ($request->input('logId') && $request->input('categoryId')) {
+
+                        $categoryId = [];
+
+                        foreach ($request->input('categoryId') as $id) {
+                            if (is_numeric($id)) {
+                                $categoryId[] = $id;
+                            }
+                        }
+
+                        $total = Subscriptions::join('subscribers','subscriptions.subscriberId','=','subscribers.id')
+                            ->where('subscribers.active',1)
+                            ->whereIN('subscriptions.categoryId', $categoryId)
+                            ->count();
+
+                        $success = ReadySent::where('logId', $request->input('logId'))
+                            ->where('success',1)
+                            ->count();
+
+                        $unsuccess = ReadySent::where('logId', $request->input('logId'))
+                            ->where('success',0)
+                            ->count();
+
+                        $sleep = SettingsHelpers::getSetting('sleep') == 0 ? 0.5 : SettingsHelpers::getSetting('sleep');
+                        $timesec = intval(($total - ($success + $unsuccess)) * $sleep);
+
+                        $datetime = new DateTime();
+                        $datetime->setTime(0, 0, $timesec);
+
+                        return ResponseHelpers::jsonResponse([
+                            'result'  => true,
+                            'status'  => 1,
+                            'total'   => $total,
+                            'success' => $success,
+                            'unsuccessful' => $unsuccess,
+                            'time'     => $datetime->format('H:i:s'),
+                            'leftsend' => round(($success + $unsuccess) / $total * 100, 2),
+                        ]);
+
+                    } else {
+                        return ResponseHelpers::jsonResponse([
+                            'result'  => false,
+                        ]);
                     }
 
                     break;
+
+                case 'log_online':
+
+                    $readySent = ReadySent::orderBy('id','desc')
+                        ->where('logId', '>', 0)
+                        ->limit(10)
+                        ->get();
+
+                    if ($readySent) {
+
+                        $rows = [];
+
+                        foreach($readySent as $row) {
+                            $rows[] = [
+                                'subscriberId' => $row->subscriberId,
+                                "email"   => $row->email,
+                                "status"  => $row->success,
+                               ];
+                        }
+
+                        return ResponseHelpers::jsonResponse([
+                            'result' => true,
+                            'item' => $rows
+                        ]);
+
+                    } else {
+                        return ResponseHelpers::jsonResponse([
+                            'result'  => false,
+                        ]);
+                    }
+
+                    break;
+
             }
         }
     }
