@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\{ReadySent, RedirectLog, Subscribers, Category, Subscriptions};
+use App\Models\{ReadySent, Redirect, Subscribers, Category, Subscriptions};
 
 class FrontendController extends Controller
 {
@@ -47,7 +47,7 @@ class FrontendController extends Controller
         $data['time'] = date("Y-m-d H:i:s");
         $data['email'] = isset($subscriber->email) ? $subscriber->email : '';
 
-        RedirectLog::create($data);
+        Redirect::create($data);
 
         return redirect($url);
     }

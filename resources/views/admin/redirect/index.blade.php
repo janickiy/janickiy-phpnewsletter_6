@@ -12,8 +12,8 @@
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">
-                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" href="{{ URL::route('admin.redirect_log.clear') }}" onclick="return confirm('{{ trans('frontend.str.want_to_redirect_log_clear') }}');">
-                    <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.redirect_log_clear') }}
+                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" href="{{ URL::route('admin.redirect.clear') }}" onclick="return confirm('{{ trans('frontend.str.want_to_redirect_clear') }}');">
+                    <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.redirect_clear') }}
                 </a>
             </p>
         </div>
@@ -97,7 +97,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('admin.datatable.redirect_log') }}'
+                    url: '{{ URL::route('admin.datatable.redirect') }}'
                 },
                 columns: [
                     {data: 'url', name: 'url'},

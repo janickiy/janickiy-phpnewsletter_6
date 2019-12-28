@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RedirectLog extends Model
+class Logs extends Model
 {
-	protected $table = 'redirect_log';
+	protected $table = 'logs';
 
     protected $primaryKey = 'id';
 
+    public $timestamps = false;
+
 	protected $fillable = [
-		'url',
-        'email'
+		'time',
 	];
 }

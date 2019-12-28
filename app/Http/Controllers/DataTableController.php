@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, RedirectLog};
+use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, Redirect};
 use App\Helpers\StringHelpers;
 use Illuminate\Support\Facades\Auth;
 use DataTables;
@@ -202,7 +202,7 @@ class DataTableController extends Controller
      */
     public function getRedirectLog()
     {
-        $row = RedirectLog::query()
+        $row = Redirect::query()
             ->selectRaw('DISTINCT url, COUNT(email) as count')
             ->groupBy('url')
         ;
@@ -210,11 +210,11 @@ class DataTableController extends Controller
         return Datatables::of($row)
 
             ->editColumn('count', function ($row) {
-                return '<a href="' . URL::route('admin.redirect_log.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
+                return '<a href="' . URL::route('admin.redirect.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
             })
 
             ->addColumn('report', function ($row) {
-                return '<a href="' . URL::route('admin.redirect_log.report', ['url' => $row->url]) . '">скачать</a>';
+                return '<a href="' . URL::route('admin.redirect.report', ['url' => $row->url]) . '">скачать</a>';
             })
 
             ->rawColumns(['count', 'report'])->make(true);
@@ -227,7 +227,7 @@ class DataTableController extends Controller
      */
     public function getInfoRedirectLog($url)
     {
-        $row = RedirectLog::query()->where('url', $url);
+        $row = Redirect::query()->where('url', $url);
 
         return Datatables::of($row)
 

@@ -98,11 +98,11 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('info/{id}', 'LogController@info')->name('admin.log.info')->where('id', '[0-9]+');
         });
 
-        Route::group(['prefix' => 'redirect-log'], function () {
-            Route::get('', 'RedirectLogController@index')->name('admin.redirect_log.index');
-            Route::get('clear', 'RedirectLogController@clear')->name('admin.redirect_log.clear');
-            Route::get('download/{url}', 'RedirectLogController@download')->name('admin.redirect_log.download');
-            Route::get('info/{url}', 'RedirectLogController@info')->name('admin.redirect_log.info');
+        Route::group(['prefix' => 'redirect'], function () {
+            Route::get('', 'RedirectController@index')->name('admin.redirect.index');
+            Route::get('clear', 'RedirectController@clear')->name('admin.redirect.clear');
+            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.download');
+            Route::get('info/{url}', 'RedirectController@info')->name('admin.redirect.info');
         });
 
         Route::group(['prefix' => 'settings'], function () {
@@ -128,8 +128,8 @@ Route::group(['middleware' => ['install']], function () {
             Route::any('smtp', 'DataTableController@getSmtp')->name('admin.datatable.smtp')->middleware(['permission:admin']);
             Route::any('log', 'DataTableController@getLog')->name('admin.datatable.log');
             Route::any('info-log/{id}', 'DataTableController@getInfoLog')->name('admin.datatable.info_log')->where('id', '[0-9]+');
-            Route::any('redirect-log', 'DataTableController@getRedirectLog')->name('admin.datatable.redirect_log');
-            Route::any('info-redirect-log/{url}', 'DataTableController@getInfoRedirectLog')->name('admin.datatable.info_redirect_log');
+            Route::any('redirect-log', 'DataTableController@getRedirectLog')->name('admin.datatable.redirect');
+            Route::any('info-redirect-log/{url}', 'DataTableController@getInfoRedirectLog')->name('admin.datatable.info_redirect');
         });
     });
 

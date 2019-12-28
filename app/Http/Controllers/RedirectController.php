@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RedirectLog;
+use App\Models\Redirect;
 use App\Helpers\StringHelpers;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class RedirectLogController extends Controller
+class RedirectController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $infoAlert = trans('frontend.hint.redirect_log_index') ? trans('frontend.hint.redirect_log_index') : null;
+        $infoAlert = trans('frontend.hint.redirect_index') ? trans('frontend.hint.redirect_index') : null;
 
-        return view('admin.redirect_log.index', compact('infoAlert'))->with('title',trans('frontend.title.redirect_log_index'));
+        return view('admin.redirect.index', compact('infoAlert'))->with('title',trans('frontend.title.redirect_index'));
     }
 
     /**
@@ -24,9 +24,9 @@ class RedirectLogController extends Controller
      */
     public function clear()
     {
-        RedirectLog::truncate();
+        Redirect::truncate();
 
-        return redirect(URL::route('admin.redirect_log.index'))->with('success', trans('message.statistics_cleared'));
+        return redirect(URL::route('admin.redirect.index'))->with('success', trans('message.statistics_cleared'));
     }
 
     /**
@@ -38,16 +38,16 @@ class RedirectLogController extends Controller
     public function download($url)
     {
         $ext = 'xlsx';
-        $filename = 'redirect_log_' . date("d_m_Y") . '.xlsx';
+        $filename = 'redirect_' . date("d_m_Y") . '.xlsx';
         $oSpreadsheet_Out = new Spreadsheet();
 
-        $redirectLog = RedirectLog::where('url',$url)->get();
+        $redirectLog = Redirect::where('url',$url)->get();
 
         if (!$redirectLog) abort(404);
 
         $oSpreadsheet_Out->getProperties()->setCreator('Alexander Yanitsky')
             ->setLastModifiedBy('PHP Newsletter')
-            ->setTitle(trans('str.redirect_log'))
+            ->setTitle(trans('str.redirect'))
             ->setSubject('Office 2007 XLSX Document')
             ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
             ->setKeywords('office 2007 openxml php')
@@ -91,6 +91,6 @@ class RedirectLogController extends Controller
     {
         $infoAlert = trans('frontend.hint.redirectlog_info') ? trans('frontend.hint.redirectlog_info') : null;
 
-        return view('admin.redirect_log.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_log_inf'));
+        return view('admin.redirect.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_inf'));
     }
 }

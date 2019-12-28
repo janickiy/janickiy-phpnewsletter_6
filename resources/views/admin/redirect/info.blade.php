@@ -18,7 +18,7 @@
                 <!-- widget div-->
                 <div>
 
-                    <p>« <a href="{{ URL::route('admin.redirect_log.index') }}">{{ trans('frontend.str.back') }}</a></p>
+                    <p>« <a href="{{ URL::route('admin.redirect.index') }}">{{ trans('frontend.str.back') }}</a></p>
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
@@ -89,7 +89,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('admin.datatable.info_redirect_log', ['url' => $url]) }}'
+                    url: '{{ URL::route('admin.datatable.info_redirect', ['url' => $url]) }}'
                 },
                 columns: [
                     {data: 'id', name: 'id'},

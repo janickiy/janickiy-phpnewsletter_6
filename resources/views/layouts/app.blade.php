@@ -284,8 +284,8 @@ Use search to find needed section.
                         </a>
                     </li>
 
-                    <li {{ Request::is('redirect-log*') ? ' class=active' : '' }}>
-                        <a href="{{ URL::route('admin.redirect_log.index') }}" title="{{ trans('frontend.menu.referrens_log') }}">
+                    <li {{ Request::is('redirect*') ? ' class=active' : '' }}>
+                        <a href="{{ URL::route('admin.redirect.index') }}" title="{{ trans('frontend.menu.referrens_log') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.referrens_log') }}</span>
                         </a>
                     </li>

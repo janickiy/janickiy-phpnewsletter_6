@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRedirectLogTable extends Migration
+class CreateRedirectTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRedirectLogTable extends Migration
      */
     public function up()
     {
-        Schema::create('redirect_log', function (Blueprint $table) {
+        Schema::create('redirect', function (Blueprint $table) {
             $table->increments('id');
             $table->string('url')->index('url');
             $table->string('email')->index('email');
@@ -28,6 +28,6 @@ class CreateRedirectLogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('redirect_log');
+        Schema::dropIfExists('redirect');
     }
 }
