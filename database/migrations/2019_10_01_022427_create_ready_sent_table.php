@@ -24,6 +24,7 @@ class CreateReadySentTable extends Migration
             $table->tinyInteger('readMail')->nullable();
             $table->integer('scheduleId')->index('scheduleId');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 

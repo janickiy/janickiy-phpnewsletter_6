@@ -18,6 +18,7 @@ class CreateRedirectTable extends Migration
             $table->string('url')->index('url');
             $table->string('email')->index('email');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 
