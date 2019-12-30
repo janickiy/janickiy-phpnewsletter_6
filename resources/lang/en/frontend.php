@@ -137,6 +137,8 @@ return [
         'bad' => 'Bad',
         'send_out_newsletter' => 'Send out email newsletter to subscribers',
         'stop_newsletter' => 'Stop email newsletter',
+        'no_newsletter_selected' => 'No newsletter selected!',
+        'not_sent' => 'Not sent',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

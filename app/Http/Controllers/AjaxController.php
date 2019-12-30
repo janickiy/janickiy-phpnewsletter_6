@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Attach, Logs, ReadySent, Schedule, ScheduleCategory, Subscribers, Subscriptions, Templates};
+use App\Models\{Attach, Logs, Process, ReadySent, Schedule, ScheduleCategory, Subscribers, Subscriptions, Templates};
 use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, UpdateHelpers};
 use Illuminate\Support\Facades\Storage;
 use Cookie;
@@ -182,9 +182,12 @@ class AjaxController extends Controller
                     $logId = $request->input('logId');
 
                     if ($logId == 0) {
-                        $log = Logs::create(['time' => date('Y-m-d H:i:s')]);
-                        $logId = $log->id;
+                        return ResponseHelpers::jsonResponse([
+                            'result' => false,
+                        ]);
                     }
+
+                    $mailcount = 0;
 
                     $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
                     $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
@@ -211,94 +214,128 @@ class AjaxController extends Controller
                         }
                     }
 
-                    $templateId = $request->input('templateId');
+                    $templateId = [];
 
-                    $template = Templates::where('id', $templateId)->first();
-
-                    if ($interval) {
-                        $subscribers = Subscribers::select('subscribers.email','subscribers.token','subscribers.id','subscribers.name')
-                            ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
-                            ->leftJoin('ready_sent', function ($join) use ($template,$logId) {
-                                $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
-                                    ->where('ready_sent.templateId', '=', $template->id)
-                                    ->where('ready_sent.logId', '=', $logId)
-                                    ->where(function ($query) {
-                                        $query->where('ready_sent.success', '=', 1)
-                                            ->orWhere('ready_sent.success', '=', 0);
-                                    });
-                            })
-                            ->whereIN('subscriptions.categoryId', $categoryId)
-                            ->where('subscribers.active', 1)
-                            ->whereRaw($interval)
-                            ->groupBy('subscribers.id')
-                            ->groupBy('subscribers.email')
-                            ->groupBy('subscribers.token')
-                            ->groupBy('subscribers.name')
-                            ->orderByRaw($order)
-                            ->limit($limit)
-                            ->get();
-                    } else {
-                        $subscribers = Subscribers::select('subscribers.email','subscribers.token','subscribers.id','subscribers.name')
-                            ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
-                            ->leftJoin('ready_sent', function ($join) use ($template,$logId) {
-                                $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
-                                    ->where('ready_sent.templateId', '=', $template->id)
-                                    ->where('ready_sent.logId', '=', $logId)
-                                    ->where(function ($query) {
-                                        $query->where('ready_sent.success', '=', 1)
-                                            ->orWhere('ready_sent.success', '=', 0);
-                                    });
-                            })
-                            ->whereIN('subscriptions.categoryId', $categoryId)
-                            ->where('subscribers.active', 1)
-                            ->groupBy('subscribers.id')
-                            ->groupBy('subscribers.email')
-                            ->groupBy('subscribers.token')
-                            ->groupBy('subscribers.name')
-                            ->orderByRaw($order)
-                            ->limit($limit)
-                            ->get();
+                    foreach ($request->templateId as $id) {
+                        if (is_numeric($id)) {
+                            $templateId[] = $id;
+                        }
                     }
 
-                    foreach ($subscribers as $subscriber) {
-                        SendEmailHelpers::setBody($template->body);
-                        SendEmailHelpers::setSubject($template->name);
-                        SendEmailHelpers::setPrior($template->prior);
-                        SendEmailHelpers::setEmail($subscriber->email);
-                        SendEmailHelpers::setToken($subscriber->token);
-                        SendEmailHelpers::setSubscriberId($subscriber->id);
-                        SendEmailHelpers::setName($subscriber->name);
+                    $templates = Templates::whereIN('id', $templateId)->get();
 
-                        $result = SendEmailHelpers::sendEmail($template->id);
-
-                        $data = [];
-
-                        if ($result['result'] === true) {
-                            $data['subscriberId'] = $subscriber->id;
-                            $data['email'] = $subscriber->email;
-                            $data['templateId'] = $template->id;
-                            $data['template'] = $template->name;
-                            $data['success'] = 1;
-                            $data['scheduleId'] = 0;
-                            $data['logId'] = $logId;
-
-
-                            Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
-
+                    foreach ($templates as $template) {
+                        if ($interval) {
+                            $subscribers = Subscribers::select('subscribers.email', 'subscribers.token', 'subscribers.id', 'subscribers.name')
+                                ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                                ->leftJoin('ready_sent', function ($join) use ($template, $logId) {
+                                    $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
+                                        ->where('ready_sent.templateId', '=', $template->id)
+                                        ->where('ready_sent.logId', '=', $logId)
+                                        ->where(function ($query) {
+                                            $query->where('ready_sent.success', '=', 1)
+                                                ->orWhere('ready_sent.success', '=', 0);
+                                        });
+                                })
+                                ->whereIN('subscriptions.categoryId', $categoryId)
+                                ->where('subscribers.active', 1)
+                                ->whereRaw($interval)
+                                ->groupBy('subscribers.id')
+                                ->groupBy('subscribers.email')
+                                ->groupBy('subscribers.token')
+                                ->groupBy('subscribers.name')
+                                ->orderByRaw($order)
+                                ->limit($limit)
+                                ->get();
                         } else {
-                            $data['subscriberId'] = $subscriber->id;
-                            $data['email'] = $subscriber->email;
-                            $data['templateId'] = $template->templateId;
-                            $data['template'] = $template->name;
-                            $data['success'] = 0;
-                            $data['errorMsg'] = $result['error'];
-                            $data['scheduleId'] = 0;
-                            $data['logId'] = $logId;
+                            $subscribers = Subscribers::select('subscribers.email', 'subscribers.token', 'subscribers.id', 'subscribers.name')
+                                ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+                                ->leftJoin('ready_sent', function ($join) use ($template, $logId) {
+                                    $join->on('subscribers.id', '=', 'ready_sent.subscriberId')
+                                        ->where('ready_sent.templateId', '=', $template->id)
+                                        ->where('ready_sent.logId', '=', $logId)
+                                        ->where(function ($query) {
+                                            $query->where('ready_sent.success', '=', 1)
+                                                ->orWhere('ready_sent.success', '=', 0);
+                                        });
+                                })
+                                ->whereIN('subscriptions.categoryId', $categoryId)
+                                ->where('subscribers.active', 1)
+                                ->groupBy('subscribers.id')
+                                ->groupBy('subscribers.email')
+                                ->groupBy('subscribers.token')
+                                ->groupBy('subscribers.name')
+                                ->orderByRaw($order)
+                                ->limit($limit)
+                                ->get();
                         }
 
-                        ReadySent::create($data);
+                        foreach ($subscribers as $subscriber) {
 
-                        unset($data);
+                            if ($this->getProcess() == 'stop' || $this->getProcess() == 'pause') {
+                                return ResponseHelpers::jsonResponse([
+                                    'result' => true,
+                                    'completed' => true,
+                                ]);
+                            }
+
+                            if (SettingsHelpers::getSetting('sleep') > 0)
+                                sleep(SettingsHelpers::getSetting('sleep'));
+
+                            SendEmailHelpers::setBody($template->body);
+                            SendEmailHelpers::setSubject($template->name);
+                            SendEmailHelpers::setPrior($template->prior);
+                            SendEmailHelpers::setEmail($subscriber->email);
+                            SendEmailHelpers::setToken($subscriber->token);
+                            SendEmailHelpers::setSubscriberId($subscriber->id);
+                            SendEmailHelpers::setName($subscriber->name);
+
+                            $result = SendEmailHelpers::sendEmail($template->id);
+
+                            $data = [];
+
+                            if ($result['result'] === true) {
+                                $data['subscriberId'] = $subscriber->id;
+                                $data['email'] = $subscriber->email;
+                                $data['templateId'] = $template->id;
+                                $data['template'] = $template->name;
+                                $data['success'] = 1;
+                                $data['scheduleId'] = 0;
+                                $data['logId'] = $logId;
+
+                                $mailcount++;
+
+                                Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
+
+                            } else {
+                                $data['subscriberId'] = $subscriber->id;
+                                $data['email'] = $subscriber->email;
+                                $data['templateId'] = $template->templateId;
+                                $data['template'] = $template->name;
+                                $data['success'] = 0;
+                                $data['errorMsg'] = $result['error'];
+                                $data['scheduleId'] = 0;
+                                $data['logId'] = $logId;
+                            }
+
+                            ReadySent::create($data);
+
+                            unset($data);
+
+                            if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
+                                return ResponseHelpers::jsonResponse([
+                                    'result' => true,
+                                    'completed' => true,
+                                ]);
+                            }
+                        }
+                    }
+
+                    if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
+                        return ResponseHelpers::jsonResponse([
+                            'result' => true,
+                            'completed' => true,
+                        ]);
                     }
 
                     return ResponseHelpers::jsonResponse([
@@ -372,7 +409,7 @@ class AjaxController extends Controller
                             $rows[] = [
                                 'subscriberId' => $row->subscriberId,
                                 "email"   => $row->email,
-                                "status"  => $row->success,
+                                "status"  => $row->success == 1 ? trans('frontend.str.sent') : trans('frontend.str.not_sent'),
                                ];
                         }
 
@@ -389,7 +426,29 @@ class AjaxController extends Controller
 
                     break;
 
+                case 'start_mailing':
+
+                    $log = Logs::create(['time' => date('Y-m-d H:i:s')]);
+                    $logId = $log->id;
+
+                    return ResponseHelpers::jsonResponse([
+                        'result' => true,
+                        'logId' => $logId
+                    ]);
+
+                    break;
+
             }
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getProcess()
+    {
+        $process = Process::where('userId', \Auth::user('web')->id)->first();
+
+        return $process->process;
     }
 }

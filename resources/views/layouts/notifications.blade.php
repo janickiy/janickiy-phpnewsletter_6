@@ -29,7 +29,6 @@
         </button>
         <i class="fa-fw fa fa-check"></i>
         {{ session('success') }}
-
     </div>
 @endif
 

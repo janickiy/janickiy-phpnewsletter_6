@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+class CreateProcessTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamp('time');
+        Schema::create('process', function (Blueprint $table) {
+            $table->integer('id');
+            $table->enum('process',['start', 'pause', 'stop'])->default('start');
+            $table->integer('userId');
+            $table->timestamps();
             $table->engine = 'MyISAM';
         });
     }
@@ -27,6 +29,6 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('process');
     }
 }

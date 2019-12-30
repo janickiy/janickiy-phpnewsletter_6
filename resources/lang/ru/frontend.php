@@ -133,6 +133,7 @@ return [
         'bad' => 'Плохо',
         'send_out_newsletter' => 'Разослать рассылку подписчикам',
         'stop_newsletter' => 'Остановить рассылку',
+        'not_sent' => 'не отправлено',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -150,6 +151,7 @@ return [
         'cannot_read_zip_archive' => 'Ошибка! Невозможно прочитать .zip архив',
         'update_completed' => 'Обновление завершено.',
         'cache_cleared' => 'Кеш очищен',
+        'no_newsletter_selected' => 'Ни одной рассылки не выбрано!',
     ],
     'form' => [
         'required_fields' => 'обязательные поля',

@@ -169,18 +169,18 @@ class TemplateController extends Controller
      */
     public function status(Request $request)
     {
-        $temp = [];
+        $templateId = [];
 
-        foreach ($request->activate as $id) {
+        foreach ($request->templateId as $id) {
             if (is_numeric($id)) {
-                $temp[] = $id;
+                $templateId[] = $id;
             }
         }
 
         switch ($request->action) {
             case  1 :
 
-                $templates = Templates::whereIN('id', $temp)->get();
+                $templates = Templates::whereIN('id', $templateId)->get();
 
                 foreach ($templates as $template) {
                     foreach ($template->attach as $a) {
@@ -188,7 +188,7 @@ class TemplateController extends Controller
                     }
                 }
 
-                Templates::whereIN('id', $temp)->delete();
+                Templates::whereIN('id', $templateId)->delete();
 
                 break;
         }

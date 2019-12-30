@@ -106,7 +106,7 @@
                 <span style="color: green">{{ trans('frontend.str.good') }}: </span><span style="color: green" id="successful">0</span>
                 <span style="color: red">{{ trans('frontend.str.bad') }}: </span><span style="color: red" id="unsuccessful">0</span><br><br>
                 <span id="divStatus" class="error"></span>
-                <button onClick="sendout();" id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" style="margin-right: 15px;" title="{{ trans('frontend.str.send_out_newsletter') }}"><i class="fa fa-play"></i></button>
+                <button id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" style="margin-right: 15px;" title="{{ trans('frontend.str.send_out_newsletter') }}"><i class="fa fa-play"></i></button>
                 <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled" disabled="disabled" title="{{ trans('frontend.str.stop_newsletter') }}"><i class="fa fa-stop"></i></button>
             </div>
         </div>
@@ -119,11 +119,156 @@
 
     <script>
 
+        function getCountProcess()
+        {
+            var logId = $('#logId').val();
+
+            if (logId != 0 && completed === null) {
+                $.ajax({
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    cache: false,
+                    method: "POST",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "count_send",
+                    },
+                    dataType: "json",
+                    success:function(json){
+                        if (json.result == true) {
+                            var totalmail = json.total;
+                            var successful = json.success;
+                            var unsuccessful = json.unsuccessful;
+                            var timeleft = json.time;
+                            var leftsend = json.leftsend;
+
+                            $('#totalsendlog').text(totalmail);
+                            $('#unsuccessful').text(unsuccessful);
+                            $('#successful').text(successful);
+                            $('#timer2').text(timeleft);
+
+                            onlineLogProcess();
+
+                            $('.progress-bar').css('width', leftsend + '%');
+                            $('#leftsend').text(leftsend);
+
+                            setTimeout('getCountProcess()', 2000);
+
+                        } else { setTimeout('getCountProcess()', 1000); }
+                    }
+                });
+            }
+        }
+
+        function onlineLogProcess()
+        {
+            if (completed === null) {
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "log_online",
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        var msg = '';
+
+                        for(var i=0; i < data.item.length; i++)	{
+                            if(data.item[i].email != 'undefined'){
+                                msg += data.item[i].email + ' - ' + data.item[i].status;
+                                msg += '<br>';
+                            }
+                            $('#onlinelog').html(msg);
+                        }
+                    },
+                });
+            }
+        }
+
+       function completeProcess()
+       {
+           $("#pausesendout").addClass('disabled').attr('disabled','disabled');
+           $("#stopsendout").addClass('disabled').attr('disabled','disabled');
+           $("#sendout").removeClass('disabled').removeAttr('disabled');
+           $("#process").removeClass();
+           $("#timer2").text('00:00:00');
+           $('#leftsend').text(100);
+           $('.progress-bar').css('width', '100%');
+       }
+
+        function process()
+        {
+            if (pausesend == false){
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "send_out",
+                    },
+                    cache: false,
+                    dataType:"json",
+                    success:function(json){
+                        if (json.completed == true){
+                            $("#process").removeClass();
+                            completed = json.completed;
+                            completeProcess();
+                        } else {
+                            setTimeout('process()', 3000);
+                        }
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
             var overlay = $('#overlay');
             var open_modal = $('#apply');
             var close = $('.modal_close, #overlay');
             var modal = $('.modal_div');
+
+            $("#sendout").on('click', function () {
+                pausesend = false;
+                completed = null;
+                successful   = 0;
+                unsuccessful = 0;
+                totalmail = 0;
+
+                if ($('.check').is(':checked')) {
+                    $('#timer2').text('00:00:00');
+                    $("#stopsendout").removeClass('disabled').removeAttr('disabled');
+                    $("#sendout").addClass('disabled').attr('disabled','disabled');
+                    $("#process").removeClass().addClass('showprocess');
+
+                    var request = $.ajax({
+                        url: '{{ URL::route('admin.ajax.action') }}',
+                        method: "POST",
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        data: {
+                            action: "start_mailing",
+                        },
+                        dataType: "json"
+                    });
+
+                    request.done(function (data) {
+                        if (data.result != null && data.result == true) {
+                            $('#logId').val(data.logId);
+
+                            getCountProcess();
+                            onlineLogProcess();
+                            process();
+                        }
+                    });
+
+                    getCountProcess();
+                    onlineLogProcess();
+                    process();
+                } else {
+                    $("#divStatus").html('{{ trans('frontend.str.no_newsletter_selected') }}');
+                }
+            });
 
             open_modal.click(function (event) {
                 var idSelect = $('#select_action').val();

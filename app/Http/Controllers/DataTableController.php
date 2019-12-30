@@ -23,7 +23,7 @@ class DataTableController extends Controller
         return Datatables::of($row)
 
             ->addColumn('checkbox', function ($row) {
-                return '<input type="checkbox" class="check" value="' . $row->id . '" name="activate[]">';
+                return '<input type="checkbox" class="check" value="' . $row->id . '" name="templateId[]">';
             })
 
             ->addColumn('action', function ($row) {
