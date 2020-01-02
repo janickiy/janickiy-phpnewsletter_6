@@ -163,7 +163,7 @@ class AjaxController extends Controller
 
                     $fh = fopen(__FILE__, 'r');
 
-                    if (! flock($fh, LOCK_EX | LOCK_NB)) {
+                    if (!flock($fh, LOCK_EX | LOCK_NB)) {
                         exit('Script is already running');
                     }
 
@@ -357,17 +357,17 @@ class AjaxController extends Controller
                             }
                         }
 
-                        $total = Subscriptions::join('subscribers','subscriptions.subscriberId','=','subscribers.id')
-                            ->where('subscribers.active',1)
+                        $total = Subscriptions::join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
+                            ->where('subscribers.active', 1)
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->count();
 
                         $success = ReadySent::where('logId', $request->input('logId'))
-                            ->where('success',1)
+                            ->where('success', 1)
                             ->count();
 
                         $unsuccess = ReadySent::where('logId', $request->input('logId'))
-                            ->where('success',0)
+                            ->where('success', 0)
                             ->count();
 
                         $sleep = SettingsHelpers::getSetting('sleep') == 0 ? 0.5 : SettingsHelpers::getSetting('sleep');
@@ -377,18 +377,18 @@ class AjaxController extends Controller
                         $datetime->setTime(0, 0, $timesec);
 
                         return ResponseHelpers::jsonResponse([
-                            'result'  => true,
-                            'status'  => 1,
-                            'total'   => $total,
+                            'result' => true,
+                            'status' => 1,
+                            'total' => $total,
                             'success' => $success,
                             'unsuccessful' => $unsuccess,
-                            'time'     => $datetime->format('H:i:s'),
+                            'time' => $datetime->format('H:i:s'),
                             'leftsend' => round(($success + $unsuccess) / $total * 100, 2),
                         ]);
 
                     } else {
                         return ResponseHelpers::jsonResponse([
-                            'result'  => false,
+                            'result' => false,
                         ]);
                     }
 
@@ -396,7 +396,7 @@ class AjaxController extends Controller
 
                 case 'log_online':
 
-                    $readySent = ReadySent::orderBy('id','desc')
+                    $readySent = ReadySent::orderBy('id', 'desc')
                         ->where('logId', '>', 0)
                         ->limit(10)
                         ->get();
@@ -405,12 +405,12 @@ class AjaxController extends Controller
 
                         $rows = [];
 
-                        foreach($readySent as $row) {
+                        foreach ($readySent as $row) {
                             $rows[] = [
                                 'subscriberId' => $row->subscriberId,
-                                "email"   => $row->email,
-                                "status"  => $row->success == 1 ? trans('frontend.str.sent') : trans('frontend.str.not_sent'),
-                               ];
+                                "email" => $row->email,
+                                "status" => $row->success == 1 ? trans('frontend.str.sent') : trans('frontend.str.not_sent'),
+                            ];
                         }
 
                         return ResponseHelpers::jsonResponse([
@@ -420,7 +420,7 @@ class AjaxController extends Controller
 
                     } else {
                         return ResponseHelpers::jsonResponse([
-                            'result'  => false,
+                            'result' => false,
                         ]);
                     }
 
@@ -435,6 +435,24 @@ class AjaxController extends Controller
                         'result' => true,
                         'logId' => $logId
                     ]);
+
+                    break;
+
+                case 'process':
+
+                    if ($request->input('command')) {
+                        Process::where('userId', \Auth::user('web')->id)->update(['command' => $request->input('command')]);
+
+                        return ResponseHelpers::jsonResponse([
+                            'result' => true,
+                            'command' => $request->input('command')
+                        ]);
+
+                    } else {
+                        return ResponseHelpers::jsonResponse([
+                            'result' => false,
+                        ]);
+                    }
 
                     break;
 

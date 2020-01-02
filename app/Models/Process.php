@@ -11,7 +11,7 @@ class Process extends Model
     protected $primaryKey = 'id';
 
 	protected $fillable = [
-		'process',
+		'command',
         'userId'
 	];
 }

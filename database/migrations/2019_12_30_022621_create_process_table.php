@@ -15,7 +15,7 @@ class CreateProcessTable extends Migration
     {
         Schema::create('process', function (Blueprint $table) {
             $table->integer('id');
-            $table->enum('process',['start', 'pause', 'stop'])->default('start');
+            $table->enum('command',['start', 'pause', 'stop'])->default('start');
             $table->integer('userId');
             $table->timestamps();
             $table->engine = 'MyISAM';

@@ -139,6 +139,7 @@ return [
         'stop_newsletter' => 'Stop email newsletter',
         'no_newsletter_selected' => 'No newsletter selected!',
         'not_sent' => 'Not sent',
+        "error_server" => " Error server",
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
