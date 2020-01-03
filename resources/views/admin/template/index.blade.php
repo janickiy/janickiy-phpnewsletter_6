@@ -33,9 +33,11 @@
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
-                            <th width="10px"><span><input type="checkbox"
-                                                          title="{{ trans('frontend.str.check_uncheck_all') }}"
-                                                          id="checkAll"></span></th>
+                            <th width="10px">
+                                <span>
+                                    <input type="checkbox" title="{{ trans('frontend.str.check_uncheck_all') }}" id="checkAll">
+                                </span>
+                            </th>
                             <th width="15px">ID</th>
                             <th width="50%">{{ trans('frontend.str.template') }}</th>
                             <th>{{ trans('frontend.str.importance') }}</th>
@@ -96,23 +98,22 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <p><span id="leftsend">0</span>% {{ trans('frontend.str.left') }}: <span id="timer2">00:00:00</span></p>
             <div class="progress progress-sm progress-striped active">
                 <div class="progress-bar bg-color-darken" role="progressbar" style="width: 1%"></div>
             </div>
-            <div class="online_statistics">{{ trans('frontend.str.total')  }}: <span id="totalsendlog">0</span>
-                <span style="color: green">{{ trans('frontend.str.good') }}: </span><span style="color: green"
-                                                                                          id="successful">0</span>
-                <span style="color: red">{{ trans('frontend.str.bad') }}: </span><span style="color: red"
-                                                                                       id="unsuccessful">0</span><br><br>
+            <div class="online_statistics">{{ trans('frontend.str.total')  }}:
+                <span id="totalsendlog">0</span>
+                <span style="color: green">{{ trans('frontend.str.good') }}: </span>
+                <span style="color: green" id="successful">0</span>
+                <span style="color: red">{{ trans('frontend.str.bad') }}: </span>
+                <span style="color: red"  id="unsuccessful">0</span><br><br>
                 <span id="divStatus" class="error"></span>
-                <button id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" style="margin-right: 15px;"
-                        title="{{ trans('frontend.str.send_out_newsletter') }}"><i class="fa fa-play"></i></button>
-                <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled"
-                        disabled="disabled" title="{{ trans('frontend.str.stop_newsletter') }}"><i
-                        class="fa fa-stop"></i></button>
+                <button id="sendout" class="btn btn-default btn-circle btn-modal btn-lg" style="margin-right: 15px;"  title="{{ trans('frontend.str.send_out_newsletter') }}"><i class="fa fa-play"></i></button>
+                <button onClick="stopsend('stop');" id="stopsendout" class="btn btn-danger btn-circle btn-lg disabled"  disabled="disabled" title="{{ trans('frontend.str.stop_newsletter') }}">
+                    <i class="fa fa-stop"></i>
+                </button>
             </div>
         </div>
 
@@ -135,6 +136,8 @@
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     data: {
                         action: "count_send",
+                        logId: $('#logId').val(),
+                        categoryId: $('#categoryId').val(),
                     },
                     dataType: "json",
                     success: function (json) {
@@ -216,7 +219,10 @@
                         $('#leftsend').text(0);
                     }
                 },
-                error: function(error) { $("#divStatus").html("trans('frontend.str.error_server')"); },
+                error: function(error) {
+                    completeProcess();
+                    $("#divStatus").html("trans('frontend.str.error_server')");
+                    },
             });
         }
 
@@ -233,12 +239,21 @@
         function process() {
             if (pausesend == false) {
 
+                var templateId = [];
+
+                $('input:checkbox:checked').each(function(){
+                    templateId.push($(this).val());
+                });
+
                 $.ajax({
                     type: 'POST',
                     url: '{{ URL::route('admin.ajax.action') }}',
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     data: {
                         action: "send_out",
+                        categoryId: $('#categoryId').val(),
+                        templateId: templateId,
+                        logId: $('#logId').val(),
                     },
                     cache: false,
                     dataType: "json",
@@ -291,12 +306,12 @@
                             getCountProcess();
                             onlineLogProcess();
                             process();
+                        } else {
+                            completeProcess();
+                            $("#divStatus").html("trans('frontend.str.error_server')");
                         }
                     });
 
-                    getCountProcess();
-                    onlineLogProcess();
-                    process();
                 } else {
                     $("#divStatus").html('{{ trans('frontend.str.no_newsletter_selected') }}');
                 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Cookie;
 use Artisan;
 use ZipArchive;
+use DateTime;
 
 class AjaxController extends Controller
 {
@@ -167,13 +168,7 @@ class AjaxController extends Controller
                         exit('Script is already running');
                     }
 
-                    if (!$request->input('categoryId')) {
-                        return ResponseHelpers::jsonResponse([
-                            'result' => false,
-                        ]);
-                    }
-
-                    if (!$request->input('templateId')) {
+                    if (!$request->templateId || !$request->categoryId) {
                         return ResponseHelpers::jsonResponse([
                             'result' => false,
                         ]);
@@ -347,50 +342,48 @@ class AjaxController extends Controller
 
                 case 'count_send':
 
-                    if ($request->input('logId') && $request->input('categoryId')) {
-
-                        $categoryId = [];
-
-                        foreach ($request->input('categoryId') as $id) {
-                            if (is_numeric($id)) {
-                                $categoryId[] = $id;
-                            }
-                        }
-
-                        $total = Subscriptions::join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
-                            ->where('subscribers.active', 1)
-                            ->whereIN('subscriptions.categoryId', $categoryId)
-                            ->count();
-
-                        $success = ReadySent::where('logId', $request->input('logId'))
-                            ->where('success', 1)
-                            ->count();
-
-                        $unsuccess = ReadySent::where('logId', $request->input('logId'))
-                            ->where('success', 0)
-                            ->count();
-
-                        $sleep = SettingsHelpers::getSetting('sleep') == 0 ? 0.5 : SettingsHelpers::getSetting('sleep');
-                        $timesec = intval(($total - ($success + $unsuccess)) * $sleep);
-
-                        $datetime = new DateTime();
-                        $datetime->setTime(0, 0, $timesec);
-
-                        return ResponseHelpers::jsonResponse([
-                            'result' => true,
-                            'status' => 1,
-                            'total' => $total,
-                            'success' => $success,
-                            'unsuccessful' => $unsuccess,
-                            'time' => $datetime->format('H:i:s'),
-                            'leftsend' => round(($success + $unsuccess) / $total * 100, 2),
-                        ]);
-
-                    } else {
+                    if (!$request->logId || !$request->categoryId) {
                         return ResponseHelpers::jsonResponse([
                             'result' => false,
                         ]);
                     }
+
+                    $categoryId = [];
+
+                    foreach ($request->categoryId as $id) {
+                        if (is_numeric($id)) {
+                            $categoryId[] = $id;
+                        }
+                    }
+
+                    $total = Subscriptions::join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
+                        ->where('subscribers.active', 1)
+                        ->whereIN('subscriptions.categoryId', $categoryId)
+                        ->count();
+
+                    $success = ReadySent::where('logId', $request->input('logId'))
+                        ->where('success', 1)
+                        ->count();
+
+                    $unsuccess = ReadySent::where('logId', $request->input('logId'))
+                        ->where('success', 0)
+                        ->count();
+
+                    $sleep = SettingsHelpers::getSetting('sleep') == 0 ? 0.5 : SettingsHelpers::getSetting('sleep');
+                    $timesec = intval(($total - ($success + $unsuccess)) * $sleep);
+
+                    $datetime = new DateTime();
+                    $datetime->setTime(0, 0, $timesec);
+
+                    return ResponseHelpers::jsonResponse([
+                        'result' => true,
+                        'status' => 1,
+                        'total' => $total,
+                        'success' => $success,
+                        'unsuccessful' => $unsuccess,
+                        'time' => $datetime->format('H:i:s'),
+                        'leftsend' => $total > 0 ? round(($success + $unsuccess) / $total * 100, 2) : 0,
+                    ]);
 
                     break;
 
