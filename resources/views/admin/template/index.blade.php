@@ -86,8 +86,8 @@
         <div id="sendmail" class="modal_div">
             <input id="logId" type="hidden" value="0">
             <span class="modal_close">X</span>
-            <div id="onlinelog"></div>
             <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
+            <div id="onlinelog"></div>
             <div class="row">
                 <div class="col-sm-12 padding-bottom-10">
                     <div class="form-inline">

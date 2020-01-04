@@ -182,6 +182,8 @@ class AjaxController extends Controller
                         ]);
                     }
 
+                    $this->updateProcess('start');
+
                     $mailcount = 0;
 
                     $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
@@ -433,12 +435,12 @@ class AjaxController extends Controller
 
                 case 'process':
 
-                    if ($request->input('command')) {
-                        Process::where('userId', \Auth::user('web')->id)->update(['command' => $request->input('command')]);
+                    if ($request->command) {
+                        Process::where('userId', \Auth::user('web')->id)->update(['command' => $request->command]);
 
                         return ResponseHelpers::jsonResponse([
                             'result' => true,
-                            'command' => $request->input('command')
+                            'command' => $request->command
                         ]);
 
                     } else {
@@ -454,12 +456,38 @@ class AjaxController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     private function getProcess()
     {
         $process = Process::where('userId', \Auth::user('web')->id)->first();
 
-        return $process->process;
+        if (isset($process->command)) {
+            return $process->command;
+        } else {
+            $process = new Process();
+            $process->command = 'start';
+            $process->userId = \Auth::user('web')->id;
+            $process->save();
+
+            return 'start';
+        }
+    }
+
+    /**
+     * @param $command
+     */
+    private function updateProcess($command)
+    {
+        $result = Process::where('userId', \Auth::user('web')->id);
+
+        if ($result->first()) {
+            $result->update(['command' => $command]);
+        } else {
+            $process = new Process();
+            $process->command = $command;
+            $process->userId = \Auth::user('web')->id;
+            $process->save();
+        }
     }
 }

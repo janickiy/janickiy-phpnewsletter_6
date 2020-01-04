@@ -14,7 +14,7 @@ class CreateProcessTable extends Migration
     public function up()
     {
         Schema::create('process', function (Blueprint $table) {
-            $table->integer('id');
+            $table->increments('id');
             $table->enum('command',['start', 'pause', 'stop'])->default('start');
             $table->integer('userId');
             $table->timestamps();
