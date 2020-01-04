@@ -148,11 +148,21 @@ class AjaxController extends Controller
                         SendEmailHelpers::setToken(md5($email));
                         $result = SendEmailHelpers::sendEmail();
                         $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('msg.email_wasnt_sent') : trans('msg.email_sent')];
-
                     } else {
                         $msg = implode(",", $errors);
                         $result_send = ['result' => 'errors', 'msg' => $msg];
                     }
+
+                    $data['subscriberId'] = 0;
+                    $data['email'] = $email;
+                    $data['templateId'] = 0;
+                    $data['template'] = $subject;
+                    $data['success'] = 0;
+                    $data['errorMsg'] = $result['result'] !== true ? $result['error'] : '';
+                    $data['scheduleId'] = 0;
+                    $data['logId'] = 0;
+
+                    ReadySent::create($data);
 
                     return ResponseHelpers::jsonResponse([
                         $result_send
@@ -222,6 +232,7 @@ class AjaxController extends Controller
                     $templates = Templates::whereIN('id', $templateId)->get();
 
                     foreach ($templates as $template) {
+
                         if ($interval) {
                             $subscribers = Subscribers::select('subscribers.email', 'subscribers.token', 'subscribers.id', 'subscribers.name')
                                 ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
@@ -307,7 +318,7 @@ class AjaxController extends Controller
                             } else {
                                 $data['subscriberId'] = $subscriber->id;
                                 $data['email'] = $subscriber->email;
-                                $data['templateId'] = $template->templateId;
+                                $data['templateId'] = $template->id;
                                 $data['template'] = $template->name;
                                 $data['success'] = 0;
                                 $data['errorMsg'] = $result['error'];
@@ -320,6 +331,9 @@ class AjaxController extends Controller
                             unset($data);
 
                             if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
+
+                                $this->updateProcess('stop');
+
                                 return ResponseHelpers::jsonResponse([
                                     'result' => true,
                                     'completed' => true,
@@ -329,11 +343,16 @@ class AjaxController extends Controller
                     }
 
                     if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
+
+                        $this->updateProcess('stop');
+
                         return ResponseHelpers::jsonResponse([
                             'result' => true,
                             'completed' => true,
                         ]);
                     }
+
+                    $this->updateProcess('stop');
 
                     return ResponseHelpers::jsonResponse([
                         'result' => true,
@@ -393,7 +412,7 @@ class AjaxController extends Controller
 
                     $readySent = ReadySent::orderBy('id', 'desc')
                         ->where('logId', '>', 0)
-                        ->limit(10)
+                        ->limit(5)
                         ->get();
 
                     if ($readySent) {

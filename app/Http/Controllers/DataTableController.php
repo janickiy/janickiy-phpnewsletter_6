@@ -171,9 +171,9 @@ class DataTableController extends Controller
     /**
      * @return mixed
      */
-    public function getInfoLog($id)
+    public function getInfoLog($id = null)
     {
-        $row = ReadySent::where('scheduleId', $id);
+        $row = $id ? ReadySent::where('scheduleId', $id) : ReadySent::query();
 
         return Datatables::of($row)
 

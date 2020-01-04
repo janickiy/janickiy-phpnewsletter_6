@@ -127,7 +127,7 @@ Route::group(['middleware' => ['install']], function () {
             Route::any('users', 'DataTableController@getUsers')->name('admin.datatable.users')->middleware(['permission:admin']);
             Route::any('smtp', 'DataTableController@getSmtp')->name('admin.datatable.smtp')->middleware(['permission:admin']);
             Route::any('log', 'DataTableController@getLog')->name('admin.datatable.log');
-            Route::any('info-log/{id}', 'DataTableController@getInfoLog')->name('admin.datatable.info_log')->where('id', '[0-9]+');
+            Route::any('info-log/{id?}', 'DataTableController@getInfoLog')->name('admin.datatable.info_log')->where('id', '[0-9]+');
             Route::any('redirect-log', 'DataTableController@getRedirectLog')->name('admin.datatable.redirect');
             Route::any('info-redirect-log/{url}', 'DataTableController@getInfoRedirectLog')->name('admin.datatable.info_redirect');
         });
@@ -151,6 +151,5 @@ Route::group(['prefix' => 'install'], function () {
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
     Route::get('error', 'InstallController@error')->name('install.error');
-
     Route::any('ajax', 'InstallController@ajax')->name('install.ajax.action');
 });

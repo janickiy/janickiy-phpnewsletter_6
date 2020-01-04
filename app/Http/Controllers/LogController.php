@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Logs;
 use App\Models\ReadySent;
 use \App\Helpers\StringHelpers;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -28,6 +29,7 @@ class LogController extends Controller
     public function clear()
     {
         ReadySent::truncate();
+        Logs::truncate();
 
         return redirect(URL::route('admin.log.index'))->with('success', trans('message.log_cleared'));
     }
