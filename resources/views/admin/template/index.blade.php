@@ -89,7 +89,7 @@
             <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
             <div id="onlinelog"></div>
             <div class="row">
-                <div class="col-sm-12 padding-bottom-10">
+                <div class="col-sm-12 padding-top-10 padding-bottom-10">
                     <div class="form-inline">
                         <div class="control-group">
 
