@@ -24,6 +24,9 @@ Route::group(['middleware' => ['install']], function () {
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
+
+
+
         Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');
@@ -79,7 +82,13 @@ Route::group(['middleware' => ['install']], function () {
 
         Route::group(['prefix' => 'update'], function () {
             Route::get('', 'UpdateController@index')->name('admin.update.index');
-            Route::post('', 'UpdateController@addLicenseKey')->name('admin.update.add_license_key');
+            Route::post('add_license_key', 'UpdateController@addLicenseKey')->name('admin.update.add_license_key');
+
+        });
+
+        Route::group(['prefix' => 'expired'], function () {
+            Route::get('', 'ExpiredController@index')->name('admin.expired.index');
+            Route::post('add_license_key', 'ExpiredController@addLicenseKey')->name('admin.expired.add_license_key');
         });
 
         Route::group(['prefix' => 'schedule'], function () {

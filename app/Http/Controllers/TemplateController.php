@@ -62,8 +62,6 @@ class TemplateController extends Controller
                 foreach ($attachFile as $file) {
                     $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
 
-                    Storage::putFileAs(Attach::DIRECTORY, $file, $filename);
-
                     if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
                         $attach = [
                             'name' => $file->getClientOriginalName(),
@@ -122,8 +120,6 @@ class TemplateController extends Controller
             if (isset($attachFile)) {
                 foreach ($attachFile as $file) {
                     $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
-
-                    Storage::putFileAs(Attach::DIRECTORY, $file, $filename);
 
                     if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
                         $attach = [

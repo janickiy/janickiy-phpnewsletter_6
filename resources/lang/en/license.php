@@ -5,6 +5,8 @@ return [
         'license_is_used' => 'This license key is already in use!',
         'license_not_found' => 'License key not found!',
         'error_checking_license' => 'License Validation Error! Server is not available.',
+        'cannot_create_licensekey_file' => 'Cannot create a license key file!',
+        'check_licensekey' => 'License key verification error!',
     ],
     'agreement' => "Software Product License Agreement
 

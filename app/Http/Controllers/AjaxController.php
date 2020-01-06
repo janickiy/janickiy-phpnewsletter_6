@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\{Attach, Logs, Process, ReadySent, Schedule, ScheduleCategory, Subscribers, Subscriptions, Templates};
-use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, UpdateHelpers};
+use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, LicenseHelpers};
 use Illuminate\Support\Facades\Storage;
 use Cookie;
 use Artisan;
@@ -20,7 +20,7 @@ class AjaxController extends Controller
 
                 case 'start_update':
 
-                    $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
+                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($request->p == 'start') {
 
@@ -74,7 +74,7 @@ class AjaxController extends Controller
 
                 case 'alert_update':
 
-                    $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
+                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($update->checkNewVersion()) {
                         $update_warning = str_replace('%SCRIPTNAME%', trans('frontend.str.script_name'), trans('frontend.str.update_warning'));

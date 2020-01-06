@@ -2,11 +2,17 @@
 
 namespace App\Helpers;
 
-class UpdateHelpers
+use Illuminate\Support\Facades\Storage;
+use File;
+
+class LicenseHelpers
 {
     private $language;
     private $url = 'http://license.janicky.com/';
     private $currenversion;
+    const licenseKey = 'license/license_key';
+    const KEY    = 'Tey6P1#$(13';
+    const METHOD = 'aes-256-cbc';
 
     public function __construct($language, $currenversion)
     {
@@ -92,7 +98,7 @@ class UpdateHelpers
 
         preg_match('/\{([^\}])+\}/',$data, $out);
 
-        return json_decode($out[0], true);
+        return isset($out[0]) ? json_decode($out[0], true) : null;
     }
 
     /**
@@ -190,20 +196,82 @@ class UpdateHelpers
         return $ip;
     }
 
-    /**
-     * @param $license_key
-     * @return array|mixed
-     */
-    public function checkLicenseKey($license_key)
-    {
-        $domain = (substr($_SERVER['SERVER_NAME'], 0, 4)) == "www." ? str_replace('www.','', $_SERVER['SERVER_NAME']) : $_SERVER['SERVER_NAME'];
-        $url = $this->url . '?t=check_licensekey&licensekey=' . $license_key . '&domain=' . $domain . '&s=phpnewsletter&version=' . urlencode($this->currenversion);
-        $data = $this->getDataContents($url, 5);
 
-        if ($data)  {
-            return $data;
+    /**
+     * @return string|null
+     */
+    public function getLicenseInfo()
+    {
+        if (Storage::exists(self::licenseKey)) {
+            $storagePath  = Storage::disk('local')->path(self::licenseKey);
+            $contents = File::get($storagePath);
+
+            return self::decodeStr($contents);
+        } else
+            return null;
+    }
+
+    /**
+     * @param $licenseKey
+     * @return array
+     */
+    public function makeLicensekey($licenseKey)
+    {
+        $domain = (substr($_SERVER["SERVER_NAME"], 0, 4)) == "www." ? str_replace('www.','', $_SERVER["SERVER_NAME"]) : $_SERVER["SERVER_NAME"];
+        $lisenseInfo = $this->getDataContents($this->url . '?t=licensekey&licensekey=' . $licenseKey . '&domain=' . $domain, 5);
+
+        if (!isset($lisenseInfo['error'])) {
+            $data = [
+                'domain' => $domain,
+                'license_type' => $lisenseInfo['license_type'],
+                'licensekey'   => $licenseKey,
+                'created'   => $lisenseInfo['date_created'],
+                'date_from' => $lisenseInfo['date_active_from'],
+                'date_to'   => $lisenseInfo['date_active_to']
+            ];
+
+            $encodeStr = self::encodeStr(json_encode($data));
+
+            if (File::put(self::licenseKey, $encodeStr) === false) {
+                return ['result' => false, 'msg' => trans('license.error.cannot_create_licensekey_file')];
+            }
         } else {
-            return ['error' => 'ERROR_CHECKING_LICENSE'];
+            return ['result' => false, 'msg' => trans('license.error.check_licensekey')];
         }
+
+        return ['result' => true];
+    }
+
+    /**
+     * @param $str
+     * @return string
+     */
+    static public function encodeStr($str)
+    {
+        $ivsize = openssl_cipher_iv_length(self::METHOD);
+        $iv = openssl_random_pseudo_bytes($ivsize);
+        $ciphertext = openssl_encrypt($str, self::METHOD, self::KEY, OPENSSL_RAW_DATA, $iv);
+
+        return base64_encode($iv . $ciphertext);
+    }
+
+    /**
+     * @param $str
+     * @return string
+     */
+    static public function decodeStr($str)
+    {
+        $str =  base64_decode($str);
+        $ivsize = openssl_cipher_iv_length(self::METHOD);
+        $iv = substr($str, 0, $ivsize);
+        $ciphertext = substr($str, $ivsize);
+
+        return openssl_decrypt(
+            $ciphertext,
+            self::METHOD,
+            self::KEY,
+            OPENSSL_RAW_DATA,
+            $iv
+        );
     }
 }

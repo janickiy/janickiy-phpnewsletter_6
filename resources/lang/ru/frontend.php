@@ -307,5 +307,6 @@ return [
         'template_create' => '',
         'template_edit' => '',
         'log_info' => '',
+        'expired_index' => '',
     ],
 ];

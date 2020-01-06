@@ -91,10 +91,6 @@
                                 {{ trans('frontend.form.send') }}
                             </button>
 
-                            <a class="btn btn-default" href="{{ URL::route('admin.subscribers.index') }}">
-                                {{ trans('frontend.form.back') }}
-                            </a>
-
                         </footer>
 
                         {!! Form::close() !!}
