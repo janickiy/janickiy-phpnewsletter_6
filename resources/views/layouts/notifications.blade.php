@@ -32,6 +32,16 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="alert alert-danger fade in">
+        <button class="close" data-dismiss="alert">
+            ×
+        </button>
+        <i class="fa-fw fa fa-check"></i>
+        {{ session('error') }}
+    </div>
+@endif
+
 @if($errors->any())
     <div class="alert alert-danger fade in">
         <button class="close" data-dismiss="alert">

@@ -377,16 +377,50 @@ class AjaxController extends Controller
                         }
                     }
 
-                    $total = Subscriptions::join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
-                        ->where('subscribers.active', 1)
-                        ->whereIN('subscriptions.categoryId', $categoryId)
-                        ->count();
+                    $logId = $request->input('logId');
 
-                    $success = ReadySent::where('logId', $request->input('logId'))
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+
+                    switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
+                        case "minute":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' MINUTE)";
+                            break;
+                        case "hour":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' HOUR)";
+                            break;
+                        case "day":
+                            $interval = "(subscribers.timeSent < NOW() - INTERVAL '" . SettingsHelpers::getSetting('INTERVAL_NUMBER') . "' DAY)";
+                            break;
+                        default:
+                            $interval = null;
+                    }
+
+                    if ($interval) {
+                        $total = Subscriptions::select('subscribers.id')
+                            ->join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
+                            ->where('subscribers.active', 1)
+                            ->whereIN('subscriptions.categoryId', $categoryId)
+                            ->whereRaw($interval)
+                            ->groupBy('subscribers.id')
+                            ->limit($limit)
+                            ->get()
+                            ->count();
+                    } else {
+                        $total = Subscriptions::select('subscribers.id')
+                            ->join('subscribers', 'subscriptions.subscriberId', '=', 'subscribers.id')
+                            ->where('subscribers.active', 1)
+                            ->whereIN('subscriptions.categoryId', $categoryId)
+                            ->groupBy('subscribers.id')
+                            ->limit($limit)
+                            ->get()
+                            ->count();
+                    }
+
+                    $success = ReadySent::where('logId', $logId)
                         ->where('success', 1)
                         ->count();
 
-                    $unsuccess = ReadySent::where('logId', $request->input('logId'))
+                    $unsuccess = ReadySent::where('logId', $logId)
                         ->where('success', 0)
                         ->count();
 
@@ -455,7 +489,8 @@ class AjaxController extends Controller
                 case 'process':
 
                     if ($request->command) {
-                        Process::where('userId', \Auth::user('web')->id)->update(['command' => $request->command]);
+
+                        $this->updateProcess($request->command);
 
                         return ResponseHelpers::jsonResponse([
                             'result' => true,

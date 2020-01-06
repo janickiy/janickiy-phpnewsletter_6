@@ -125,151 +125,6 @@
 
     <script>
 
-        function getCountProcess() {
-            var logId = $('#logId').val();
-
-            if (logId != 0 && completed === null) {
-                $.ajax({
-                    url: '{{ URL::route('admin.ajax.action') }}',
-                    cache: false,
-                    method: "POST",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    data: {
-                        action: "count_send",
-                        logId: $('#logId').val(),
-                        categoryId: $('#categoryId').val(),
-                    },
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.result == true) {
-                            var totalmail = json.total;
-                            var successful = json.success;
-                            var unsuccessful = json.unsuccessful;
-                            var timeleft = json.time;
-                            var leftsend = json.leftsend;
-
-                            $('#totalsendlog').text(totalmail);
-                            $('#unsuccessful').text(unsuccessful);
-                            $('#successful').text(successful);
-                            $('#timer2').text(timeleft);
-
-                            onlineLogProcess();
-
-                            $('.progress-bar').css('width', leftsend + '%');
-                            $('#leftsend').text(leftsend);
-
-                            setTimeout('getCountProcess()', 2000);
-
-                        } else {
-                            setTimeout('getCountProcess()', 1000);
-                        }
-                    }
-                });
-            }
-        }
-
-        function onlineLogProcess() {
-            if (completed === null) {
-                $.ajax({
-                    type: 'POST',
-                    cache: false,
-                    url: '{{ URL::route('admin.ajax.action') }}',
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    data: {
-                        action: "log_online",
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        var msg = '';
-
-                        for (var i = 0; i < data.item.length; i++) {
-                            if (data.item[i].email != 'undefined') {
-                                msg += data.item[i].email + ' - ' + data.item[i].status;
-                                msg += '<br>';
-                            }
-                            $('#onlinelog').html(msg);
-                        }
-                    },
-                });
-            }
-        }
-
-        function stopsend(command)
-        {
-            $.ajax({
-                type: 'POST',
-                url: '{{ URL::route('admin.ajax.action') }}',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                data: {
-                    action: "process",
-                    command: command,
-                },
-                dataType : "json",
-                success:function(data){
-                    pausesend = true;
-                    $("#process").removeClass();
-                    $("#pausesendout").addClass('disabled').attr('disabled','disabled');
-                    $("#stopsendout").addClass('disabled').attr('disabled','disabled');
-                    $("#sendout").removeClass('disabled').removeAttr('disabled');
-                    $("#refreshemail").addClass('disabled').attr('disabled','disabled');
-
-                    if (command == 'stop'){
-                        $('#timer2').text('00:00:00');
-                        $('.progress-bar').css('width', '0%');
-                        $('#leftsend').text(0);
-                    }
-                },
-                error: function(error) {
-                    completeProcess();
-                    $("#divStatus").html("trans('frontend.str.error_server')");
-                    },
-            });
-        }
-
-        function completeProcess() {
-            $("#pausesendout").addClass('disabled').attr('disabled', 'disabled');
-            $("#stopsendout").addClass('disabled').attr('disabled', 'disabled');
-            $("#sendout").removeClass('disabled').removeAttr('disabled');
-            $("#process").removeClass();
-            $("#timer2").text('00:00:00');
-            $('#leftsend').text(100);
-            $('.progress-bar').css('width', '100%');
-        }
-
-        function process() {
-            if (pausesend == false) {
-
-                var templateId = [];
-
-                $('input:checkbox:checked').each(function(){
-                    templateId.push($(this).val());
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ URL::route('admin.ajax.action') }}',
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    data: {
-                        action: "send_out",
-                        categoryId: $('#categoryId').val(),
-                        templateId: templateId,
-                        logId: $('#logId').val(),
-                    },
-                    cache: false,
-                    dataType: "json",
-                    success: function (json) {
-                        if (json.completed == true) {
-                            $("#process").removeClass();
-                            completed = json.completed;
-                            completeProcess();
-                        } else {
-                            setTimeout('process()', 3000);
-                        }
-                    }
-                });
-            }
-        }
-
         $(document).ready(function () {
             var overlay = $('#overlay');
             var open_modal = $('#apply');
@@ -456,6 +311,155 @@
                 $('#apply').attr('disabled', false);
             else
                 $('#apply').attr('disabled', true);
+        }
+
+        function getCountProcess() {
+            var logId = $('#logId').val();
+
+            if (logId != 0 && completed === null) {
+                $.ajax({
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    cache: false,
+                    method: "POST",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "count_send",
+                        logId: $('#logId').val(),
+                        categoryId: $('#categoryId').val(),
+                    },
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.result == true) {
+                            var totalmail = json.total;
+                            var successful = json.success;
+                            var unsuccessful = json.unsuccessful;
+                            var timeleft = json.time;
+                            var leftsend = json.leftsend;
+
+                            $('#totalsendlog').text(totalmail);
+                            $('#unsuccessful').text(unsuccessful);
+                            $('#successful').text(successful);
+                            $('#timer2').text(timeleft);
+
+                            onlineLogProcess();
+
+                            $('.progress-bar').css('width', leftsend + '%');
+                            $('#leftsend').text(leftsend);
+
+                            setTimeout('getCountProcess()', 2000);
+
+                        } else {
+                            setTimeout('getCountProcess()', 1000);
+                        }
+                    }
+                });
+            }
+        }
+
+        function onlineLogProcess() {
+            if (completed === null) {
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "log_online",
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        var msg = '';
+
+                        for (var i = 0; i < data.item.length; i++) {
+                            if (data.item[i].email != 'undefined') {
+                                msg += data.item[i].email + ' - ' + data.item[i].status;
+                                msg += '<br>';
+                            }
+                            $('#onlinelog').html(msg);
+                        }
+                    },
+                });
+            }
+        }
+
+        function stopsend(command)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '{{ URL::route('admin.ajax.action') }}',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "process",
+                    command: command,
+                },
+                dataType : "json",
+                success:function(data){
+                    pausesend = true;
+                    $("#process").removeClass();
+                    $("#pausesendout").addClass('disabled').attr('disabled','disabled');
+                    $("#stopsendout").addClass('disabled').attr('disabled','disabled');
+                    $("#sendout").removeClass('disabled').removeAttr('disabled');
+                    $("#refreshemail").addClass('disabled').attr('disabled','disabled');
+
+                    if (command == 'stop'){
+                        $('#timer2').text('00:00:00');
+                        $('.progress-bar').css('width', '0%');
+                        $('#leftsend').text(0);
+                    }
+                },
+                error: function(error) {
+                    completeProcess();
+                    $("#divStatus").html("trans('frontend.str.error_server')");
+                },
+            });
+        }
+
+        function completeProcess() {
+            $("#pausesendout").addClass('disabled').attr('disabled', 'disabled');
+            $("#stopsendout").addClass('disabled').attr('disabled', 'disabled');
+            $("#sendout").removeClass('disabled').removeAttr('disabled');
+            $("#process").removeClass();
+            $("#timer2").text('00:00:00');
+            $('#leftsend').text(100);
+            $('.progress-bar').css('width', '0%');
+        }
+
+        function process() {
+            if (pausesend == false) {
+
+                var templateId = [];
+
+                $('input:checkbox:checked').each(function(){
+                    templateId.push($(this).val());
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ URL::route('admin.ajax.action') }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "send_out",
+                        categoryId: $('#categoryId').val(),
+                        templateId: templateId,
+                        logId: $('#logId').val(),
+                    },
+                    cache: false,
+                    dataType: "json",
+                    success: function (json) {
+                        if (json.completed == true) {
+                            $("#process").removeClass();
+                            completed = json.completed;
+                            completeProcess();
+                        } else {
+                            setTimeout('process()', 3000);
+                        }
+                    },
+                    error: function(error) {
+                        completeProcess();
+                        $("#divStatus").html("trans('frontend.str.error_server')");
+                    },
+                });
+            }
         }
 
     </script>

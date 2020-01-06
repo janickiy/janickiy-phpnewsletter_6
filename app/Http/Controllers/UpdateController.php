@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\UpdateHelpers;
+use App\Helpers\{StringHelpers,UpdateHelpers};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use URL;
@@ -50,11 +50,18 @@ class UpdateController extends Controller
             return back()->withErrors($validator)->withInput();
         } else {
 
-            $path = base_path('.env');
-            $env = file_get_contents($path);
-            $env = str_replace( env('LICENSE_KEY'), $request->input('license_key'), $env);
+            $update = new UpdateHelpers(app()->getLocale(), env('VERSION'));
+            $check = $update::checkLicenseKey(env('LICENSE_KEY'));
 
-            file_put_contents($path, $env);
+            if (isset($check['error'])) {
+                $check['error'] = str_replace('LICENSE_IS_USED', trans('license.error.license_is_used'), $check['error']);
+                $check['error'] = str_replace('LICENSE_NOT_FOUND', trans('license.error.license_not_found'), $check['error']);
+                $check['error'] = str_replace('ERROR_CHECKING_LICENSE', trans('license.error.error_checking_license'), $check['error']);
+
+                return redirect(URL::route('admin.update.index'))->with('error',  $check['error']);
+            }
+
+            StringHelpers::setEnvironmentValue('LICENSE_KEY', $request->license_key);
 
             return redirect(URL::route('admin.update.index'))->with('success', trans('message.data_updated'));
         }

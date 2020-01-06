@@ -25,6 +25,8 @@ class UpdateHelpers
             preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
             preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
 
+            if (!isset($out1[1]) || !isset($out2[1])) return false;
+
             $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
             $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
 
@@ -68,9 +70,10 @@ class UpdateHelpers
 
     /**
      * @param $url
+     * @param int $timeout
      * @return mixed
      */
-    public function getDataNewVersion($url)
+    public function getDataContents($url, $timeout = 10)
     {
         $ch = curl_init($url);
 
@@ -81,13 +84,13 @@ class UpdateHelpers
         curl_setopt($ch, CURLOPT_REFERER, isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 
         $data = curl_exec($ch);
 
         curl_close($ch);
 
-        preg_match('/\{([^\}])+\}/U', $data, $out);
+        preg_match('/\{([^\}])+\}/',$data, $out);
 
         return json_decode($out[0], true);
     }
@@ -110,7 +113,7 @@ class UpdateHelpers
      */
     public function getVersion()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out["version"];
     }
 
@@ -119,7 +122,7 @@ class UpdateHelpers
      */
     public function getDownloadLink()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['download'];
     }
 
@@ -128,7 +131,7 @@ class UpdateHelpers
      */
     public function getUpdateLink()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContentsn($this->getUrlInfo());
         return $out['update'];
     }
 
@@ -137,7 +140,7 @@ class UpdateHelpers
      */
     public function getCreated()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['created'];
     }
 
@@ -146,7 +149,7 @@ class UpdateHelpers
      */
     public function getUpdate()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['update'];
     }
 
@@ -155,7 +158,7 @@ class UpdateHelpers
      */
     public function getUpgradeVersion()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['upgrade_version'];
     }
 
@@ -164,7 +167,7 @@ class UpdateHelpers
      */
     public function getMessage()
     {
-        $out = $this->getDataNewVersion($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['message'];
     }
 
@@ -185,5 +188,22 @@ class UpdateHelpers
             $ip = "unknown";
 
         return $ip;
+    }
+
+    /**
+     * @param $license_key
+     * @return array|mixed
+     */
+    public function checkLicenseKey($license_key)
+    {
+        $domain = (substr($_SERVER['SERVER_NAME'], 0, 4)) == "www." ? str_replace('www.','', $_SERVER['SERVER_NAME']) : $_SERVER['SERVER_NAME'];
+        $url = $this->url . '?t=check_licensekey&licensekey=' . $license_key . '&domain=' . $domain . '&s=phpnewsletter&version=' . urlencode($this->currenversion);
+        $data = $this->getDataContents($url, 5);
+
+        if ($data)  {
+            return $data;
+        } else {
+            return ['error' => 'ERROR_CHECKING_LICENSE'];
+        }
     }
 }
