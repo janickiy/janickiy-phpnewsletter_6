@@ -206,7 +206,7 @@ class LicenseHelpers
             $storagePath  = Storage::disk('local')->path(self::licenseKey);
             $contents = File::get($storagePath);
 
-            return self::decodeStr($contents);
+            return json_decode(self::decodeStr($contents), true);
         } else
             return null;
     }
@@ -232,7 +232,7 @@ class LicenseHelpers
 
             $encodeStr = self::encodeStr(json_encode($data));
 
-            if (File::put(self::licenseKey, $encodeStr) === false) {
+            if (Storage::disk('local')->put(self::licenseKey, $encodeStr) === false) {
                 return ['result' => false, 'msg' => trans('license.error.cannot_create_licensekey_file')];
             }
         } else {
@@ -273,5 +273,33 @@ class LicenseHelpers
             OPENSSL_RAW_DATA,
             $iv
         );
+    }
+
+    /**
+     * @param $licenseKey
+     * @return array|mixed
+     */
+    public function checkLicenseKey($licenseKey)
+    {
+        $domain = (substr($_SERVER['SERVER_NAME'], 0, 4)) == "www." ? str_replace('www.','', $_SERVER['SERVER_NAME']) : $_SERVER['SERVER_NAME'];
+        $data = $this->getDataContents($this->url . '?t=check_licensekey&licensekey=' . $licenseKey . '&domain=' . $domain . '&s=phpnewsletter&version=' . urlencode($this->currenversion), 5);
+
+        if ($data)  {
+            return $data;
+        } else {
+            return ['error' => 'ERROR_CHECKING_LICENSE'];
+        }
+    }
+
+    /**
+     * @param $licenseKey
+     */
+    public function updateLicensekey($licenseKey)
+    {
+        $lisense_info = $this->getLicenseInfo();
+
+        if ($lisense_info['licensekey'] != $licenseKey) {
+            $this->makeLicensekey($licenseKey);
+        }
     }
 }

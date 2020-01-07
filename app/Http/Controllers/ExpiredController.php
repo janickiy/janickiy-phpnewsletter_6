@@ -48,6 +48,8 @@ class ExpiredController extends Controller
                 return redirect(URL::route('admin.update.index'))->with('error',  $check['error']);
             }
 
+            $update->updateLicensekey($licenseKey);
+
             StringHelpers::setEnvironmentValue('LICENSE_KEY', $licenseKey);
 
             return redirect(URL::route('admin.expired.index'))->with('success', trans('message.data_updated'));

@@ -34,7 +34,6 @@
                 <!-- widget div-->
                 <div>
 
-
                     <!-- widget edit box -->
                     <div class="jarviswidget-editbox">
                         <!-- This area used as dropdown edit box -->
@@ -50,11 +49,11 @@
 
                             <section>
 
-                                {!! Form::label('license key', trans('frontend.form.license_key'), ['class' => 'label']) !!}
+                                {!! Form::label('license_key', trans('frontend.form.license_key'), ['class' => 'label']) !!}
 
                                 <label class="input">
 
-                                    {!! Form::text('license key', old('license key', env('LICENSE_KEY', null)), ['class' => 'form-control']) !!}
+                                    {!! Form::text('license_key', old('license_key', env('LICENSE_KEY', null)), ['class' => 'form-control']) !!}
 
                                 </label>
 
@@ -93,7 +92,5 @@
 @endsection
 
 @section('js')
-    <script>
 
-    </script>
 @endsection

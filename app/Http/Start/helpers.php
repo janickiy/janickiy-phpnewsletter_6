@@ -52,7 +52,6 @@ class Helpers
             $license->makeLicensekey(env('LICENSE_KEY'));
         }
 
-
         return $result;
     }
 }

@@ -3,13 +3,13 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
 use App\Http\Start\Helpers;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class License
 {
     protected $helper;
+
     /**
      * Creates a new instance of the middleware.
      *
@@ -18,6 +18,7 @@ class License
     {
         $this->helper = $helper;
     }
+
     /**
      * Handle an incoming request.
      *

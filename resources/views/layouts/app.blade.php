@@ -333,13 +333,13 @@ Use search to find needed section.
 
                     <ul class="treeview-menu">
 
-                        <li {{ Request::is('cron_job_list') ? ' class=active' : '' }}>
+                        <li {{ Request::is('miscellaneous/cron_job_list*') ? ' class=active' : '' }}>
                             <a href="{{ URL::route('admin.miscellaneous.cron_job_list') }}" title="{{ trans('frontend.menu.cron_job_list') }}">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.cron_job_list') }}</span>
                             </a>
                         </li>
 
-                        <li {{ Request::is('phpinfo') ? ' class=active' : '' }}>
+                        <li {{ Request::is('miscellaneous/phpinfo*') ? ' class=active' : '' }}>
                             <a href="{{ URL::route('admin.miscellaneous.phpinfo') }}" title="PHP Info">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">PHP Info</span>
                             </a>
@@ -359,8 +359,6 @@ Use search to find needed section.
 
 <!-- MAIN PANEL -->
 <div id="main" role="main">
-
-
 
     <!-- RIBBON -->
     <div id="ribbon">
