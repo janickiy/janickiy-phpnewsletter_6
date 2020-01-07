@@ -263,6 +263,7 @@ return [
         'subform' => 'Subscription',
         'auth' => 'Login',
         'update' => 'Update',
+        'expired_index' => 'License Key Expired',
     ],
     'menu' => [
         'templates' => 'Templates',
