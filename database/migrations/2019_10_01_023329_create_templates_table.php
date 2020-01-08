@@ -19,6 +19,7 @@ class CreateTemplatesTable extends Migration
             $table->mediumText('body');
             $table->tinyInteger('prior');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 
