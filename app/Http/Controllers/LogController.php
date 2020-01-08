@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Logs;
 use App\Models\ReadySent;
 use \App\Helpers\StringHelpers;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -17,7 +18,9 @@ class LogController extends Controller
      */
     public function index()
     {
-        return view('admin.log.index')->with('title', trans('frontend.title.log_index'));
+        $infoAlert = trans('frontend.hint.log_index') ? trans('frontend.hint.log_index') : null;
+
+        return view('admin.log.index', compact('infoAlert'))->with('title', trans('frontend.title.log_index'));
     }
 
     /**
@@ -26,6 +29,7 @@ class LogController extends Controller
     public function clear()
     {
         ReadySent::truncate();
+        Logs::truncate();
 
         return redirect(URL::route('admin.log.index'))->with('success', trans('message.log_cleared'));
     }
@@ -144,6 +148,8 @@ class LogController extends Controller
      */
     public function info($id)
     {
-        return view('admin.log.info', compact('id'))->with('title', trans('frontend.title.log_info'));
+        $infoAlert = trans('frontend.hint.log_info') ? trans('frontend.hint.log_info') : null;
+
+        return view('admin.log.info', compact('id', 'infoAlert'))->with('title', trans('frontend.title.log_info'));
     }
 }

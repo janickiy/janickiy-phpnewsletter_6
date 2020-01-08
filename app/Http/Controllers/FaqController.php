@@ -9,6 +9,8 @@ class FaqController extends Controller
      */
     public function index()
     {
-        return view('admin.faq.index')->with('title', 'FAQ');
+        $infoAlert = trans('frontend.hint.faq_index') ? trans('frontend.hint.faq_index') : null;
+
+        return view('admin.faq.index', compact('infoAlert'))->with('title', 'FAQ');
     }
 }

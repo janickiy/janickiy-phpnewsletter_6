@@ -675,4 +675,63 @@ class StringHelpers
             return $out;
         }
     }
+
+    /**
+     * @param $str
+     * @return string|string[]|null
+     */
+    public static function charsetList($str)
+    {
+        $str = preg_replace("/^utf\-8$/i", trans('frontend.str.charutf8'), $str);
+        $str = preg_replace("/^iso\-8859\-1$/i", trans('frontend.str.iso88591'), $str);
+        $str = preg_replace("/^iso\-8859\-2$/i", trans('frontend.str.iso88592'), $str);
+        $str = preg_replace("/^iso\-8859\-3$/i", trans('frontend.str.iso88593'), $str);
+        $str = preg_replace("/^iso\-8859\-4$/i", trans('frontend.str.iso88594'), $str);
+        $str = preg_replace("/^iso\-8859\-5$/i", trans('frontend.str.iso88595'), $str);
+        $str = preg_replace("/^koi8\-r$/i", trans('frontend.str.koi8r'), $str);
+        $str = preg_replace("/^koi8\-u$/i", trans('frontend.str.koi8u'), $str);
+        $str = preg_replace("/^iso\-8859\-6$/i", trans('frontend.str.iso88596'), $str);
+        $str = preg_replace("/^iso\-8859\-8$/i", trans('frontend.str.iso88598'), $str);
+        $str = preg_replace("/^iso\-8859\-7$/i", trans('frontend.str.iso88597'), $str);
+        $str = preg_replace("/^iso\-8859\-9$/i", trans('frontend.str.iso88599'), $str);
+        $str = preg_replace("/^iso\-8859\-10$/i", trans('frontend.str.iso885910'), $str);
+        $str = preg_replace("/^iso\-8859\-13$/i", trans('frontend.str.iso885913'), $str);
+        $str = preg_replace("/^iso\-8859\-14$/i", trans('frontend.str.iso885914'), $str);
+        $str = preg_replace("/^iso\-8859\-15$/i", trans('frontend.str.iso885915'), $str);
+        $str = preg_replace("/^iso\-8859\-16$/i", trans('frontend.str.iso885916'), $str);
+        $str = preg_replace("/^windows\-1250$/i", trans('frontend.str.windows1250'), $str);
+        $str = preg_replace("/^windows\-1251$/i", trans('frontend.str.windows1251'), $str);
+        $str = preg_replace("/^windows\-1252$/i", trans('frontend.str.windows1252'), $str);
+        $str = preg_replace("/^windows\-1253$/i", trans('frontend.str.windows1253'), $str);
+        $str = preg_replace("/^windows\-1254$/i", trans('frontend.str.windows1254'), $str);
+        $str = preg_replace("/^windows\-1255$/i", trans('frontend.str.windows1255'), $str);
+        $str = preg_replace("/^windows\-1256$/i", trans('frontend.str.windows1256'), $str);
+        $str = preg_replace("/^windows\-1257$/i", trans('frontend.str.windows1257'), $str);
+        $str = preg_replace("/^windows\-1258$/i", trans('frontend.str.windows1258'), $str);
+        $str = preg_replace("/^gb2312$/i", trans('frontend.str.gb2312'), $str);
+        $str = preg_replace("/^big5$/i", trans('frontend.str.big5'), $str);
+        $str = preg_replace("/^iso-2022\-jp$/i", trans('frontend.str.iso2022jp'), $str);
+        $str = preg_replace("/^ks_c_5601\-1987$/i", trans('frontend.str.ksc56011987'), $str);
+        $str = preg_replace("/^euc\-kr$/i", trans('frontend.str.euckr'), $str);
+        $str = preg_replace("/^windows\-874$/i", trans('frontend.str.windows874'), $str);
+
+        return $str;
+    }
+
+    /**
+     * @param $envKey
+     * @param $envValue
+     */
+    public static function setEnvironmentValue($envKey, $envValue)
+    {
+        $path = app()->environmentFilePath();
+
+        $escaped = preg_quote('='.env($envKey), '/');
+
+        file_put_contents($path, preg_replace(
+            "/^{$envKey}{$escaped}/m",
+            "{$envKey}={$envValue}",
+            file_get_contents($path)
+        ));
+    }
 }

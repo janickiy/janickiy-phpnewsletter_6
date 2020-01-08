@@ -12,7 +12,7 @@ class CategoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $infoAlert = trans('frontend.hint.category_index') ? trans('frontend.hint.category_index') : null;
 
@@ -24,7 +24,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create_edit')->with('title', trans('frontend.title.category_create'));
+        $infoAlert = trans('frontend.hint.category_create') ? trans('frontend.hint.category_create') : null;
+
+        return view('admin.category.create_edit', compact('infoAlert'))->with('title', trans('frontend.title.category_create'));
     }
 
     /**

@@ -16,7 +16,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index')->with('title', trans('frontend.title.users_index'));
+        $infoAlert = trans('frontend.hint.users_index') ? trans('frontend.hint.users_index') : null;
+
+        return view('admin.users.index', compact('infoAlert'))->with('title', trans('frontend.title.users_index'));
     }
 
     /**
@@ -30,7 +32,9 @@ class UsersController extends Controller
             'editor' => trans('frontend.str.editor'),
         ];
 
-        return view('admin.users.create_edit', compact('options'))->with('title', trans('frontend.title.users_create'));
+        $infoAlert = trans('frontend.hint.users_create') ? trans('frontend.hint.users_create') : null;
+
+        return view('admin.users.create_edit', compact('options', 'infoAlert'))->with('title', trans('frontend.title.users_create'));
     }
 
     /**
@@ -75,7 +79,9 @@ class UsersController extends Controller
             'editor' => trans('frontend.str.editor'),
         ];
 
-        return view('admin.users.create_edit', compact('user', 'options'))->with('title', trans('frontend.title.users_edit'));
+        $infoAlert = trans('frontend.hint.users_edit') ? trans('frontend.hint.users_edit') : null;
+
+        return view('admin.users.create_edit', compact('user', 'options', 'infoAlert'))->with('title', trans('frontend.title.users_edit'));
     }
 
     /**

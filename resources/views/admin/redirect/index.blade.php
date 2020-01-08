@@ -8,6 +8,19 @@
 
 @section('content')
 
+    @if(Helpers::has_permission(Auth::user()->login,'admin'))
+
+    <div class="row">
+        <div class="col-lg-12"><p class="text-center">
+                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" href="{{ URL::route('admin.redirect.clear') }}" onclick="return confirm('{{ trans('frontend.str.want_to_redirect_clear') }}');">
+                    <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.redirect_clear') }}
+                </a>
+            </p>
+        </div>
+    </div>
+
+    @endif
+
     <div class="row-fluid">
 
         <div class="col">
@@ -17,25 +30,18 @@
 
                 <!-- widget div-->
                 <div>
-
-                    <p>« <a href="{{ URL::route('admin.log.index') }}">{{ trans('frontend.str.back') }}</a></p>
-
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
                         <tr>
-                            <th>{{ trans('frontend.str.newsletter') }}</th>
-                            <th>E-mail</th>
-                            <th>{{ trans('frontend.str.time') }}</th>
-                            <th>{{ trans('frontend.str.status') }}</th>
-                            <th>{{ trans('frontend.str.read') }}</th>
-                            <th>{{ trans('frontend.str.error') }}</th>
+                            <th>URL</th>
+                            <th>{{ trans('frontend.str.redirect_number') }}</th>
+                            <th>{{ trans('frontend.str.excel_report') }}</th>
                         </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
                 </div>
-
             </div>
             <!-- end widget div -->
 
@@ -80,28 +86,23 @@
 
             $('#itemList').dataTable({
                 "sDom": "flrtip",
-                "autoWidth": true,
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
+                "autoWidth": true,
                 'createdRow': function (row, data, dataIndex) {
                     $(row).attr('id', 'rowid_' + data['id']);
-                    if (data['status'] == 0) $(row).attr('class', 'danger');
-                    else if (data['read'] == 1) $(row).attr('class', 'success');
                 },
-                aaSorting: [[2, 'asc']],
+                aaSorting: [[0, 'asc']],
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('admin.datatable.info_log', ['id' => $id]) }}'
+                    url: '{{ URL::route('admin.datatable.redirect') }}'
                 },
                 columns: [
-                    {data: 'template', name: 'template'},
-                    {data: 'email', name: 'email'},
-                    {data: 'created_at', name: 'created_at'},
-                    {data: 'success', name: 'success', searchable: false},
-                    {data: 'readMail', name: 'readMail', searchable: false},
-                    {data: 'errorMsg', name: 'errorMsg', orderable: false, searchable: false},
+                    {data: 'url', name: 'url'},
+                    {data: 'count', name: 'count', searchable: false},
+                    {data: 'report', name: 'report', orderable: false, searchable: false},
                 ],
             });
         })

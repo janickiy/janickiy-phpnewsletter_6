@@ -13,7 +13,6 @@ class Subscribers extends Model
 	protected $fillable = [
 		'name',
         'email',
-        'ip',
         'active',
         'timeSent',
         'token'

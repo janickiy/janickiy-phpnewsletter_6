@@ -74,7 +74,7 @@ class SendUnsentEmails extends Command
             }
 
             if ($interval) {
-                $subscribers = Subscribers::select(['subscribers.email','subscribers.id','subscribers.token','subscribers.name'])
+                $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
                     ->join('schedule_category', function ($join) use ($row) {
                         $join->on('subscriptions.categoryId', '=', 'schedule_category.categoryId')
@@ -98,7 +98,7 @@ class SendUnsentEmails extends Command
                     ->limit($limit)
                     ->get();
             } else {
-                $subscribers = Subscribers::select(['subscribers.email','subscribers.id','subscribers.token','subscribers.name'])
+                $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
                     ->join('schedule_category', function ($join) use ($row) {
                         $join->on('subscriptions.categoryId', '=', 'schedule_category.categoryId')
@@ -123,6 +123,8 @@ class SendUnsentEmails extends Command
             }
 
             foreach ($subscribers as $subscriber) {
+                if (SettingsHelpers::getSetting('sleep') > 0)
+                    sleep(SettingsHelpers::getSetting('sleep'));
 
                 SendEmailHelpers::setBody($row->template->body);
                 SendEmailHelpers::setSubject($row->template->name);
@@ -136,7 +138,7 @@ class SendUnsentEmails extends Command
 
                 if ($result['result'] === true) {
 
-                    ReadySent::where('scheduleId',$row->id)->update(['success' => 1]);
+                    ReadySent::where('scheduleId', $row->id)->update(['success' => 1]);
                     Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
                     $mailcount++;
@@ -145,12 +147,12 @@ class SendUnsentEmails extends Command
                     $mailcountno++;
                 }
 
-                if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount){
+                if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
                     break;
                 }
             }
 
-            if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount){
+            if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
                 break;
             }
         }

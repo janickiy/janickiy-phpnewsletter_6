@@ -10,13 +10,16 @@
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">
-                <a class="btn btn-outline btn-default btn-lg" title="{{ trans('frontend.str.import_subscribers') }}" href="{{ URL::route('admin.subscribers.import') }}">
+                <a class="btn btn-outline btn-default btn-lg" title="{{ trans('frontend.str.import_subscribers') }}"
+                   href="{{ URL::route('admin.subscribers.import') }}">
                     <span class="fa fa-download fa-2x"></span> {{ trans('frontend.str.import') }}
                 </a>
-                <a class="btn btn-outline btn-default btn-lg" title="{{ trans('frontend.str.export_subscribers') }}" href="{{ URL::route('admin.subscribers.export') }}">
+                <a class="btn btn-outline btn-default btn-lg" title="{{ trans('frontend.str.export_subscribers') }}"
+                   href="{{ URL::route('admin.subscribers.export') }}">
                     <span class="fa fa-upload fa-2x"></span> {{ trans('frontend.str.export') }}
                 </a>
-                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.delete_all_subscribers') }}" href="{{ URL::route('admin.subscribers.remove_all') }}"
+                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.delete_all_subscribers') }}"
+                   href="{{ URL::route('admin.subscribers.remove_all') }}"
                    onclick="return confirm('{{ trans('frontend.str.want_to_delete_all_subscribers') }}');">
                     <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.delete_all') }}
                 </a>
@@ -37,52 +40,53 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{ URL::route('admin.subscribers.create') }}" class="btn btn-info btn-sm pull-left">
+                                <a href="{{ URL::route('admin.subscribers.create') }}"  class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span>{{ trans('frontend.str.add_subscriber') }}
                                 </a>
                             </div>
                         </div>
                     </div>
 
+                    {!! Form::open(['url' => URL::route('admin.subscribers.status'), 'method' => 'post', 'onSubmit' => 'if(this.action.value == \'\') { window.alert(\'' . trans('frontend.str.select_action') . '\'); return false; } if (this.action.value == 2) { return confirm(\'' . trans('frontend.str.confirm_remove') .'\') }']) !!}
 
-                    {!! Form::open(['url' => URL::route('admin.subscribers.status'), 'method' => 'post']) !!}
+                    <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="10px">
+                                <span>
+                                    <input type="checkbox"  title="{{ trans('frontend.str.check_uncheck_all') }}" id="checkAll">
+                                </span>
+                            </th>
+                            <th>{{ trans('frontend.str.name') }}</th>
+                            <th>E-mail</th>
+                            <th>{{ trans('frontend.str.status') }}</th>
+                            <th>{{ trans('frontend.str.added') }}</th>
+                            <th width="20px">{{ trans('frontend.str.action') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
 
-                       <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
-                            <thead>
-                            <tr>
-                                <th width="10px"><span><input type="checkbox" title="{{ trans('frontend.str.check_uncheck_all') }}" id="checkAll"></span></th>
-                                <th>{{ trans('frontend.str.name') }}</th>
-                                <th>E-mail</th>
-                                <th>IP</th>
-                                <th>{{ trans('frontend.str.status') }}</th>
-                                <th>{{ trans('frontend.str.added') }}</th>
-                                <th width="20px">{{ trans('frontend.str.action') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-sm-12 padding-bottom-10">
+                            <div class="form-inline">
+                                <div class="control-group">
 
-                        <div class="row">
-                            <div class="col-sm-12 padding-bottom-10">
-                                <div class="form-inline">
-                                    <div class="control-group">
+                                    {!! Form::select('action',[
+                                    '1' => trans('frontend.str.activate'),
+                                    '0' => trans('frontend.str.deactivate'),
+                                    '2' => trans('frontend.str.remove')
+                                    ],null,['class' => 'span3 form-control', 'id' => 'select_action','placeholder' => '--' . trans('frontend.str.action') . '--']) !!}
 
-                                        {!! Form::select('action',[
-                                        '1' => trans('frontend.str.activate'),
-                                        '0' => trans('frontend.str.deactivate'),
-                                        '2' => trans('frontend.str.remove')
-                                        ],null,['class' => 'span3 form-control', 'id' => 'select_action','placeholder' => '--' . trans('frontend.str.action') . '--']) !!}
+                                    <span class="help-inline">
+                                       {!! Form::submit(trans('frontend.str.apply'), ['class' => 'btn btn-success', 'disabled' => "", 'id' => 'apply']) !!}
+                                    </span>
 
-                                        <span class="help-inline">
-
-                                       {!! Form::submit(trans('frontend.str.apply'), ['class' => 'btn btn-success']) !!}
-
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                     {!! Form::close() !!}
 
@@ -106,6 +110,15 @@
 
             $("#checkAll").click(function () {
                 $('input:checkbox').not(this).prop('checked', this.checked);
+                countChecked();
+            });
+
+            $("#checkAll").on('change',function () {
+                countChecked();
+            });
+
+            $("#itemList").on('change', 'input.check', function () {
+                countChecked();
             });
 
             pageSetUp();
@@ -154,7 +167,6 @@
                     {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
-                    {data: 'ip', name: 'ip'},
                     {data: 'active', name: 'active'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -192,6 +204,14 @@
                     });
             });
         })
+
+        function countChecked()
+        {
+            if ($('.check').is(':checked'))
+                $('#apply').attr('disabled',false);
+            else
+                $('#apply').attr('disabled',true);
+        }
 
     </script>
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
-use App\Models\{Templates, Attach};
+use App\Models\{Category, Templates, Attach};
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use URL;
@@ -18,7 +18,13 @@ class TemplateController extends Controller
     {
         $infoAlert = trans('frontend.hint.template_index') ? trans('frontend.hint.template_index') : null;
 
-        return view('admin.template.index', compact('infoAlert'))->with('title', trans('frontend.title.template_index'));
+        $category_options = [];
+
+        foreach (Category::get() as $row) {
+            $category_options[$row->id] = $row->name;
+        }
+
+        return view('admin.template.index', compact('infoAlert','category_options'))->with('title', trans('frontend.title.template_index'));
     }
 
     /**
@@ -26,7 +32,9 @@ class TemplateController extends Controller
      */
     public function create()
     {
-        return view('admin.template.create_edit')->with('title', trans('frontend.title.template_create'));
+        $infoAlert = trans('frontend.hint.template_create') ? trans('frontend.hint.template_create') : null;
+
+        return view('admin.template.create_edit', compact('infoAlert'))->with('title', trans('frontend.title.template_create'));
     }
 
     /**
@@ -53,8 +61,6 @@ class TemplateController extends Controller
             if (isset($attachFile)) {
                 foreach ($attachFile as $file) {
                     $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
-
-                    Storage::putFileAs(Attach::DIRECTORY, $file, $filename);
 
                     if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
                         $attach = [
@@ -84,7 +90,9 @@ class TemplateController extends Controller
 
         $attachment = $template->attach;
 
-        return view('admin.template.create_edit', compact('template','attachment'))->with('title', trans('frontend.title.template_edit'));
+        $infoAlert = trans('frontend.hint.template_edit') ? trans('frontend.hint.template_edit') : null;
+
+        return view('admin.template.create_edit', compact('template','attachment', 'infoAlert'))->with('title', trans('frontend.title.template_edit'));
     }
 
     /**
@@ -112,8 +120,6 @@ class TemplateController extends Controller
             if (isset($attachFile)) {
                 foreach ($attachFile as $file) {
                     $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
-
-                    Storage::putFileAs(Attach::DIRECTORY, $file, $filename);
 
                     if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
                         $attach = [
@@ -151,5 +157,38 @@ class TemplateController extends Controller
 
             $q->delete();
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function status(Request $request)
+    {
+        $templateId = [];
+
+        foreach ($request->templateId as $id) {
+            if (is_numeric($id)) {
+                $templateId[] = $id;
+            }
+        }
+
+        switch ($request->action) {
+            case  1 :
+
+                $templates = Templates::whereIN('id', $templateId)->get();
+
+                foreach ($templates as $template) {
+                    foreach ($template->attach as $a) {
+                        if (isset($a->id) && $a->id) Attach::Remove($a->id);
+                    }
+                }
+
+                Templates::whereIN('id', $templateId)->delete();
+
+                break;
+        }
+
+        return redirect(URL::route('admin.template.index'))->with('success', trans('message.actions_completed'));
     }
 }

@@ -21,7 +21,9 @@ class SubscribersController extends Controller
      */
     public function index()
     {
-        return view('admin.subscribers.index')->with('title', trans('frontend.title.subscribers_index'));
+        $infoAlert = trans('frontend.hint.subscribers_index') ? trans('frontend.hint.subscribers_index') : null;
+
+        return view('admin.subscribers.index', compact('infoAlert'))->with('title', trans('frontend.title.subscribers_index'));
     }
 
     /**
@@ -35,7 +37,9 @@ class SubscribersController extends Controller
             $options[$row->id] = $row->name;
         }
 
-        return view('admin.subscribers.create_edit', compact('options'))->with('title', trans('frontend.title.subscribers_create'));
+        $infoAlert = trans('frontend.hint.subscribers_create') ? trans('frontend.hint.subscribers_create') : null;
+
+        return view('admin.subscribers.create_edit', compact('options', 'infoAlert'))->with('title', trans('frontend.title.subscribers_create'));
     }
 
     /**
@@ -55,7 +59,7 @@ class SubscribersController extends Controller
             return back()->withErrors($validator)->withInput();
         } else {
 
-            $id = Subscribers::create(array_merge($request->all(), ['timeSent' => date('Y-m-d H:i:s'),'active' => 1, 'token' => StringHelpers::token()]))->id;
+            $id = Subscribers::create(array_merge($request->all(), ['timeSent' => date('Y-m-d H:i:s'), 'active' => 1, 'token' => StringHelpers::token()]))->id;
 
             if ($request->categoryId && $id) {
                 foreach ($request->categoryId as $categoryId) {
@@ -91,7 +95,9 @@ class SubscribersController extends Controller
             $subscriberCategoryId[] = $subscription->categoryId;
         }
 
-        return view('admin.subscribers.create_edit', compact('options', 'subscriber', 'subscriberCategoryId'))->with('title', trans('frontend.title.subscribers_edit'));
+        $infoAlert = trans('frontend.hint.subscribers_edit') ? trans('frontend.hint.subscribers_edit') : null;
+
+        return view('admin.subscribers.create_edit', compact('options', 'subscriber', 'subscriberCategoryId', 'infoAlert'))->with('title', trans('frontend.title.subscribers_edit'));
     }
 
     /**
@@ -140,8 +146,9 @@ class SubscribersController extends Controller
         Subscribers::where('id', $id)->delete();
     }
 
+
     /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function import()
     {
@@ -150,7 +157,7 @@ class SubscribersController extends Controller
         $charsets = [];
 
         foreach (Charset::get() as $row) {
-            $charsets[$row->charset] = $row->charset;
+            $charsets[$row->charset] = StringHelpers::charsetList($row->charset);
         }
 
         $category_options = [];
@@ -161,7 +168,9 @@ class SubscribersController extends Controller
 
         $maxUploadFileSize = StringHelpers::maxUploadFileSize();
 
-        return view('admin.subscribers.import', compact('charsets', 'category_options', 'maxUploadFileSize'))->with('title', trans('frontend.title.subscribers_import'));
+        $infoAlert = trans('frontend.hint.subscribers_import') ? trans('frontend.hint.subscribers_import') : null;
+
+        return view('admin.subscribers.import', compact('charsets', 'category_options', 'maxUploadFileSize', 'infoAlert'))->with('title', trans('frontend.title.subscribers_import'));
 
     }
 
@@ -218,7 +227,9 @@ class SubscribersController extends Controller
             $options[$row->id] = $row->name;
         }
 
-        return view('admin.subscribers.export', compact('options'))->with('title', trans('frontend.title.subscribers_export'));
+        $infoAlert = trans('frontend.hint.subscribers_export') ? trans('frontend.hint.subscribers_export') : null;
+
+        return view('admin.subscribers.export', compact('options', 'infoAlert'))->with('title', trans('frontend.title.subscribers_export'));
     }
 
     /**
@@ -254,14 +265,12 @@ class SubscribersController extends Controller
                 ->setSubject('Office 2007 XLSX Document')
                 ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
                 ->setKeywords('office 2007 openxml php')
-                ->setCategory('Email export file')
-            ;
+                ->setCategory('Email export file');
 
             // Add some data
             $oSpreadsheet_Out->setActiveSheetIndex(0)
                 ->setCellValue('A1', 'User email')
-                ->setCellValue('B2', 'Name')
-            ;
+                ->setCellValue('B2', 'Name');
 
             $i = 0;
 
@@ -269,9 +278,8 @@ class SubscribersController extends Controller
                 $i++;
 
                 $oSpreadsheet_Out->setActiveSheetIndex(0)
-                    ->setCellValue('A'.$i, $subscriber->email)
-                    ->setCellValue('B'.$i, $subscriber->name)
-                ;
+                    ->setCellValue('A' . $i, $subscriber->email)
+                    ->setCellValue('B' . $i, $subscriber->name);
             }
 
             $oSpreadsheet_Out->getActiveSheet()->getColumnDimension('A')->setWidth(30);
@@ -284,15 +292,15 @@ class SubscribersController extends Controller
             ob_end_clean();
         }
 
-        if ($request->compress == 'zip'){
+        if ($request->compress == 'zip') {
 
             $fout = fopen("php://output", "wb");
 
-            if ($fout !== false){
-                fwrite($fout, "\x1F\x8B\x08\x08".pack("V", '')."\0\xFF", 10);
+            if ($fout !== false) {
+                fwrite($fout, "\x1F\x8B\x08\x08" . pack("V", '') . "\0\xFF", 10);
 
                 $oname = str_replace("\0", "", $filename);
-                fwrite($fout, $oname."\0", 1+strlen($oname));
+                fwrite($fout, $oname . "\0", 1 + strlen($oname));
 
                 $fltr = stream_filter_append($fout, "zlib.deflate", STREAM_FILTER_WRITE, -1);
                 $hctx = hash_init("crc32b");
@@ -313,7 +321,7 @@ class SubscribersController extends Controller
 
                 fclose($fout);
 
-                return response('',200, [
+                return response('', 200, [
                     'Content-Type' => 'application/zip',
                     'Content-Disposition' => 'filename=emailexport_' . date("d_m_Y") . '.zip',
                 ]);
@@ -507,7 +515,7 @@ class SubscribersController extends Controller
                         'name' => $name,
                         'email' => $email,
                         'active' => 1,
-                         'timeSent' => date('Y-m-d H:i:s'),
+                        'timeSent' => date('Y-m-d H:i:s'),
                         'token' => StringHelpers::token()
                     ];
 
@@ -548,19 +556,19 @@ class SubscribersController extends Controller
                 }
             }
 
-            $subscribers = Subscribers::select('subscribers.name','subscribers.email')
-                ->leftJoin('subscriptions', function($join) {
+            $subscribers = Subscribers::select('subscribers.name', 'subscribers.email')
+                ->leftJoin('subscriptions', function ($join) {
                     $join->on('subscribers.id', '=', 'subscriptions.subscriberId');
                 })
-                ->where('subscribers.active','=',1)
-                ->whereIn('subscriptions.categoryId',$temp)
+                ->where('subscribers.active', '=', 1)
+                ->whereIn('subscriptions.categoryId', $temp)
                 ->groupBy('subscribers.email')
                 ->groupBy('subscribers.id')
                 ->groupBy('subscribers.name')
                 ->get();
         } else {
-            $subscribers = Subscribers::select('name','email')
-                ->where('active','=',1)
+            $subscribers = Subscribers::select('name', 'email')
+                ->where('active', '=', 1)
                 ->get();
         }
 

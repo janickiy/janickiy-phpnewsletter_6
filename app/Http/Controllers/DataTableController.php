@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, RedirectLog};
+use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, Redirect};
 use App\Helpers\StringHelpers;
 use Illuminate\Support\Facades\Auth;
 use DataTables;
@@ -21,16 +21,20 @@ class DataTableController extends Controller
         $row = Templates::with('attach')->get();
 
         return Datatables::of($row)
+
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" class="check" value="' . $row->id . '" name="templateId[]">';
+            })
+
             ->addColumn('action', function ($row) {
                 $editBtn = '<a title="' . trans('frontend.str.edit') . '" class="btn btn-xs btn-primary"  href="' . URL::route('admin.template.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+                return $editBtn;
 
-                return '<div class="nobr"> ' .$editBtn . $deleteBtn . '</div>';
             })
 
             ->editColumn('name', function ($row) {
                 $body = preg_replace('/(<.*?>)|(&.*?;)/', '', $row->body);
-                return $row->name . '<br><br>' . StringHelpers::shortText($body, 500);
+                return $row->name . '<br><br><small class="text-muted">' . StringHelpers::shortText($body, 500) . '</small>';
             })
 
             ->editColumn('prior', function ($row) {
@@ -41,7 +45,7 @@ class DataTableController extends Controller
                 return isset($row->attach) && count($row->attach) > 0 ? trans('frontend.str.yes') : trans('frontend.str.no');
             })
 
-            ->rawColumns(['action', 'name'])->make(true);
+            ->rawColumns(['action', 'name', 'checkbox'])->make(true);
     }
 
     /**
@@ -74,7 +78,7 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('checkbox', function ($row) {
-                return '<input type="checkbox" value="' . $row->id . '" name="activate[]">';
+                return '<input type="checkbox" class="check" value="' . $row->id . '" name="activate[]">';
             })
 
             ->editColumn('active', function ($row) {
@@ -87,7 +91,7 @@ class DataTableController extends Controller
                 return $editBtn;
             })
 
-            ->rawColumns(['action', 'checkbox','ip'])->make(true);
+            ->rawColumns(['action', 'checkbox', 'check'])->make(true);
     }
 
     /**
@@ -140,10 +144,11 @@ class DataTableController extends Controller
      */
     public function getLog()
     {
-        $row = Schedule::selectRaw('schedule.id, schedule.date, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
+        $row = Schedule::selectRaw('schedule.id, schedule.start, schedule.end, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
             ->join('ready_sent', 'schedule.id', '=', 'ready_sent.scheduleId')
             ->groupBy('ready_sent.scheduleId')
-            ->groupBy('schedule.date')
+            ->groupBy('schedule.start')
+            ->groupBy('schedule.end')
             ->groupBy('schedule.id')
         ;
 
@@ -166,9 +171,9 @@ class DataTableController extends Controller
     /**
      * @return mixed
      */
-    public function getInfoLog($id)
+    public function getInfoLog($id = null)
     {
-        $row = ReadySent::where('scheduleId', $id);
+        $row = $id ? ReadySent::where('scheduleId', $id) : ReadySent::query();
 
         return Datatables::of($row)
 
@@ -197,7 +202,7 @@ class DataTableController extends Controller
      */
     public function getRedirectLog()
     {
-        $row = RedirectLog::query()
+        $row = Redirect::query()
             ->selectRaw('DISTINCT url, COUNT(email) as count')
             ->groupBy('url')
         ;
@@ -205,11 +210,11 @@ class DataTableController extends Controller
         return Datatables::of($row)
 
             ->editColumn('count', function ($row) {
-                return '<a href="' . URL::route('admin.redirect_log.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
+                return '<a href="' . URL::route('admin.redirect.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
             })
 
             ->addColumn('report', function ($row) {
-                return '<a href="' . URL::route('admin.redirect_log.report', ['url' => $row->url]) . '">скачать</a>';
+                return '<a href="' . URL::route('admin.redirect.report', ['url' => $row->url]) . '">скачать</a>';
             })
 
             ->rawColumns(['count', 'report'])->make(true);
@@ -222,11 +227,10 @@ class DataTableController extends Controller
      */
     public function getInfoRedirectLog($url)
     {
-        $row = RedirectLog::query()->where('url', $url);
+        $row = Redirect::query()->where('url', $url);
 
         return Datatables::of($row)
 
             ->make(true);
     }
 }
-
