@@ -144,11 +144,11 @@ class DataTableController extends Controller
      */
     public function getLog()
     {
-        $row = Schedule::selectRaw('schedule.id, schedule.start, schedule.end, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
+        $row = Schedule::selectRaw('schedule.id, schedule.value_from_start_date, schedule.value_from_end_date, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
             ->join('ready_sent', 'schedule.id', '=', 'ready_sent.scheduleId')
             ->groupBy('ready_sent.scheduleId')
-            ->groupBy('schedule.start')
-            ->groupBy('schedule.end')
+            ->groupBy('schedule.value_from_start_date')
+            ->groupBy('schedule.value_from_end_date')
             ->groupBy('schedule.id')
         ;
 
