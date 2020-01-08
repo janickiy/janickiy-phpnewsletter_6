@@ -102,6 +102,8 @@ Use search to find needed section.
 -->
 <body class="">
 
+<div id="overlay"></div>
+
 <!-- #HEADER -->
 <header id="header">
     <div id="logo-group">
@@ -282,8 +284,8 @@ Use search to find needed section.
                         </a>
                     </li>
 
-                    <li {{ Request::is('redirect-log*') ? ' class=active' : '' }}>
-                        <a href="{{ URL::route('admin.redirect_log.index') }}" title="{{ trans('frontend.menu.referrens_log') }}">
+                    <li {{ Request::is('redirect*') ? ' class=active' : '' }}>
+                        <a href="{{ URL::route('admin.redirect.index') }}" title="{{ trans('frontend.menu.referrens_log') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.referrens_log') }}</span>
                         </a>
                     </li>
@@ -331,13 +333,13 @@ Use search to find needed section.
 
                     <ul class="treeview-menu">
 
-                        <li {{ Request::is('cron_job_list') ? ' class=active' : '' }}>
+                        <li {{ Request::is('miscellaneous/cron_job_list*') ? ' class=active' : '' }}>
                             <a href="{{ URL::route('admin.miscellaneous.cron_job_list') }}" title="{{ trans('frontend.menu.cron_job_list') }}">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.cron_job_list') }}</span>
                             </a>
                         </li>
 
-                        <li {{ Request::is('phpinfo') ? ' class=active' : '' }}>
+                        <li {{ Request::is('miscellaneous/phpinfo*') ? ' class=active' : '' }}>
                             <a href="{{ URL::route('admin.miscellaneous.phpinfo') }}" title="PHP Info">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">PHP Info</span>
                             </a>

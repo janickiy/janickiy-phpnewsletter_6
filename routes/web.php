@@ -24,6 +24,9 @@ Route::group(['middleware' => ['install']], function () {
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
+
+
+
         Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');
@@ -31,6 +34,7 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('edit/{id}', 'TemplateController@edit')->name('admin.template.edit')->where('id', '[0-9]+');
             Route::put('update', 'TemplateController@update')->name('admin.template.update');
             Route::delete('destroy/{id}', 'TemplateController@destroy')->name('admin.template.destroy')->where('id', '[0-9]+');
+            Route::post('status', 'TemplateController@status')->name('admin.template.status');
         });
 
         Route::group(['prefix' => 'subscribers'], function () {
@@ -46,7 +50,6 @@ Route::group(['middleware' => ['install']], function () {
             Route::post('export-subscribers', 'SubscribersController@exportSubscribers')->name('admin.subscribers.export_subscribers')->middleware(['permission:admin|moderator']);
             Route::get('remove-all', 'SubscribersController@removeAll')->name('admin.subscribers.remove_all')->middleware(['permission:admin|moderator']);
             Route::post('status', 'SubscribersController@status')->name('admin.subscribers.status')->middleware(['permission:admin|moderator']);
-            Route::get('whois/{ip}', 'SubscribersController@whois')->name('admin.subscribers.whois');
         });
 
         Route::group(['prefix' => 'category'], function () {
@@ -79,7 +82,13 @@ Route::group(['middleware' => ['install']], function () {
 
         Route::group(['prefix' => 'update'], function () {
             Route::get('', 'UpdateController@index')->name('admin.update.index');
-            Route::post('', 'UpdateController@addLicenseKey')->name('admin.update.add_license_key');
+            Route::post('add_license_key', 'UpdateController@addLicenseKey')->name('admin.update.add_license_key');
+
+        });
+
+        Route::group(['prefix' => 'expired'], function () {
+            Route::get('', 'ExpiredController@index')->name('admin.expired.index');
+            Route::post('add_license_key', 'ExpiredController@addLicenseKey')->name('admin.expired.add_license_key');
         });
 
         Route::group(['prefix' => 'schedule'], function () {
@@ -98,11 +107,11 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('info/{id}', 'LogController@info')->name('admin.log.info')->where('id', '[0-9]+');
         });
 
-        Route::group(['prefix' => 'redirect-log'], function () {
-            Route::get('', 'RedirectLogController@index')->name('admin.redirect_log.index');
-            Route::get('clear', 'RedirectLogController@clear')->name('admin.redirect_log.clear');
-            Route::get('download/{url}', 'RedirectLogController@download')->name('admin.redirect_log.download');
-            Route::get('info/{url}', 'RedirectLogController@info')->name('admin.redirect_log.info');
+        Route::group(['prefix' => 'redirect'], function () {
+            Route::get('', 'RedirectController@index')->name('admin.redirect.index');
+            Route::get('clear', 'RedirectController@clear')->name('admin.redirect.clear');
+            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.download');
+            Route::get('info/{url}', 'RedirectController@info')->name('admin.redirect.info');
         });
 
         Route::group(['prefix' => 'settings'], function () {
@@ -119,7 +128,6 @@ Route::group(['middleware' => ['install']], function () {
             Route::get('phpinfo', 'MiscellaneousController@phpinfo')->name('admin.miscellaneous.phpinfo')->middleware(['permission:admin|moderator']);
         });
 
-
         Route::group(['prefix' => 'datatable'], function () {
             Route::any('templates', 'DataTableController@getTemplates')->name('admin.datatable.templates');
             Route::any('category', 'DataTableController@getCategory')->name('admin.datatable.category')->middleware(['permission:admin|moderator']);
@@ -128,9 +136,9 @@ Route::group(['middleware' => ['install']], function () {
             Route::any('users', 'DataTableController@getUsers')->name('admin.datatable.users')->middleware(['permission:admin']);
             Route::any('smtp', 'DataTableController@getSmtp')->name('admin.datatable.smtp')->middleware(['permission:admin']);
             Route::any('log', 'DataTableController@getLog')->name('admin.datatable.log');
-            Route::any('info-log/{id}', 'DataTableController@getInfoLog')->name('admin.datatable.info_log')->where('id', '[0-9]+');
-            Route::any('redirect-log', 'DataTableController@getRedirectLog')->name('admin.datatable.redirect_log');
-            Route::any('info-redirect-log/{url}', 'DataTableController@getInfoRedirectLog')->name('admin.datatable.info_redirect_log');
+            Route::any('info-log/{id?}', 'DataTableController@getInfoLog')->name('admin.datatable.info_log')->where('id', '[0-9]+');
+            Route::any('redirect-log', 'DataTableController@getRedirectLog')->name('admin.datatable.redirect');
+            Route::any('info-redirect-log/{url}', 'DataTableController@getInfoRedirectLog')->name('admin.datatable.info_redirect');
         });
     });
 
@@ -152,6 +160,5 @@ Route::group(['prefix' => 'install'], function () {
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
     Route::get('error', 'InstallController@error')->name('install.error');
-
     Route::any('ajax', 'InstallController@ajax')->name('install.ajax.action');
 });

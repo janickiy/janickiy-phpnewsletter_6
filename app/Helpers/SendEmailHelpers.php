@@ -285,7 +285,6 @@ class SendEmailHelpers
         $msg = str_replace('%UNSUB%', $UNSUB, $msg);
         $msg = str_replace('%SERVER_NAME%', $url_info['host'], $msg);
         $msg = str_replace('%USERID%',$subscriberId, $msg);
-
         $msg = SettingsHelpers::getSetting('RANDOM_REPLACEMENT_BODY') == 1 ? StringHelpers::encodeString($msg) : $msg;
 
         if ($attach) {

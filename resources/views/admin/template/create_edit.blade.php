@@ -274,20 +274,21 @@
                         var alert_msg = '';
 
                         if (data.result == 'success'){
-                            alert_msg += '<div class="alert alert-success alert-dismissable">';
-                            alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>';
+                            alert_msg += '<div class="alert alert-success fade in">';
+                            alert_msg += '<button class="close" data-dismiss="alert">×</button>';
+                            alert_msg += '<i class="fa-fw fa fa-check"></i>';
                             alert_msg += data.msg;
                             alert_msg += '</div>';
                         } else if (data.result == 'error'){
-                            alert_msg += '<div class="alert alert-danger alert-dismissable">';
-                            alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>';
-                            alert_msg += '<strong>${STR_ERROR}!</strong>';
+                            alert_msg += '<div class="alert alert-danger fade in">';
+                            alert_msg += '<button class="close" data-dismiss="alert">×</button>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
                             alert_msg += data.msg;
                             alert_msg += '</div>';
                         } else if (data.result == 'errors'){
-                            alert_msg += '<div class="alert alert-danger alert-dismissable">';
-                            alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert">×</button>';
-                            alert_msg += '<strong><h4 class="alert-heading">${STR_IDENTIFIED_FOLLOWING_ERRORS}:</h4></strong>';
+                            alert_msg += '<div class="alert alert-danger fade in">';
+                            alert_msg += '<button class="close" data-dismiss="alert">×</button>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
                             alert_msg += '<ul>';
 
                             var arr = data.msg.split(',');

@@ -74,7 +74,7 @@ class SendEmails extends Command
             }
 
             if ($interval) {
-                $subscribers = Subscribers::select(['subscribers.email','subscribers.id','subscribers.token','subscribers.name'])
+                $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
                     ->join('schedule_category', function ($join) use ($row) {
                         $join->on('subscriptions.categoryId', '=', 'schedule_category.categoryId')
@@ -99,7 +99,7 @@ class SendEmails extends Command
                     ->limit($limit)
                     ->get();
             } else {
-                $subscribers = Subscribers::select(['subscribers.email','subscribers.id','subscribers.token','subscribers.name'])
+                $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
                     ->join('schedule_category', function ($join) use ($row) {
                         $join->on('subscriptions.categoryId', '=', 'schedule_category.categoryId')
@@ -125,6 +125,8 @@ class SendEmails extends Command
             }
 
             foreach ($subscribers as $subscriber) {
+                if (SettingsHelpers::getSetting('sleep') > 0)
+                    sleep(SettingsHelpers::getSetting('sleep'));
 
                 SendEmailHelpers::setBody($row->template->body);
                 SendEmailHelpers::setSubject($row->template->name);
@@ -165,17 +167,18 @@ class SendEmails extends Command
 
                 unset($data);
 
-                if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount){
+                if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
                     break;
                 }
             }
 
-            if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount){
+            if (SettingsHelpers::getSetting('LIMIT_SEND') == 1 && SettingsHelpers::getSetting('LIMIT_NUMBER') == $mailcount) {
                 break;
             }
         }
 
         $this->line("sent: " . $mailcount);
         $this->line("no sent: " . $mailcountno);
+
     }
 }

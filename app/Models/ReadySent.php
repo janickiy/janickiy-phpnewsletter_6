@@ -20,6 +20,7 @@ class ReadySent extends Model
         'readMail',
         'date',
         'scheduleId',
+        'logId'
 	];
 
     /**

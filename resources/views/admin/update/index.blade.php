@@ -14,7 +14,6 @@
         <!-- NEW COL START -->
         <article class="col-sm-12 col-md-12 col-lg-12">
 
-
             <!-- Widget ID (each widget will need unique ID)-->
             <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false"
                  data-widget-custombutton="false">
@@ -71,11 +70,11 @@
 
                             <section>
 
-                                {!! Form::label('license key', trans('frontend.form.license_key'), ['class' => 'label']) !!}
+                                {!! Form::label('license_key', trans('frontend.form.license_key'), ['class' => 'label']) !!}
 
                                 <label class="input">
 
-                                    {!! Form::text('license key', old('license key', env('LICENSE_KEY', null)), ['class' => 'form-control']) !!}
+                                    {!! Form::text('license_key', old('license_key', env('LICENSE_KEY', null)), ['class' => 'form-control']) !!}
 
                                 </label>
 
@@ -91,10 +90,6 @@
                             <button type="submit" class="btn btn-primary">
                                 {{ trans('frontend.form.send') }}
                             </button>
-
-                            <a class="btn btn-default" href="{{ URL::route('admin.subscribers.index') }}">
-                                {{ trans('frontend.form.back') }}
-                            </a>
 
                         </footer>
 
@@ -118,8 +113,104 @@
 
 @endsection
 
-
 @section('js')
 
+    <script>
+
+        $(document).ready(function(){
+
+            $("#start_update").on("click", function(){
+                $("#btn_refresh").html('<div id="progress_bar" class="progress progress-sm progress-striped active"><div class="progress-bar bg-color-darken" role="progressbar" style="width: 1%"></div></div><span style="padding: 10px" id="status_process">{{ trans('frontend.str.start_update') }}</span>');
+
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "{{ URL::route('admin.ajax.action') }}",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    data: {
+                        action: "start_update",
+                        p: "start",
+                    },
+                    success: function(data){
+                        if (data[0].result == true) {
+                            $('.progress-bar').css('width', '20%');
+                            $("#status_process").text(data[0].status);
+                            updateFiles();
+                        } else {
+                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        }
+                    }
+                });
+            });
+        });
+
+        function updateFiles()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_files",
+                },
+                success: function(data){
+                    if (data[0].result == true) {
+                        $('.progress-bar').css('width', '60%');
+                        updateBD();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function updateBD()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_bd",
+                },
+                success: function(data){
+                    if (data[0].result == true) {
+                        $('.progress-bar').css('width', '80%');
+                        clearCache();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function clearCache()
+        {
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "clear_cache",
+                },
+                success: function(data){
+                    if (data[0].result == true) {
+                        $('.progress-bar').css('width', '100%');
+                        $('#progress_bar').delay(3000).fadeOut();
+                        $('#status_process').delay(3000).text('{{ trans('frontend.msg.update_completed') }}');
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                    }
+                }
+            });
+        }
+
+    </script>
 
 @endsection
