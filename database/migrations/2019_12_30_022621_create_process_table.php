@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateAttachTable extends Migration
+class CreateProcessTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateAttachTable extends Migration
      */
     public function up()
     {
-        Schema::create('attach', function (Blueprint $table) {
+        Schema::create('process', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('file_name');
-            $table->integer('templateId')->index('templateId');
+            $table->enum('command',['start', 'pause', 'stop'])->default('start');
+            $table->integer('userId');
             $table->timestamps();
             $table->engine = 'MyISAM';
         });
@@ -30,6 +29,6 @@ class CreateAttachTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attach');
+        Schema::dropIfExists('process');
     }
 }

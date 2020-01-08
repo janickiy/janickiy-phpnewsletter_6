@@ -14,7 +14,7 @@ class CreateReadySentTable extends Migration
     public function up()
     {
         Schema::create('ready_sent', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('subscriberId')->index('subscriberId');
             $table->string('email');
             $table->integer('templateId')->index('templateId');
@@ -24,6 +24,7 @@ class CreateReadySentTable extends Migration
             $table->tinyInteger('readMail')->nullable();
             $table->integer('scheduleId')->index('scheduleId');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 

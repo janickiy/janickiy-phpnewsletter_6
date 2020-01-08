@@ -18,6 +18,7 @@ class CreateScheduleTable extends Migration
             $table->timestamp('date')->nullable();
             $table->integer('templateId')->index('templateId');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 

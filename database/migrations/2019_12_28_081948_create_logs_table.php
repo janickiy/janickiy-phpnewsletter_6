@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateCharsetTable extends Migration
+class CreateLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateCharsetTable extends Migration
      */
     public function up()
     {
-        Schema::create('charset', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('charset');
+            $table->timestamp('time');
             $table->engine = 'MyISAM';
         });
     }
@@ -27,6 +27,6 @@ class CreateCharsetTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('charset');
+        Schema::dropIfExists('logs');
     }
 }
