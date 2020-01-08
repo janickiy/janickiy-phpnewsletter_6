@@ -156,7 +156,7 @@ class SendEmailHelpers
      * @return bool
      * @throws PHPMailer\Exception
      */
-    public static function sendEmail($attach)
+    public static function sendEmail($attach = null)
     {
         $subject = self::getSubject();
         $body = self::getBody();
