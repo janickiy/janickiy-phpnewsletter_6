@@ -148,6 +148,8 @@ class SendEmails extends Command
                     $data['template'] = $row->template->name;
                     $data['success'] = 1;
                     $data['scheduleId'] = $row->id;
+                    $data['logId'] = 0;
+
 
                     Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
@@ -160,6 +162,8 @@ class SendEmails extends Command
                     $data['success'] = 0;
                     $data['errorMsg'] = $result['error'];
                     $data['scheduleId'] = $row->id;
+
+                    $data['logId'] = 0;
 
                     $mailcountno++;
                 }
