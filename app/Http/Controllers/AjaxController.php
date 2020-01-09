@@ -192,7 +192,7 @@ class AjaxController extends Controller
                     $mailcount = 0;
 
                     $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
-                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
                     switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                         case "minute":
@@ -248,7 +248,7 @@ class AjaxController extends Controller
                                 ->groupBy('subscribers.token')
                                 ->groupBy('subscribers.name')
                                 ->orderByRaw($order)
-                                ->limit($limit)
+                                ->take($limit)
                                 ->get();
                         } else {
                             $subscribers = Subscribers::select('subscribers.email', 'subscribers.token', 'subscribers.id', 'subscribers.name')
@@ -269,7 +269,7 @@ class AjaxController extends Controller
                                 ->groupBy('subscribers.token')
                                 ->groupBy('subscribers.name')
                                 ->orderByRaw($order)
-                                ->limit($limit)
+                                ->take($limit)
                                 ->get();
                         }
 
@@ -374,7 +374,7 @@ class AjaxController extends Controller
 
                     $logId = $request->input('logId');
 
-                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
                     switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                         case "minute":
@@ -397,7 +397,7 @@ class AjaxController extends Controller
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->whereRaw($interval)
                             ->groupBy('subscribers.id')
-                            ->limit($limit)
+                            ->take($limit)
                             ->get()
                             ->count();
                     } else {
@@ -406,7 +406,7 @@ class AjaxController extends Controller
                             ->where('subscribers.active', 1)
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->groupBy('subscribers.id')
-                            ->limit($limit)
+                            ->take($limit)
                             ->get()
                             ->count();
                     }

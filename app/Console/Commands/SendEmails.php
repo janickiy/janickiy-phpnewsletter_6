@@ -57,7 +57,7 @@ class SendEmails extends Command
         foreach ($schedule as $row) {
 
             $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
-            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
             switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                 case "minute":
@@ -96,8 +96,9 @@ class SendEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
-                    ->get();
+                    ->take($limit)
+                    ->get()
+                ;
             } else {
                 $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
@@ -120,8 +121,9 @@ class SendEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
-                    ->get();
+                    ->take($limit)
+                    ->get()
+                ;
             }
 
             foreach ($subscribers as $subscriber) {
@@ -150,7 +152,6 @@ class SendEmails extends Command
                     $data['scheduleId'] = $row->id;
                     $data['logId'] = 0;
 
-
                     Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
                     $mailcount++;
@@ -162,7 +163,6 @@ class SendEmails extends Command
                     $data['success'] = 0;
                     $data['errorMsg'] = $result['error'];
                     $data['scheduleId'] = $row->id;
-
                     $data['logId'] = 0;
 
                     $mailcountno++;
