@@ -196,7 +196,6 @@ class LicenseHelpers
         return $ip;
     }
 
-
     /**
      * @return string|null
      */
@@ -300,6 +299,17 @@ class LicenseHelpers
 
         if ($lisense_info['licensekey'] != $licenseKey) {
             $this->makeLicensekey($licenseKey);
+        }
+    }
+
+    /**
+     * @return false|float
+     */
+    public function expiredDayCount()
+    {
+        $lisense_info = $this->getLicenseInfo();
+        if ($lisense_info['license_type'] == 'demo') {
+            return round((strtotime($lisense_info['date_to']) - strtotime(date("Y-m-d H:i:s"))) / 3600 / 24);
         }
     }
 }

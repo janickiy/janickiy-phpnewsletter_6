@@ -92,8 +92,7 @@ class InstallController extends Controller
         if (!$this->dbCredentialsAreValid($dbCredentials)) {
             return redirect()->route('install.database')
                 ->withInput()
-                ->withErrors("Connection to your database cannot be established.
-                Please provide correct database credentials.");
+                ->withErrors("Connection to your database cannot be established. Please provide correct database credentials.");
         }
 
         Session::put('install.db_credentials', $dbCredentials);
@@ -132,7 +131,7 @@ class InstallController extends Controller
             $env = str_replace('DB_DATABASE=' . env('DB_DATABASE'), 'DB_DATABASE=' . $db['database'], $env);
             $env = str_replace('DB_USERNAME=' . env('DB_USERNAME'), 'DB_USERNAME=' . $db['username'], $env);
             $env = str_replace('DB_PASSWORD=' . env('DB_PASSWORD'), 'DB_PASSWORD="' . $db['password'] . '"', $env);
-            $env = str_replace('VERSION=', '"VERSION=6.0.0 alfa"', $env);
+            $env = str_replace('VERSION=', 'VERSION="6.0.0 alfa"', $env);
 
             file_put_contents($path, $env);
 

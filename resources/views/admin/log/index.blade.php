@@ -141,7 +141,7 @@
                     if (data['status'] == 0) $(row).attr('class', 'danger');
                     else if (data['read'] == 1) $(row).attr('class', 'success');
                 },
-                aaSorting: [[2, 'asc']],
+                aaSorting: [[2, 'desc']],
                 processing: true,
                 serverSide: true,
                 ajax: {

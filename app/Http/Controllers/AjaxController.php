@@ -15,12 +15,12 @@ class AjaxController extends Controller
 {
     public function action(Request $request)
     {
+        $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
+
         if ($request->input('action')) {
             switch ($request->input('action')) {
 
                 case 'start_update':
-
-                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($request->p == 'start') {
 
@@ -66,15 +66,11 @@ class AjaxController extends Controller
                         $content['status'] = trans('frontend.msg.cache_cleared');
                     }
 
-                    return ResponseHelpers::jsonResponse([
-                        $content
-                    ]);
+                    return ResponseHelpers::jsonResponse([$content]);
 
                     break;
 
                 case 'alert_update':
-
-                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($update->checkNewVersion()) {
                         $update_warning = str_replace('%SCRIPTNAME%', trans('frontend.str.script_name'), trans('frontend.str.update_warning'));
@@ -83,9 +79,7 @@ class AjaxController extends Controller
                         $update_warning = str_replace('%DOWNLOADLINK%', $update->getDownloadLink(), $update_warning);
                         $update_warning = str_replace('%MESSAGE%', $update->getMessage(), $update_warning);
 
-                        return ResponseHelpers::jsonResponse([
-                            ["msg" => $update_warning]
-                        ]);
+                        return ResponseHelpers::jsonResponse(["msg" => $update_warning]);
                     }
 
                     break;

@@ -5,6 +5,13 @@
     <span id="alert_warning_msg"></span>
 </div>
 
+@if (\App\Helpers\StringHelpers::expiredDayAlert())
+    <div class="alert alert-info">
+        <i class="fa-fw fa fa-warning"></i>
+        {!! \App\Helpers\StringHelpers::expiredDayAlert() !!}
+    </div>
+@endif
+
 @if (isset($infoAlert))
     <div class="alert alert-info">
         <i class="fa-fw fa fa-warning"></i>
@@ -22,7 +29,7 @@
     </div>
 @endif
 
-@if(session('success'))
+@if (session('success'))
     <div class="alert alert-success fade in">
         <button class="close" data-dismiss="alert">
             ×
@@ -32,7 +39,7 @@
     </div>
 @endif
 
-@if(session('error'))
+@if (session('error'))
     <div class="alert alert-danger fade in">
         <button class="close" data-dismiss="alert">
             ×
@@ -42,7 +49,7 @@
     </div>
 @endif
 
-@if($errors->any())
+@if ($errors->any())
     <div class="alert alert-danger fade in">
         <button class="close" data-dismiss="alert">
             ×

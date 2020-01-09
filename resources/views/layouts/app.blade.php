@@ -489,7 +489,7 @@ Use search to find needed section.
             success: function(data){
                 if (data.msg != '' && $.cookie('alertshow') != 'no'){
                     $('#alert_msg_block').fadeIn('700');
-                    $("#alert_warning_msg").append(data[0].msg);
+                    $("#alert_warning_msg").append(data.msg);
                 }
             }
         });
