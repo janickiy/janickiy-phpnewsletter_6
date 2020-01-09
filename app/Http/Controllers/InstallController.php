@@ -131,7 +131,7 @@ class InstallController extends Controller
             $env = str_replace('DB_DATABASE=' . env('DB_DATABASE'), 'DB_DATABASE=' . $db['database'], $env);
             $env = str_replace('DB_USERNAME=' . env('DB_USERNAME'), 'DB_USERNAME=' . $db['username'], $env);
             $env = str_replace('DB_PASSWORD=' . env('DB_PASSWORD'), 'DB_PASSWORD="' . $db['password'] . '"', $env);
-            $env = str_replace('VERSION=', 'VERSION="6.0.0 alfa"', $env);
+            $env = str_replace('VERSION=', 'VERSION="6.0.1 beta"', $env);
 
             file_put_contents($path, $env);
 
@@ -283,7 +283,6 @@ class InstallController extends Controller
             "database.connections.{$default}.password" => $credentials['password']
         ]);
     }
-
 
     /**
      * @param Request $request

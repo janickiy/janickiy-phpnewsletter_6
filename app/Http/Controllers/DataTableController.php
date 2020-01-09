@@ -85,13 +85,16 @@ class DataTableController extends Controller
                 return $row->active == 1 ? trans('frontend.str.yes') : trans('frontend.str.no');
             })
 
+            ->editColumn('activeStatus', function ($row) {
+                return $row->active;
+            })
+
             ->addColumn('action', function ($row) {
                 $editBtn = '<a title="' . trans('frontend.str.edit') . '" class="btn btn-xs btn-primary"  href="' . URL::route('admin.subscribers.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-
                 return $editBtn;
             })
 
-            ->rawColumns(['action', 'checkbox', 'check'])->make(true);
+            ->rawColumns(['action', 'checkbox'])->make(true);
     }
 
     /**
