@@ -253,7 +253,7 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('SLEEP') > 0) sleep(SettingsHelpers::getSetting('SLEEP'));
         if (SettingsHelpers::getSetting('ORGANIZATION') != '') $m->addCustomHeader("Organization: " . SettingsHelpers::getSetting('ORGANIZATION'));
-        if (SettingsHelpers::getSetting('URL') != '') $IMG = '------------------<img border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
+        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
 
         $m->AddAddress($email);
 

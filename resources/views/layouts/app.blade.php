@@ -209,15 +209,15 @@ Use search to find needed section.
 <aside id="left-panel">
 
     <!-- User info -->
-    <!-- User info -->
     <div class="login-info">
-		<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
-
-            {{ Auth::user()->name }}
-
-		</span>
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
+					<a>
+						<span>
+							{{ Auth::user()->name }}
+						</span>
+					</a>
+				</span>
     </div>
-    <!-- end user info -->
     <!-- end user info -->
 
     <nav>
