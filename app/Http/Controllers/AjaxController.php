@@ -147,7 +147,7 @@ class AjaxController extends Controller
                         SendEmailHelpers::setEmail($email);
                         SendEmailHelpers::setToken(md5($email));
                         $result = SendEmailHelpers::sendEmail();
-                        $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('msg.email_wasnt_sent') : trans('msg.email_sent')];
+                        $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('frontend.msg.email_wasnt_sent') : trans('frontend.msg.email_sent')];
                     } else {
                         $msg = implode(",", $errors);
                         $result_send = ['result' => 'errors', 'msg' => $msg];
@@ -164,9 +164,9 @@ class AjaxController extends Controller
 
                     ReadySent::create($data);
 
-                    return ResponseHelpers::jsonResponse([
+                    return ResponseHelpers::jsonResponse(
                         $result_send
-                    ]);
+                    );
 
                     break;
 

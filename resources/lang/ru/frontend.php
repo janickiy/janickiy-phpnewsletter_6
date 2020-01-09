@@ -135,6 +135,7 @@ return [
         'stop_newsletter' => 'Остановить рассылку',
         'not_sent' => 'не отправлено',
         "error_server" => "Ошибка сервера",
+        'remember_me' => "Запомнить меня",
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

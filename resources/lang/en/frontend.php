@@ -140,6 +140,7 @@ return [
         'no_newsletter_selected' => 'No newsletter selected!',
         'not_sent' => 'Not sent',
         "error_server" => " Error server",
+        'remember_me' => "Запомнить меня",
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

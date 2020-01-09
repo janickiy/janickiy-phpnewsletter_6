@@ -177,7 +177,6 @@
                                     {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Email', 'id' => 'email']) !!}
 
                                     <div class="input-group-btn">
-
                                         <button class="btn btn-default" id="send_test" type="button">
                                             <i class="fa fa-send"></i> {{ trans('frontend.str.send') }}
                                         </button>
@@ -282,13 +281,13 @@
                         } else if (data.result == 'error'){
                             alert_msg += '<div class="alert alert-danger fade in">';
                             alert_msg += '<button class="close" data-dismiss="alert">×</button>';
-                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }} </strong>';
                             alert_msg += data.msg;
                             alert_msg += '</div>';
                         } else if (data.result == 'errors'){
                             alert_msg += '<div class="alert alert-danger fade in">';
                             alert_msg += '<button class="close" data-dismiss="alert">×</button>';
-                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }} </strong>';
                             alert_msg += '<ul>';
 
                             var arr = data.msg.split(',');
