@@ -140,6 +140,7 @@ class AjaxController extends Controller
                         SendEmailHelpers::setPrior($prior);
                         SendEmailHelpers::setEmail($email);
                         SendEmailHelpers::setToken(md5($email));
+                        SendEmailHelpers::setTemplateId(0);
                         $result = SendEmailHelpers::sendEmail();
                         $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('frontend.msg.email_wasnt_sent') : trans('frontend.msg.email_sent')];
                     } else {
@@ -291,7 +292,7 @@ class AjaxController extends Controller
                             SendEmailHelpers::setToken($subscriber->token);
                             SendEmailHelpers::setSubscriberId($subscriber->id);
                             SendEmailHelpers::setName($subscriber->name);
-
+                            SendEmailHelpers::setTemplateId($template->id);
                             $result = SendEmailHelpers::sendEmail($template->id);
 
                             $data = [];

@@ -135,6 +135,7 @@ class SendEmails extends Command
                 SendEmailHelpers::setToken($subscriber->token);
                 SendEmailHelpers::setSubscriberId($subscriber->id);
                 SendEmailHelpers::setName($subscriber->name);
+                SendEmailHelpers::setTemplateId($row->template->id);
 
                 $result = SendEmailHelpers::sendEmail($row->templateId);
 

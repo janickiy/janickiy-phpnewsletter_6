@@ -6,6 +6,7 @@ use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{ReadySent, Redirect, Subscribers, Category, Subscriptions};
+use ImageCreateTrueColor;
 
 class FrontendController extends Controller
 {
@@ -18,14 +19,14 @@ class FrontendController extends Controller
     {
         ReadySent::where('templateId', $template)->where('subscriberId', $subscriber)->update(['readmail' => 1]);
 
-        $img = ImageCreateTrueColor(1, 1);
-        ob_start();
-        imagegif($img);
-        $image = ob_get_clean();
+        $im = imagecreatetruecolor(1, 1);
 
-        return response($image, 200, [
-            'Content-Type', 'image/gif',
-        ]);
+        imagefilledrectangle($im, 0, 0, 99, 99, 0xFFFFFF);
+        header('Content-Type: image/gif');
+
+        imagegif($im);
+        imagedestroy($im);
+        exit;
     }
 
     /**
