@@ -156,6 +156,7 @@ return [
         'no_newsletter_selected' => 'Ни одной рассылки не выбрано!',
         'demo_version_will_expire' => 'Срок действия демо версии истекает через %DAYS% дня(ей)',
         'demo_version_will_expire_today' => 'Демо версия истекает сегодня',
+        'subscription_is_formed' => 'Подписка оформлена. Спасибо, что подписались на получение наших электронных сообщений',
     ],
     'form' => [
         'required_fields' => 'обязательные поля',

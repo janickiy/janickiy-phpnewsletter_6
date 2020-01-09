@@ -160,6 +160,7 @@ return [
         'cache_cleared' => 'Cache cleared',
         'demo_version_will_expire' => 'Duration of the demo version will expire in %DAYS% day(s)',
         'demo_version_will_expire_today' => 'Duration of the demo version  will expire today',
+        'subscription_is_formed' => 'Subscription to the newsletter is formed. Thanks for signing up to receive our emails.',
     ],
     'form' => [
         'required_fields' => 'required fields',

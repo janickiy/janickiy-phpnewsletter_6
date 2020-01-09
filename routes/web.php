@@ -24,9 +24,6 @@ Route::group(['middleware' => ['install']], function () {
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
-
-
-
         Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');

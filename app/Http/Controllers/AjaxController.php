@@ -151,7 +151,7 @@ class AjaxController extends Controller
                     $data['email'] = $email;
                     $data['templateId'] = 0;
                     $data['template'] = $subject;
-                    $data['success'] = 0;
+                    $data['success'] = $result['result'] !== true ? 0 : 1;
                     $data['errorMsg'] = $result['result'] !== true ? $result['error'] : '';
                     $data['scheduleId'] = 0;
                     $data['logId'] = 0;

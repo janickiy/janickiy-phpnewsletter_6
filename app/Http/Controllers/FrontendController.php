@@ -133,7 +133,8 @@ class FrontendController extends Controller
 
         return json_encode([
             'result' => 'success',
-            'msg' => 'Подписка оформлена. Спасибо, что подписались на получение наших электронных сообщений']);
+            'msg' => trans('frontend.msg.subscription_is_formed')
+        ]);
 
     }
 }
