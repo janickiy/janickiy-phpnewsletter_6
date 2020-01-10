@@ -121,7 +121,7 @@
                 },
 
                 columns: [
-                    {data: 'start', name: 'start'},
+                    {data: 'value_from_start_date', name: 'value_from_start_date'},
                     {data: 'count', name: 'count', searchable: false},
                     {data: 'sent', name: 'sent', searchable: false},
                     {data: 'unsent', name: 'unsent', searchable: false},
@@ -139,9 +139,9 @@
                 'createdRow': function (row, data, dataIndex) {
                     $(row).attr('id', 'rowid_' + data['id']);
                     if (data['status'] == 0) $(row).attr('class', 'danger');
-                    else if (data['read'] == 1) $(row).attr('class', 'success');
+                    else if (data['status'] == 1) $(row).attr('class', 'success');
                 },
-                aaSorting: [[2, 'asc']],
+                aaSorting: [[2, 'desc']],
                 processing: true,
                 serverSide: true,
                 ajax: {

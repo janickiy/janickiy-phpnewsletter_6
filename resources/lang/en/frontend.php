@@ -140,6 +140,7 @@ return [
         'no_newsletter_selected' => 'No newsletter selected!',
         'not_sent' => 'Not sent',
         "error_server" => " Error server",
+        'remember_me' => "Запомнить меня",
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -157,6 +158,9 @@ return [
         'cannot_read_zip_archive' => 'Error! Cannot read .zip archive',
         'update_completed' => 'Update is completed.',
         'cache_cleared' => 'Cache cleared',
+        'demo_version_will_expire' => 'Duration of the demo version will expire in %DAYS% day(s)',
+        'demo_version_will_expire_today' => 'Duration of the demo version  will expire today',
+        'subscription_is_formed' => 'Subscription to the newsletter is formed. Thanks for signing up to receive our emails.',
     ],
     'form' => [
         'required_fields' => 'required fields',
@@ -263,7 +267,7 @@ return [
         'subform' => 'Subscription',
         'auth' => 'Login',
         'update' => 'Update',
-        'expired_index' => 'License Key Expired',
+        'expired' => 'License Key Expired',
     ],
     'menu' => [
         'templates' => 'Templates',
