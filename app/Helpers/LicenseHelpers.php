@@ -281,7 +281,7 @@ class LicenseHelpers
     public function checkLicenseKey($licenseKey)
     {
         $domain = (substr($_SERVER['SERVER_NAME'], 0, 4)) == "www." ? str_replace('www.','', $_SERVER['SERVER_NAME']) : $_SERVER['SERVER_NAME'];
-        $data = $this->getDataContents($this->url . '?t=check_licensekey&licensekey=' . $licenseKey . '&domain=' . $domain . '&s=phpnewsletter&version=' . urlencode($this->currenversion) . '&v=6', 5);
+        $data = $this->getDataContents($this->url . '?t=check_licensekey&licensekey=' . $licenseKey . '&domain=' . $domain . '&s=phpnewsletter&version=6', 5);
 
         if ($data)  {
             return $data;
