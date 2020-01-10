@@ -294,6 +294,9 @@ class SubscribersController extends Controller
 
         if ($request->compress == 'zip') {
 
+            header('Content-type: application/zip');
+            header('Content-Disposition: attachment; filename=emailexport_' . date("d_m_Y") . '.zip');
+
             $fout = fopen("php://output", "wb");
 
             if ($fout !== false) {
@@ -321,10 +324,7 @@ class SubscribersController extends Controller
 
                 fclose($fout);
 
-                return response('', 200, [
-                    'Content-Type' => 'application/zip',
-                    'Content-Disposition' => 'filename=emailexport_' . date("d_m_Y") . '.zip',
-                ]);
+                exit();
             }
 
         } else {

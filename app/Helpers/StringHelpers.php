@@ -725,7 +725,6 @@ class StringHelpers
     public static function setEnvironmentValue($envKey, $envValue)
     {
         $path = app()->environmentFilePath();
-
         $escaped = preg_quote('='.env($envKey), '/');
 
         file_put_contents($path, preg_replace(
@@ -733,5 +732,23 @@ class StringHelpers
             "{$envKey}={$envValue}",
             file_get_contents($path)
         ));
+    }
+
+    /**
+     * @return array|\Illuminate\Contracts\Translation\Translator|string|string[]|null
+     */
+    public static function expiredDayAlert()
+    {
+        $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
+        $count = $update->expiredDayCount();
+
+        $alert_expire_license_msg = null;
+
+        if ($count > 0)
+            $alert_expire_license_msg = str_replace('%DAYS%', $count, trans('frontend.msg.demo_version_will_expire'));
+        elseif ($count === 0)
+            $alert_expire_license_msg = trans('frontend.msg.demo_version_will_expire_today');
+
+        return $alert_expire_license_msg;
     }
 }

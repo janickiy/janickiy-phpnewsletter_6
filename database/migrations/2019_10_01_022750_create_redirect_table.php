@@ -15,8 +15,8 @@ class CreateRedirectTable extends Migration
     {
         Schema::create('redirect', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url')->index('url');
-            $table->string('email')->index('email');
+            $table->string('url');
+            $table->string('email');
             $table->timestamps();
             $table->engine = 'MyISAM';
         });

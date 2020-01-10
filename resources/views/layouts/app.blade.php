@@ -209,15 +209,15 @@ Use search to find needed section.
 <aside id="left-panel">
 
     <!-- User info -->
-    <!-- User info -->
     <div class="login-info">
-		<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
-
-            {{ Auth::user()->name }}
-
-		</span>
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
+					<a>
+						<span>
+							{{ Auth::user()->name }}
+						</span>
+					</a>
+				</span>
     </div>
-    <!-- end user info -->
     <!-- end user info -->
 
     <nav>
@@ -489,7 +489,7 @@ Use search to find needed section.
             success: function(data){
                 if (data.msg != '' && $.cookie('alertshow') != 'no'){
                     $('#alert_msg_block').fadeIn('700');
-                    $("#alert_warning_msg").append(data[0].msg);
+                    $("#alert_warning_msg").append(data.msg);
                 }
             }
         });

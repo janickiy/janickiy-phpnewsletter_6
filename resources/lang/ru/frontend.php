@@ -135,6 +135,7 @@ return [
         'stop_newsletter' => 'Остановить рассылку',
         'not_sent' => 'не отправлено',
         "error_server" => "Ошибка сервера",
+        'remember_me' => "Запомнить меня",
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -153,6 +154,9 @@ return [
         'update_completed' => 'Обновление завершено.',
         'cache_cleared' => 'Кеш очищен',
         'no_newsletter_selected' => 'Ни одной рассылки не выбрано!',
+        'demo_version_will_expire' => 'Срок действия демо версии истекает через %DAYS% дня(ей)',
+        'demo_version_will_expire_today' => 'Демо версия истекает сегодня',
+        'subscription_is_formed' => 'Подписка оформлена. Спасибо, что подписались на получение наших электронных сообщений',
     ],
     'form' => [
         'required_fields' => 'обязательные поля',
@@ -263,7 +267,7 @@ return [
         'subform' => 'Подписка',
         'auth' => 'Авторизация',
         'update' => 'Обновление',
-        'expired_index' => 'Лицензионный ключ истек',
+        'expired' => 'Лицензионный ключ истек',
     ],
     'menu' => [
         'templates' => 'Шаблоны',

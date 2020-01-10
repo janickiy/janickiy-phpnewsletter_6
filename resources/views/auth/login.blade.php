@@ -61,7 +61,7 @@
 
                         {!! Form::checkbox('remember', 1, old('remember') ? true : false, ['id' => "myCheckbox"] ) !!}
 
-                        {!! Form::label('myCheckbox', 'Запомнить меня', ['class' => 'form-check-label']) !!}
+                        {!! Form::label('myCheckbox', trans('frontend.str.remember_me'), ['class' => 'form-check-label']) !!}
 
                         <span></span>
                     </div>
