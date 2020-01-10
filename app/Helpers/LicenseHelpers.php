@@ -308,7 +308,7 @@ class LicenseHelpers
     public function expiredDayCount()
     {
         $lisense_info = $this->getLicenseInfo();
-        if ($lisense_info['license_type'] == 'demo') {
+        if ($lisense_info['license_type'] == 'demo' && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false) {
             return round((strtotime($lisense_info['date_to']) - strtotime(date("Y-m-d H:i:s"))) / 3600 / 24);
         }
     }
