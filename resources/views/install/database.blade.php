@@ -17,32 +17,43 @@
         <h3>{{ trans('install.str.database_information') }}</h3>
         <hr>
         <div class="form-group">
-            <label for="host">{{ trans('install.str.database_host') }}</label>
-            <input type="text" class="form-control" id="host" name="host" placeholder="" value="{{ old('host') }}">
+
+            {!! Form::label('host', trans('install.str.database_host')) !!}
+
+            {!! Form::text('host', old('host'), ['class' => "form-control", 'placeholder' => "",'id' => "host"]) !!}
+
             <small>{{ trans('install.hint.database_host') }}</small>
             @if ($errors->has('host'))
                 <p class="text-danger">{{ $errors->first('host') }}</p>
             @endif
         </div>
         <div class="form-group">
-            <label for="username">{{ trans('install.str.database_username') }}</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="" value="{{ old('username') }}">
+
+            {!! Form::label('username', trans('install.str.database_username')) !!}
+
+            {!! Form::text('username', old('username'), ['class' => "form-control", 'placeholder' => "",'id' => "username"]) !!}
+
             <small>{{ trans('install.hint.database_username') }}</small>
             @if ($errors->has('host'))
                 <p class="text-danger">{{ $errors->first('username') }}</p>
             @endif
         </div>
         <div class="form-group">
-            <label for="password">{{ trans('install.str.password') }}</label>
-            <input type="password" class="form-control" id="password" name="password">
+
+            {!! Form::label('password', trans('install.str.password')) !!}
+
+            {!! Form::password('password', ['class' => "form-control", 'id' => "password"]) !!}
+
             <small>{{ trans('install.hint.database_password') }}</small>
             @if ($errors->has('password'))
                 <p class="text-danger">{{ $errors->first('password') }}</p>
             @endif
         </div>
         <div class="form-group">
-            <label for="database">{{ trans('install.str.database_name') }}</label>
-            <input type="text" class="form-control" id="database" name="database" placeholder="" value="{{ old('database') }}">
+            {!! Form::label('database', trans('install.str.database_name')) !!}
+
+            {!! Form::text('database', old('database'), ['class' => "form-control", 'placeholder' => "",'id' => "database"]) !!}
+
             <small>{{ trans('install.hint.database_name') }}</small>
             @if ($errors->has('database'))
                 <p class="text-danger">{{ $errors->first('database') }}</p>

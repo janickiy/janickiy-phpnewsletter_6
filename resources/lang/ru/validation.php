@@ -142,4 +142,8 @@ return [
 
     'attributes' => [],
 
+    'empty_template' => 'Поле "Шаблон" не заполнено!',
+    'empty_name' => 'Поле "Название" не заполнено!',
+    'empty_email' => 'Укажите email!',
+    'wrong_email' => 'Неверно указан email!',
 ];
