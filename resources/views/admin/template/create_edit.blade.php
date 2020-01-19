@@ -87,7 +87,7 @@
                                         @endif
 
                                         <div class="note">
-                                            {{ trans('frontend.note.personalization') }}
+                                            {!! trans('frontend.note.personalization') !!}
                                         </div>
                                     </section>
 

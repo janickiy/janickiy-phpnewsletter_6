@@ -313,5 +313,6 @@ return [
         'template_edit' => '',
         'log_info' => '',
         'expired_index' => '',
+        'redirectlog_info' => '',
     ],
 ];

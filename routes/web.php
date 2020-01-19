@@ -107,7 +107,7 @@ Route::group(['middleware' => ['install']], function () {
         Route::group(['prefix' => 'redirect'], function () {
             Route::get('', 'RedirectController@index')->name('admin.redirect.index');
             Route::get('clear', 'RedirectController@clear')->name('admin.redirect.clear');
-            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.download');
+            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.report');
             Route::get('info/{url}', 'RedirectController@info')->name('admin.redirect.info');
         });
 

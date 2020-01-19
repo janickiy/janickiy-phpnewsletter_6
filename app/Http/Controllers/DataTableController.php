@@ -206,20 +206,19 @@ class DataTableController extends Controller
     public function getRedirectLog()
     {
         $row = Redirect::query()
-            ->selectRaw('DISTINCT url, COUNT(email) as count')
+            ->selectRaw('url,COUNT(email) as count')
             ->groupBy('url')
+            ->distinct()
         ;
 
         return Datatables::of($row)
 
             ->editColumn('count', function ($row) {
-                return '<a href="' . URL::route('admin.redirect.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
+                return '<a href="' . URL::route('admin.redirect.info', ['url' => base64_encode($row->url)]) . '">' . $row->count . '</a>';
             })
-
             ->addColumn('report', function ($row) {
-                return '<a href="' . URL::route('admin.redirect.report', ['url' => $row->url]) . '">скачать</a>';
+                return Helpers::has_permission(Auth::user()->login,'admin') ? '<a href="' . URL::route('admin.redirect.report', ['url' => base64_encode($row->url)]) . '">' . trans('frontend.str.download') . '</a>' : '';
             })
-
             ->rawColumns(['count', 'report'])->make(true);
 
     }
@@ -230,6 +229,8 @@ class DataTableController extends Controller
      */
     public function getInfoRedirectLog($url)
     {
+        $url = base64_decode($url);
+
         $row = Redirect::query()->where('url', $url);
 
         return Datatables::of($row)
