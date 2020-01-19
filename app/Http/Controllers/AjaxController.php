@@ -56,17 +56,21 @@ class AjaxController extends Controller
                     if ($request->p == 'update_bd') {
                         Artisan::call('migrate', ['--force' => true]);
                         $content['status'] = trans('frontend.msg.update_completed');
+                        $content['result'] = true;
                     }
 
                     if ($request->p == 'clear_cache') {
+                        StringHelpers::setEnvironmentValue('VERSION', $update->getUpgradeVersion());
                         Artisan::call('cache:clear');
                         Artisan::call('route:cache');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');
-                        $content['status'] = trans('frontend.msg.cache_cleared');
+
+                        $content['status'] = $update->getUpgradeVersion();
+                        $content['result'] = true;
                     }
 
-                    return ResponseHelpers::jsonResponse([$content]);
+                    return ResponseHelpers::jsonResponse($content);
 
                     break;
 

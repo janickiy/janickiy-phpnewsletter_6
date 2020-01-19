@@ -725,6 +725,14 @@ class StringHelpers
     public static function setEnvironmentValue($envKey, $envValue)
     {
         $path = app()->environmentFilePath();
+        $escaped = preg_quote('="'.env($envKey).'"', '/');
+
+        file_put_contents($path, preg_replace(
+            "/^{$envKey}{$escaped}/m",
+            "{$envKey}=\"{$envValue}\"",
+            file_get_contents($path)
+        ));
+
         $escaped = preg_quote('='.env($envKey), '/');
 
         file_put_contents($path, preg_replace(

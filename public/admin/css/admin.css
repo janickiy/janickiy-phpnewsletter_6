@@ -47,3 +47,12 @@
     cursor:pointer;
     display:none;
 }
+
+div.opis{
+    display:none;
+}
+
+a.opislink {
+    margin-top:12px;
+    display:block;
+}
