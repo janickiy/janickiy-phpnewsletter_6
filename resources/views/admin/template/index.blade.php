@@ -86,7 +86,7 @@
         <div id="sendmail" class="modal_div">
             <input id="logId" type="hidden" value="0">
             <span class="modal_close">X</span>
-            <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
+            <h3>{{ trans('frontend.str.online_newsletter_log') }}<span id="process"></span></h3>
             <div id="onlinelog"></div>
             <div class="row">
                 <div class="col-sm-12 padding-top-10 padding-bottom-10">
@@ -405,6 +405,7 @@
                         $('#timer2').text('00:00:00');
                         $('.progress-bar').css('width', '0%');
                         $('#leftsend').text(0);
+                        $("#process").removeClass();
                     }
                 },
                 error: function(error) {
@@ -422,6 +423,7 @@
             $("#timer2").text('00:00:00');
             $('#leftsend').text(100);
             $('.progress-bar').css('width', '0%');
+            $("#process").removeClass();
         }
 
         function process() {

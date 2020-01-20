@@ -269,10 +269,10 @@ class SubscribersController extends Controller
 
             // Add some data
             $oSpreadsheet_Out->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'User email')
-                ->setCellValue('B2', 'Name');
+                ->setCellValue('A1', 'Email')
+                ->setCellValue('B1', trans('frontend.str.name'));
 
-            $i = 0;
+            $i = 1;
 
             foreach ($subscribers as $subscriber) {
                 $i++;

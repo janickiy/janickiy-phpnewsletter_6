@@ -87,7 +87,7 @@
                                         @endif
 
                                         <div class="note">
-                                            {{ trans('frontend.note.personalization') }}
+                                            {!! trans('frontend.note.personalization') !!}
                                         </div>
                                     </section>
 
@@ -171,7 +171,7 @@
 
                             <div class="well bg-color-blueLight">
                                 <div id="resultSend"></div>
-                                <h3>{{ trans('frontend.str.send_test_letter') }}</h3>
+                                <h3>{{ trans('frontend.str.send_test_letter') }}<span id="process"></span></h3>
                                 <div class="input-group">
 
                                     {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Email', 'id' => 'email']) !!}
@@ -240,6 +240,8 @@
                 var arr = $("#tmplForm").serializeArray();
                 var aParams = [];
                 var sParam;
+                $("#process").removeClass().addClass('showprocess');
+                $("#send_test").attr('disabled','disabled');
 
                 for (var i = 0, count = arr.length; i < count; i++) {
                     sParam = encodeURIComponent(arr[i].name);
@@ -301,6 +303,8 @@
                         }
 
                         $("#resultSend").html(alert_msg);
+                        $("#process").removeClass();
+                        $("#send_test").removeAttr('disabled');
                     }
                 });
             });

@@ -184,6 +184,7 @@ return [
         'high_secrecy' => 'высокая секретность',
         'remove' => 'Удалить',
         'add' => 'Добавить',
+        'edit' => 'Редактировать',
         'show_admin_email_in_sent_emails' => 'Показывать e-mail отправителя в отправленных письмах',
         'admin_email_name' => 'Имя к E-mail администратора (from)',
         'return_path' => 'Обратный адрес (Return-path)',
@@ -313,5 +314,6 @@ return [
         'template_edit' => '',
         'log_info' => '',
         'expired_index' => '',
+        'redirectlog_info' => '',
     ],
 ];

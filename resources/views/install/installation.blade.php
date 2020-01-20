@@ -19,7 +19,8 @@
         <p>{{ trans('install.str.administration') }}:</p>
         <div class="form-group">
             <label for="app_name">{{ trans('install.str.login') }}</label>
-            <input type="text" class="form-control" id="login" name="login" value="{{ old('login') }}">
+
+            {!! Form::text('login', old('login'), ['class' => "form-control", 'id' => "login"]) !!}
 
             @if ($errors->has('login'))
                 <span class="text-danger">{{ $errors->first('login') }}</span>
@@ -27,16 +28,20 @@
 
         </div>
         <div class="form-group">
-            <label for="app_name">{{ trans('install.str.password') }}</label>
-            <input type="password" class="form-control" id="password" name="password">
+
+            {!! Form::label('app_name', trans('install.str.password')) !!}
+
+            {!! Form::password('password', ['class' => "form-control", 'id' => "password"]) !!}
 
             @if ($errors->has('password'))
                 <span class="text-danger">{{ $errors->first('password') }}</span>
             @endif
         </div>
         <div class="form-group">
-            <label for="app_name">{{ trans('install.str.confirm_password') }}</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+
+            {!! Form::label('app_name', trans('install.str.confirm_password')) !!}
+
+            {!! Form::password('confirm_password', ['class' => "form-control", 'id' => "confirm_password"]) !!}
 
             @if ($errors->has('confirm_password'))
                 <span class="text-danger">{{ $errors->first('confirm_password') }}</span>

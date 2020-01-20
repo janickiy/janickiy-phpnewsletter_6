@@ -280,11 +280,12 @@ class SendEmailHelpers
 
         $url_info = parse_url(SettingsHelpers::getSetting('URL'));
 
-        $msg = preg_replace_callback("/%REFERRAL\:(.+)%/isU", function($matches) { return "http://%URL_PATH%/referral/" . base64_encode($matches[1]) . "/%USERID%"; }, $msg);
+        $msg = preg_replace_callback("/%REFERRAL\:(.+)%/isU", function($matches) { return "%URL_PATH%referral/" . base64_encode($matches[1]) . "/%USERID%"; }, $msg);
         $msg = str_replace('%NAME%', $name, $msg);
         $msg = str_replace('%UNSUB%', $UNSUB, $msg);
         $msg = str_replace('%SERVER_NAME%', $url_info['host'], $msg);
-        $msg = str_replace('%USERID%',$subscriberId, $msg);
+        $msg = str_replace('%USERID%', $subscriberId, $msg);
+        $msg = str_replace('%URL_PATH%', SettingsHelpers::getSetting('URL'), $msg);
         $msg = SettingsHelpers::getSetting('RANDOM_REPLACEMENT_BODY') == 1 ? StringHelpers::encodeString($msg) : $msg;
 
         if ($attach) {

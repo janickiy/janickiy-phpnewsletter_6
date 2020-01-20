@@ -132,12 +132,12 @@
                         p: "start",
                     },
                     success: function(data){
-                        if (data[0].result == true) {
+                        if (data.result == true) {
                             $('.progress-bar').css('width', '20%');
-                            $("#status_process").text(data[0].status);
+                            $("#status_process").text(data.status);
                             updateFiles();
                         } else {
-                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                         }
                     }
                 });
@@ -156,11 +156,11 @@
                     p: "update_files",
                 },
                 success: function(data){
-                    if (data[0].result == true) {
+                    if (data.result == true) {
                         $('.progress-bar').css('width', '60%');
                         updateBD();
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });
@@ -178,11 +178,11 @@
                     p: "update_bd",
                 },
                 success: function(data){
-                    if (data[0].result == true) {
+                    if (data.result == true) {
                         $('.progress-bar').css('width', '80%');
                         clearCache();
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });
@@ -200,12 +200,12 @@
                     p: "clear_cache",
                 },
                 success: function(data){
-                    if (data[0].result == true) {
+                    if (data.result == true) {
                         $('.progress-bar').css('width', '100%');
                         $('#progress_bar').delay(3000).fadeOut();
                         $('#status_process').delay(3000).text('{{ trans('frontend.msg.update_completed') }}');
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });

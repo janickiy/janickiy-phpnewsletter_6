@@ -13,7 +13,7 @@ class CategoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $infoAlert = trans('frontend.hint.category_index') ? trans('frontend.hint.category_index') : null;
 

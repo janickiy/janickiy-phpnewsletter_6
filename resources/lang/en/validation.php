@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\StringHelpers;
+
 return [
 
     /*
@@ -147,4 +149,8 @@ return [
 
     'attributes' => [],
 
+    'empty_template' => 'Field "Template" is empty!',
+    'empty_name' => 'Field "Name" is empty!',
+    'empty_email' => 'Enter Email!',
+    'wrong_email' => 'Email is incorrect!',
 ];

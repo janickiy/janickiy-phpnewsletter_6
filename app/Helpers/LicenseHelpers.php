@@ -137,7 +137,7 @@ class LicenseHelpers
      */
     public function getUpdateLink()
     {
-        $out = $this->getDataContentsn($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['update'];
     }
 
