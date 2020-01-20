@@ -38,7 +38,7 @@ class FrontendController extends Controller
     {
         if (!$ref) abort(404);
 
-        $url = isset($parameter['ref']) ? base64_decode($ref) : '';
+        $url = isset($ref) ? base64_decode($ref) : '';
 
         $subscribers = Subscribers::find($subscriber);
 
@@ -46,7 +46,7 @@ class FrontendController extends Controller
 
         $data['url'] = $url;
         $data['time'] = date("Y-m-d H:i:s");
-        $data['email'] = isset($subscriber->email) ? $subscriber->email : '';
+        $data['email'] = isset($subscribers->email) ? $subscribers->email : '';
 
         Redirect::create($data);
 

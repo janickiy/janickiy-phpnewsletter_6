@@ -188,7 +188,8 @@ return [
         'high_secrecy' => 'high secrecy',
         'remove' => 'Remove',
         'add' => 'Add',
-        'show_admin_email_in_sent_emails' => "Show sender 's e-mail in sent e-mails",
+        'edit' => 'Edit',
+        'show_admin_email_in_sent_emails' => "Show sender's e-mail in sent e-mails",
         'admin_email_name' => 'Administrator E-mail name (from)',
         'return_path' => 'Return path',
         'list_owner' => 'Email list owner',
@@ -313,5 +314,6 @@ return [
         'template_edit' => '',
         'log_info' => '',
         'expired_index' => '',
+        'redirectlog_info' => '',
     ],
 ];

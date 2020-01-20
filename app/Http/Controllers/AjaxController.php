@@ -56,17 +56,21 @@ class AjaxController extends Controller
                     if ($request->p == 'update_bd') {
                         Artisan::call('migrate', ['--force' => true]);
                         $content['status'] = trans('frontend.msg.update_completed');
+                        $content['result'] = true;
                     }
 
                     if ($request->p == 'clear_cache') {
+                        StringHelpers::setEnvironmentValue('VERSION', $update->getUpgradeVersion());
                         Artisan::call('cache:clear');
                         Artisan::call('route:cache');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');
-                        $content['status'] = trans('frontend.msg.cache_cleared');
+
+                        $content['status'] = $update->getUpgradeVersion();
+                        $content['result'] = true;
                     }
 
-                    return ResponseHelpers::jsonResponse([$content]);
+                    return ResponseHelpers::jsonResponse($content);
 
                     break;
 
@@ -129,10 +133,10 @@ class AjaxController extends Controller
 
                     $errors = [];
 
-                    if (empty($subject)) $errors[] = trans('error.empty_subject');
-                    if (empty($body)) $errors[] = trans('error.empty_content');
-                    if (empty($email)) $errors[] = trans('error.empty_email');
-                    if (!empty($email) && StringHelpers::isEmail($email) === false) $errors[] = trans('error.empty_email');
+                    if (empty($subject)) $errors[] = trans('validation.empty_name');
+                    if (empty($body)) $errors[] = trans('validation.empty_template');
+                    if (empty($email)) $errors[] = trans('validation.empty_email');
+                    if (!empty($email) && StringHelpers::isEmail($email) === false) $errors[] = trans('validation.wrong_email');
 
                     if (count($errors) == 0) {
                         SendEmailHelpers::setBody($body);
@@ -145,15 +149,18 @@ class AjaxController extends Controller
                         $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('frontend.msg.email_wasnt_sent') : trans('frontend.msg.email_sent')];
                     } else {
                         $msg = implode(",", $errors);
-                        $result_send = ['result' => 'errors', 'msg' => $msg];
+
+                        return ResponseHelpers::jsonResponse(
+                            ['result' => 'errors', 'msg' => $msg]
+                        );
                     }
 
                     $data['subscriberId'] = 0;
                     $data['email'] = $email;
                     $data['templateId'] = 0;
                     $data['template'] = $subject;
-                    $data['success'] = $result['result'] !== true ? 0 : 1;
-                    $data['errorMsg'] = $result['result'] !== true ? $result['error'] : '';
+                    $data['success'] = isset($result['result']) && $result['result'] !== true ? 0 : 1;
+                    $data['errorMsg'] = isset($result['result']) && $result['result'] !== true ? $result['error'] : '';
                     $data['scheduleId'] = 0;
                     $data['logId'] = 0;
 
