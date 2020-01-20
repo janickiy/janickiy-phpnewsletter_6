@@ -7,6 +7,7 @@ use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use URL;
 
 class RedirectController extends Controller
 {
@@ -92,9 +93,6 @@ class RedirectController extends Controller
      */
     public function info($url)
     {
-        //$url = base64_decode($url);
-
-
         $infoAlert = trans('frontend.hint.redirectlog_info') ? trans('frontend.hint.redirectlog_info') : null;
 
         return view('admin.redirect.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_info'));
