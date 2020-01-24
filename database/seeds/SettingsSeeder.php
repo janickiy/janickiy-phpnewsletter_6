@@ -72,7 +72,7 @@ class SettingsSeeder extends Seeder
         $data_insert['ru'][] = ['name' => 'PRECEDENCE', 'value' => 'bulk'];
         $data_insert['ru'][] = ['name' => 'CHARSET', 'value' => 'utf-8'];
         $data_insert['ru'][] = ['name' => 'CONTENT_TYPE', 'value' => 'html'];
-        $data_insert['ru'][] = ['name' => 'HOW_TO_SEND', 'value' => 'smtp'];
+        $data_insert['ru'][] = ['name' => 'HOW_TO_SEND', 'value' => 'php'];
         $data_insert['ru'][] = ['name' => 'SENDMAIL_PATH', 'value' => '/usr/sbin/sendmail'];
         $data_insert['ru'][] = ['name' => 'URL', 'value' => StringHelpers::getUrl()];
         $data_insert['ru'][] = ['name' => 'ADD_DKIM', 'value' => '0'];
