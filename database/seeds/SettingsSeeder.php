@@ -37,7 +37,7 @@ class SettingsSeeder extends Seeder
         $data_insert['en'][] = ['name' => 'PRECEDENCE', 'value' => 'bulk'];
         $data_insert['en'][] = ['name' => 'CHARSET', 'value' => 'utf-8'];
         $data_insert['en'][] = ['name' => 'CONTENT_TYPE', 'value' => 'html'];
-        $data_insert['en'][] = ['name' => 'HOW_TO_SEND', 'value' => 'smtp'];
+        $data_insert['en'][] = ['name' => 'HOW_TO_SEND', 'value' => 'php'];
         $data_insert['en'][] = ['name' => 'SENDMAIL_PATH', 'value' => '/usr/sbin/sendmail'];
         $data_insert['en'][] = ['name' => 'URL', 'value' => StringHelpers::getUrl()];
         $data_insert['en'][] = ['name' => 'ADD_DKIM', 'value' => '0'];
