@@ -22,6 +22,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\Locale::class,
         \App\Http\Middleware\License::class,
+        \App\Http\Middleware\RemoveSubscriber::class,
     ];
 
     /**
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\Locale::class,
             \App\Http\Middleware\License::class,
+            \App\Http\Middleware\RemoveSubscriber::class,
         ],
 
         'api' => [
@@ -72,6 +74,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'permission' => \App\Http\Middleware\CheckPermission::class,
         'install' => \App\Http\Middleware\Install::class,
+        'remove.subscriber' => \App\Http\Middleware\RemoveSubscriber::class,
     ];
 
     /**
@@ -92,5 +95,6 @@ class Kernel extends HttpKernel
         \Illuminate\Auth\Middleware\Authorize::class,
         \App\Http\Middleware\CheckPermission::class,
         \App\Http\Middleware\License::class,
+        \App\Http\Middleware\RemoveSubscriber::class,
     ];
 }
