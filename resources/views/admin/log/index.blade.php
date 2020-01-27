@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @if(Helpers::has_permission(Auth::user()->login,'admin'))
+    @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">

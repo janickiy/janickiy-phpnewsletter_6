@@ -241,7 +241,7 @@ Use search to find needed section.
                 </a>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('subscribers*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.subscribers.index') }}" title="{{ trans('frontend.menu.subscribers') }}">
@@ -251,7 +251,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('category*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.category.index') }}" title="{{ trans('frontend.menu.subscribers_category') }}">
@@ -261,7 +261,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{ Request::is('smtp*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.smtp.index') }}" title="SMTP">
@@ -292,7 +292,7 @@ Use search to find needed section.
                 </ul>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{  Request::is('settings*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.settings.index') }}" title="{{ trans('frontend.menu.settings') }}">
@@ -302,7 +302,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{ Request::is('users*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.users.index') }}" title="{{ trans('frontend.menu.users') }}">
@@ -324,7 +324,7 @@ Use search to find needed section.
                 </a>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li class="">
                     <a href="#">
