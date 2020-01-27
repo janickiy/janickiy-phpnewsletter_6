@@ -15,7 +15,7 @@ class RemoveSubscriber
      */
     public function handle($request, Closure $next)
     {
-        if (SettingsHelpers::getSetting('REMOVE_SUBSCRIBER')) {
+        if (file_exists(base_path('.env')) && SettingsHelpers::getSetting('REMOVE_SUBSCRIBER')) {
 
             $interval = "created_at < NOW() - INTERVAL '" . SettingsHelpers::getSetting('DAYS_FOR_REMOVE_SUBSCRIBER') . "' DAY";
 
