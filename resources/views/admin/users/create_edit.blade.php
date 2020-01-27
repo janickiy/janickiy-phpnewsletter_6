@@ -106,9 +106,8 @@
 
                                 <label class="select">
 
-                                    {!! Form::select('role', [$options], (isset($user->role) && $user->role == $options) or !isset($user->role) ? true : false, ['id'=> "role"]) !!}
+                                    {!! Form::select('role', $options, isset($user) ? $user->role : 'admin', ['placeholder' => trans('frontend.form.select_role'), 'id'=> "role"]) !!}
 
-                                    <i></i>
                                 </label>
 
                                 @if ($errors->has('role'))
@@ -153,7 +152,7 @@
 
                         <footer>
                             <button type="submit" class="btn btn-primary">
-                                {{ trans('frontend.form.send') }}
+                                {{ isset($user) ? trans('frontend.form.edit') : trans('frontend.form.add') }}
                             </button>
                             <a class="btn btn-default" href="{{ URL::route('admin.users.index') }}">
                                 {{ trans('frontend.form.back') }}
