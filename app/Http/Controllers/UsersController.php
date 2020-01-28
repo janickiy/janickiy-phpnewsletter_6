@@ -95,7 +95,6 @@ class UsersController extends Controller
         $rules = [
             'login' => 'required|max:255|unique:users,login,' . $request->id,
             'name' => 'required',
-            'role' => 'required',
             'password' => 'min:6|nullable',
             'password_again' => 'min:6|same:password|nullable',
         ];
