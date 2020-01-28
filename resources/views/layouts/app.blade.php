@@ -109,7 +109,7 @@ Use search to find needed section.
     <div id="logo-group">
 
         <!-- PLACE YOUR LOGO HERE -->
-        <span id="logo"> <img src="{{ url('/admin/img/logo.png') }}" alt="SmartAdmin"> </span>
+        <span id="logo"> <img src="{{ url('/admin/img/logo.png') }}" alt=""> </span>
 
     </div>
 
@@ -213,7 +213,7 @@ Use search to find needed section.
 				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
 					<a>
 						<span>
-							{{ Auth::user()->name }}
+							{{ Auth::user()->login }}
 						</span>
 					</a>
 				</span>
