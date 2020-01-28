@@ -663,9 +663,8 @@
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="col-lg-4 control-label">{{ trans('frontend.form.name') }}</label>
 
-                                                {!! Form::label('header_name[]', trans('frontend.form.name'), ['class' => 'col-lg-4 control-labell']) !!}
+                                                {!! Form::label('header_name[]', trans('frontend.form.name'), ['class' => 'col-lg-4 control-label']) !!}
 
                                                 <div class="col-lg-8">
 
@@ -677,7 +676,7 @@
                                         <div class="col-lg-8">
                                             <div class="form-group">
 
-                                                <label class="col-lg-4 control-label">{{ trans('frontend.form.value') }}</label>
+                                                {!! Form::label('header_value[]', trans('frontend.form.value'), ['class' => 'col-lg-4 control-label']) !!}
 
                                                 <div class="col-lg-6">
 

@@ -166,7 +166,7 @@ class DataTableController extends Controller
                 return $row->read_mail ? $row->read_mail : 0;
             })
             ->addColumn('report', function ($row) {
-                return Helpers::has_permission(Auth::user()->login,'admin') ? '<a href="' . URL::route('admin.log.report', ['id' => $row->id]) . '">' . trans('frontend.str.download') . '</a>' : '';
+                return Helpers::has_permission(Auth::user()->role,'admin') ? '<a href="' . URL::route('admin.log.report', ['id' => $row->id]) . '">' . trans('frontend.str.download') . '</a>' : '';
             })
             ->rawColumns(['count', 'report'])->make(true);
     }
@@ -217,7 +217,7 @@ class DataTableController extends Controller
                 return '<a href="' . URL::route('admin.redirect.info', ['url' => base64_encode($row->url)]) . '">' . $row->count . '</a>';
             })
             ->addColumn('report', function ($row) {
-                return Helpers::has_permission(Auth::user()->login,'admin') ? '<a href="' . URL::route('admin.redirect.report', ['url' => base64_encode($row->url)]) . '">' . trans('frontend.str.download') . '</a>' : '';
+                return Helpers::has_permission(Auth::user()->role,'admin') ? '<a href="' . URL::route('admin.redirect.report', ['url' => base64_encode($row->url)]) . '">' . trans('frontend.str.download') . '</a>' : '';
             })
             ->rawColumns(['count', 'report'])->make(true);
 

@@ -100,6 +100,8 @@
 
                             </section>
 
+                           @if (isset($user->id) && $user->id != Auth::user()->id)
+
                             <section>
 
                                 {!! Form::label('role', trans('frontend.form.role'), ['class' => 'label']) !!}
@@ -115,6 +117,8 @@
                                 @endif
 
                             </section>
+
+                            @endif
 
                             <section>
 

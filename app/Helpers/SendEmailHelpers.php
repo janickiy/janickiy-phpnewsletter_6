@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use PHPMailer\PHPMailer;
-use App\Models\{Attach,Smtp};
+use App\Models\{Attach,Smtp, Customheaders};
 use Illuminate\Support\Facades\Storage;
 
 class SendEmailHelpers
@@ -253,7 +253,7 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('SLEEP') > 0) sleep(SettingsHelpers::getSetting('SLEEP'));
         if (SettingsHelpers::getSetting('ORGANIZATION') != '') $m->addCustomHeader("Organization: " . SettingsHelpers::getSetting('ORGANIZATION'));
-        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
+        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img alt="" border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
 
         $m->AddAddress($email);
 
@@ -271,6 +271,14 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('URL') != '') $UNSUB = (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . "://" . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . "/unsubscribe/" . $subscriberId . "/" . $token;
         $unsublink = str_replace('%UNSUB%', $UNSUB, SettingsHelpers::getSetting('UNSUBLINK'));
+
+        $customheaders  = Customheaders::get();
+
+        if ($customheaders) {
+            foreach ($customheaders as $customheader) {
+                $m->addCustomHeader($customheader->name . ": " . $customheader->value);
+            }
+        }
 
         if (SettingsHelpers::getSetting('SHOW_UNSUBSCRIBE_LINK') == 1 && SettingsHelpers::getSetting('UNSUBLINK') != '') {
             $msg = $body . "<br><br>" . $unsublink;
