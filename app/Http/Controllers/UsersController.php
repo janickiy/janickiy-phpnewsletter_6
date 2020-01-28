@@ -95,7 +95,6 @@ class UsersController extends Controller
         $rules = [
             'login' => 'required|max:255|unique:users,login,' . $request->id,
             'name' => 'required',
-            'role' => 'required',
             'password' => 'min:6|nullable',
             'password_again' => 'min:6|same:password|nullable',
         ];
@@ -107,7 +106,7 @@ class UsersController extends Controller
         } else {
             $data['login'] = $request->input('login');
             $data['name'] = $request->input('name');
-            $data['role'] = $request->input('role');
+            if (!empty($request->role)) $data['role'] = $request->input('role');
 
             if (!empty($request->password)) {
                 $data['password'] = Hash::make($request->password);
