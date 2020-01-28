@@ -106,7 +106,7 @@ class UsersController extends Controller
         } else {
             $data['login'] = $request->input('login');
             $data['name'] = $request->input('name');
-            $data['role'] = $request->input('role');
+            if ($request->role) $data['role'] = $request->input('role');
 
             if (!empty($request->password)) {
                 $data['password'] = Hash::make($request->password);
