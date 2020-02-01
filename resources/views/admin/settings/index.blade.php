@@ -74,7 +74,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('EMAIL', \App\Helpers\SettingsHelpers::getSetting('EMAIL'), ['placeholder' => "Email", 'class' => 'form-control']) !!}
+                                            {!! Form::text('EMAIL', SettingsHelpers::getSetting('EMAIL'), ['placeholder' => "Email", 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('EMAIL'))
                                                 <span class="text-danger">{{ $errors->first('EMAIL') }}</span>
@@ -90,7 +90,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('SHOW_EMAIL', 1, \App\Helpers\SettingsHelpers::getSetting('SHOW_EMAIL') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('SHOW_EMAIL', 1, SettingsHelpers::getSetting('SHOW_EMAIL') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -108,7 +108,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('FROM', \App\Helpers\SettingsHelpers::getSetting('FROM'), ['placeholder' => trans("frontend.str.sender_name"), 'class' => 'form-control']) !!}
+                                            {!! Form::text('FROM', SettingsHelpers::getSetting('FROM'), ['placeholder' => trans("frontend.str.sender_name"), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('FROM'))
                                                 <span class="text-danger">{{ $errors->first('FROM') }}</span>
@@ -124,7 +124,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('RETURN_PATH', \App\Helpers\SettingsHelpers::getSetting('RETURN_PATH'), ['placeholder' => trans("frontend.form.return_path"), 'class' => 'form-control']) !!}
+                                            {!! Form::text('RETURN_PATH', SettingsHelpers::getSetting('RETURN_PATH'), ['placeholder' => trans("frontend.form.return_path"), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('RETURN_PATH'))
                                                 <span class="text-danger">{{ $errors->first('RETURN_PATH') }}</span>
@@ -139,7 +139,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('LIST_OWNER',\App\Helpers\SettingsHelpers::getSetting('LIST_OWNER'), ['placeholder' => trans('frontend.form.list_owner'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('LIST_OWNER', SettingsHelpers::getSetting('LIST_OWNER'), ['placeholder' => trans('frontend.form.list_owner'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('LIST_OWNER'))
                                                 <span class="text-danger">{{ $errors->first('LIST_OWNER') }}</span>
@@ -155,7 +155,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('ORGANIZATION', \App\Helpers\SettingsHelpers::getSetting('ORGANIZATION'), ['placeholder' => trans("frontend.form.organization"), 'class' => 'form-control']) !!}
+                                            {!! Form::text('ORGANIZATION', SettingsHelpers::getSetting('ORGANIZATION'), ['placeholder' => trans("frontend.form.organization"), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('ORGANIZATION'))
                                                 <span class="text-danger">{{ $errors->first('ORGANIZATION') }}</span>
@@ -170,7 +170,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('SUBJECT_TEXT_CONFIRM', \App\Helpers\SettingsHelpers::getSetting('SUBJECT_TEXT_CONFIRM'), ['placeholder' => trans("frontend.form.subject_text_confirm"), 'class' => 'form-control']) !!}
+                                            {!! Form::text('SUBJECT_TEXT_CONFIRM', SettingsHelpers::getSetting('SUBJECT_TEXT_CONFIRM'), ['placeholder' => trans("frontend.form.subject_text_confirm"), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('SUBJECT_TEXT_CONFIRM'))
                                                 <span class="text-danger">{{ $errors->first('SUBJECT_TEXT_CONFIRM') }}</span>
@@ -186,7 +186,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::textarea('TEXT_CONFIRMATION', \App\Helpers\SettingsHelpers::getSetting('TEXT_CONFIRMATION'), ['rows' => "4", 'placeholder' => trans("frontend.form.text_confirmation"), 'class' => 'form-control']) !!}
+                                            {!! Form::textarea('TEXT_CONFIRMATION', SettingsHelpers::getSetting('TEXT_CONFIRMATION'), ['rows' => "4", 'placeholder' => trans("frontend.form.text_confirmation"), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('TEXT_CONFIRMATION'))
                                                 <span class="text-danger">{{ $errors->first('TEXT_CONFIRMATION') }}</span>
@@ -202,7 +202,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('REQUIRE_SUB_CONFIRMATION', 1, \App\Helpers\SettingsHelpers::getSetting('REQUIRE_SUB_CONFIRMATION') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('REQUIRE_SUB_CONFIRMATION', 1, SettingsHelpers::getSetting('REQUIRE_SUB_CONFIRMATION') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -220,7 +220,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::textarea('UNSUBLINK', \App\Helpers\SettingsHelpers::getSetting('UNSUBLINK'), ['rows' => "4", 'placeholder' => trans('frontend.form.unsublink_text'), 'class' => 'form-control']) !!}
+                                            {!! Form::textarea('UNSUBLINK', SettingsHelpers::getSetting('UNSUBLINK'), ['rows' => "4", 'placeholder' => trans('frontend.form.unsublink_text'), 'class' => 'form-control']) !!}
 
                                         </div>
 
@@ -246,7 +246,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('SHOW_UNSUBSCRIBE_LINK', 1, \App\Helpers\SettingsHelpers::getSetting('SHOW_UNSUBSCRIBE_LINK') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('SHOW_UNSUBSCRIBE_LINK', 1, SettingsHelpers::getSetting('SHOW_UNSUBSCRIBE_LINK') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -265,7 +265,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('REQUEST_REPLY', 1, \App\Helpers\SettingsHelpers::getSetting('REQUEST_REPLY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('REQUEST_REPLY', 1, SettingsHelpers::getSetting('REQUEST_REPLY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -284,7 +284,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('NEW_SUBSCRIBER_NOTIFY', 1, \App\Helpers\SettingsHelpers::getSetting('NEW_SUBSCRIBER_NOTIFY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('NEW_SUBSCRIBER_NOTIFY', 1, SettingsHelpers::getSetting('NEW_SUBSCRIBER_NOTIFY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -302,7 +302,7 @@
 
                                         <div class="col-md-6">
 
-                                            {!! Form::text('INTERVAL_NUMBER', \App\Helpers\SettingsHelpers::getSetting('INTERVAL_NUMBER'), ['class' => 'form-control']) !!}
+                                            {!! Form::text('INTERVAL_NUMBER', SettingsHelpers::getSetting('INTERVAL_NUMBER'), ['class' => 'form-control']) !!}
 
                                             @if ($errors->has('INTERVAL_NUMBER'))
                                                 <span class="text-danger">{{ $errors->first('INTERVAL_NUMBER') }}</span>
@@ -316,7 +316,7 @@
                                                              'minute' => trans('frontend.form.minute'),
                                                              'hour' => trans('frontend.form.hour'),
                                                              'day' => trans('frontend.form.day'),
-                                                             ], \App\Helpers\SettingsHelpers::getSetting('INTERVAL_TYPE') ? \App\Helpers\SettingsHelpers::getSetting('INTERVAL_TYPE') : 'no', ['class' => 'form-control']
+                                                             ], SettingsHelpers::getSetting('INTERVAL_TYPE') ? SettingsHelpers::getSetting('INTERVAL_TYPE') : 'no', ['class' => 'form-control']
                                                              ) !!}
 
                                         </div>
@@ -328,7 +328,7 @@
 
                                         <div class="col-md-6">
 
-                                            {!! Form::text('LIMIT_NUMBER', \App\Helpers\SettingsHelpers::getSetting('LIMIT_NUMBER'), ['class' => 'form-control']) !!}
+                                            {!! Form::text('LIMIT_NUMBER', SettingsHelpers::getSetting('LIMIT_NUMBER'), ['class' => 'form-control']) !!}
 
                                             @if ($errors->has('LIMIT_NUMBER'))
                                                 <span class="text-danger">{{ $errors->first('LIMIT_NUMBER') }}</span>
@@ -338,7 +338,7 @@
                                         <div class="col-md-3">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('LIMIT_SEND', 1, \App\Helpers\SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('LIMIT_SEND', 1, SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -351,7 +351,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('SLEEP', \App\Helpers\SettingsHelpers::getSetting('SLEEP'), ['placeholder' => trans('frontend.form.sleep'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('SLEEP', SettingsHelpers::getSetting('SLEEP'), ['placeholder' => trans('frontend.form.sleep'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('SLEEP'))
                                                 <span class="text-danger">{{ $errors->first('SLEEP') }}</span>
@@ -366,7 +366,7 @@
 
                                         <div class="col-md-6">
 
-                                            {!! Form::text('DAYS_FOR_REMOVE_SUBSCRIBER', \App\Helpers\SettingsHelpers::getSetting('DAYS_FOR_REMOVE_SUBSCRIBER'), ['placeholder' => trans('frontend.form.days_for_remove_subscriber'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DAYS_FOR_REMOVE_SUBSCRIBER', SettingsHelpers::getSetting('DAYS_FOR_REMOVE_SUBSCRIBER'), ['placeholder' => trans('frontend.form.days_for_remove_subscriber'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DAYS_FOR_REMOVE_SUBSCRIBER'))
                                                 <span class="text-danger">{{ $errors->first('DAYS_FOR_REMOVE_SUBSCRIBER') }}</span>
@@ -376,7 +376,7 @@
                                         <div class="col-md-3">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('REMOVE_SUBSCRIBER', 1, \App\Helpers\SettingsHelpers::getSetting('REMOVE_SUBSCRIBER') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('REMOVE_SUBSCRIBER', 1, SettingsHelpers::getSetting('REMOVE_SUBSCRIBER') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
 
@@ -391,7 +391,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('RANDOM_SEND', 1, \App\Helpers\SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('RANDOM_SEND', 1, SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
 
@@ -411,7 +411,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('RENDOM_REPLACEMENT_SUBJECT', 1, \App\Helpers\SettingsHelpers::getSetting('RENDOM_REPLACEMENT_SUBJECT') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('RENDOM_REPLACEMENT_SUBJECT', 1, SettingsHelpers::getSetting('RENDOM_REPLACEMENT_SUBJECT') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -430,7 +430,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('RANDOM_REPLACEMENT_BODY', 1, \App\Helpers\SettingsHelpers::getSetting('RANDOM_REPLACEMENT_BODY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('RANDOM_REPLACEMENT_BODY', 1, SettingsHelpers::getSetting('RANDOM_REPLACEMENT_BODY') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
 
@@ -454,7 +454,7 @@
                                                             'bulk' => 'bulk',
                                                             'junk' => 'junk',
                                                             'list' => 'list',
-                                                            ], \App\Helpers\SettingsHelpers::getSetting('PRECEDENCE') ? \App\Helpers\SettingsHelpers::getSetting('PRECEDENCE') : 'no', ['class' => 'form-control']
+                                                            ], SettingsHelpers::getSetting('PRECEDENCE') ? SettingsHelpers::getSetting('PRECEDENCE') : 'no', ['class' => 'form-control']
                                                             ) !!}
 
                                             @if ($errors->has('PRECEDENCE'))
@@ -470,7 +470,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::select('CHARSET', $option_charset, \App\Helpers\SettingsHelpers::getSetting('CHARSET') ? \App\Helpers\SettingsHelpers::getSetting('CHARSET') : 'no', ['class' => 'form-control'] ) !!}
+                                            {!! Form::select('CHARSET', $option_charset, SettingsHelpers::getSetting('CHARSET') ? SettingsHelpers::getSetting('CHARSET') : 'no', ['class' => 'form-control'] ) !!}
 
                                             @if ($errors->has('CHARSET'))
                                                 <span class="text-danger">{{ $errors->first('CHARSET') }}</span>
@@ -486,13 +486,13 @@
                                         <div class="col-md-9">
                                             <label class="radio radio-inline">
 
-                                                {!! Form::radio('CONTENT_TYPE', 'html', \App\Helpers\SettingsHelpers::getSetting('CONTENT_TYPE') == 'html' or \App\Helpers\SettingsHelpers::getSetting('CONTENT_TYPE') == '' ? true : false, ['class' => 'radiobox style-0'] ) !!}
+                                                {!! Form::radio('CONTENT_TYPE', 'html', SettingsHelpers::getSetting('CONTENT_TYPE') == 'html' or SettingsHelpers::getSetting('CONTENT_TYPE') == '' ? true : false, ['class' => 'radiobox style-0'] ) !!}
 
                                                 <span>HTML</span>
                                             </label>
                                             <label class="radio radio-inline">
 
-                                                {!! Form::radio('CONTENT_TYPE', 'plain', \App\Helpers\SettingsHelpers::getSetting('CONTENT_TYPE') == 'plain' ? true : false, ['class' => 'radiobox style-0'] ) !!}
+                                                {!! Form::radio('CONTENT_TYPE', 'plain', SettingsHelpers::getSetting('CONTENT_TYPE') == 'plain' ? true : false, ['class' => 'radiobox style-0'] ) !!}
 
                                                 <span>Plain</span>
                                             </label>
@@ -506,19 +506,19 @@
                                         <div class="col-md-9">
                                             <label class="radio radio-inline">
 
-                                                {!! Form::radio('HOW_TO_SEND', 'php', \App\Helpers\SettingsHelpers::getSetting('HOW_TO_SEND') == 'php' or \App\Helpers\SettingsHelpers::getSetting('HOW_TO_SEND') == '' ? true : false, ['class' => 'radiobox style-0'] ) !!}
+                                                {!! Form::radio('HOW_TO_SEND', 'php', SettingsHelpers::getSetting('HOW_TO_SEND') == 'php' or \SettingsHelpers::getSetting('HOW_TO_SEND') == '' ? true : false, ['class' => 'radiobox style-0'] ) !!}
 
                                                 <span>PHP Mail</span>
                                             </label>
                                             <label class="radio radio-inline">
 
-                                                {!! Form::radio('HOW_TO_SEND', 'smtp', \App\Helpers\SettingsHelpers::getSetting('HOW_TO_SEND') == 'smtp' ? true : false, ['class' => 'radiobox style-0'] ) !!}
+                                                {!! Form::radio('HOW_TO_SEND', 'smtp', SettingsHelpers::getSetting('HOW_TO_SEND') == 'smtp' ? true : false, ['class' => 'radiobox style-0'] ) !!}
 
                                                 <span>SMTP</span>
                                             </label>
                                             <label class="radio radio-inline">
 
-                                                {!! Form::radio('HOW_TO_SEND', 'sendmail', \App\Helpers\SettingsHelpers::getSetting('HOW_TO_SEND') == 'sendmail' ? true : false, ['class' => 'radiobox style-0'] ) !!}
+                                                {!! Form::radio('HOW_TO_SEND', 'sendmail', SettingsHelpers::getSetting('HOW_TO_SEND') == 'sendmail' ? true : false, ['class' => 'radiobox style-0'] ) !!}
 
                                                 <span>Sendmail</span>
                                             </label>
@@ -531,7 +531,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('SENDMAIL_PATH', \App\Helpers\SettingsHelpers::getSetting('SENDMAIL_PATH'), ['placeholder' => trans('frontend.form.sendmail_path'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('SENDMAIL_PATH', SettingsHelpers::getSetting('SENDMAIL_PATH'), ['placeholder' => trans('frontend.form.sendmail_path'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('SENDMAIL_PATH'))
                                                 <span class="text-danger">{{ $errors->first('SENDMAIL_PATHT') }}</span>
@@ -546,7 +546,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('URL', \App\Helpers\SettingsHelpers::getSetting('URL'), ['placeholder' => 'URL', 'class' => 'form-control']) !!}
+                                            {!! Form::text('URL', SettingsHelpers::getSetting('URL'), ['placeholder' => 'URL', 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('URL'))
                                                 <span class="text-danger">{{ $errors->first('URL') }}</span>
@@ -562,7 +562,7 @@
                                         <div class="col-md-9">
                                             <label class="checkbox-inline">
 
-                                                {!! Form::checkbox('ADD_DKIM', 1, \App\Helpers\SettingsHelpers::getSetting('ADD_DKIM') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
+                                                {!! Form::checkbox('ADD_DKIM', 1, SettingsHelpers::getSetting('ADD_DKIM') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
 
                                                 <span></span>
                                             </label>
@@ -580,7 +580,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('DKIM_DOMAIN', \App\Helpers\SettingsHelpers::getSetting('DKIM_DOMAIN'), ['placeholder' => trans('frontend.form.dkim_domain'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DKIM_DOMAIN', SettingsHelpers::getSetting('DKIM_DOMAIN'), ['placeholder' => trans('frontend.form.dkim_domain'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DKIM_DOMAIN'))
                                                 <span class="text-danger">{{ $errors->first('DKIM_DOMAIN') }}</span>
@@ -595,7 +595,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('DKIM_SELECTOR', \App\Helpers\SettingsHelpers::getSetting('DKIM_SELECTOR'), ['placeholder' => trans('frontend.form.dkim_selector'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DKIM_SELECTOR', SettingsHelpers::getSetting('DKIM_SELECTOR'), ['placeholder' => trans('frontend.form.dkim_selector'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DKIM_SELECTOR'))
                                                 <span class="text-danger">{{ $errors->first('DKIM_SELECTOR') }}</span>
@@ -610,7 +610,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::textarea('DKIM_PRIVATE', \App\Helpers\SettingsHelpers::getSetting('DKIM_PRIVATE'), ['rows' => 5, 'placeholder' => trans('frontend.form.dkim_private'), 'class' => 'form-control']) !!}
+                                            {!! Form::textarea('DKIM_PRIVATE', SettingsHelpers::getSetting('DKIM_PRIVATE'), ['rows' => 5, 'placeholder' => trans('frontend.form.dkim_private'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DKIM_PRIVATE'))
                                                 <span class="text-danger">{{ $errors->first('DKIM_SELECTOR') }}</span>
@@ -625,7 +625,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('DKIM_PASSPHRAS', \App\Helpers\SettingsHelpers::getSetting('DKIM_PASSPHRAS'), ['placeholder' => trans('frontend.form.dkim_passphras'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DKIM_PASSPHRAS', SettingsHelpers::getSetting('DKIM_PASSPHRAS'), ['placeholder' => trans('frontend.form.dkim_passphras'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DKIM_PASSPHRAS'))
                                                 <span class="text-danger">{{ $errors->first('DKIM_PASSPHRAS') }}</span>
@@ -640,7 +640,7 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('DKIM_IDENTITY', \App\Helpers\SettingsHelpers::getSetting('DKIM_IDENTITY'), ['placeholder' => trans('frontend.form.dkim_identity'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DKIM_IDENTITY', SettingsHelpers::getSetting('DKIM_IDENTITY'), ['placeholder' => trans('frontend.form.dkim_identity'), 'class' => 'form-control']) !!}
 
                                             @if ($errors->has('DKIM_IDENTITYS'))
                                                 <span class="text-danger">{{ $errors->first('DKIM_IDENTITY') }}</span>
