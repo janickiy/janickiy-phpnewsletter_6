@@ -163,7 +163,7 @@
                             process();
                         } else {
                             completeProcess();
-                            $("#divStatus").html("trans('frontend.str.error_server')");
+                            $("#divStatus").html({{ trans('frontend.str.no_newsletter_selected') }});
                         }
                     });
 

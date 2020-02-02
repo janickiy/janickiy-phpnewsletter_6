@@ -625,10 +625,10 @@
 
                                         <div class="col-md-9">
 
-                                            {!! Form::text('DKIM_PASSPHRAS', SettingsHelpers::getSetting('DKIM_PASSPHRAS'), ['placeholder' => trans('frontend.form.dkim_passphras'), 'class' => 'form-control']) !!}
+                                            {!! Form::text('DKIM_PASSPHRASE', SettingsHelpers::getSetting('DKIM_PASSPHRASE'), ['placeholder' => trans('frontend.form.dkim_passphras'), 'class' => 'form-control']) !!}
 
-                                            @if ($errors->has('DKIM_PASSPHRAS'))
-                                                <span class="text-danger">{{ $errors->first('DKIM_PASSPHRAS') }}</span>
+                                            @if ($errors->has('DKIM_PASSPHRASE'))
+                                                <span class="text-danger">{{ $errors->first('DKIM_PASSPHRASE') }}</span>
                                             @endif
 
                                         </div>
