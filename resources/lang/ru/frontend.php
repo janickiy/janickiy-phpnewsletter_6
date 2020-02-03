@@ -136,6 +136,7 @@ return [
         'not_sent' => 'не отправлено',
         "error_server" => "Ошибка сервера",
         'remember_me' => "Запомнить меня",
+        'editor' => 'Редактор',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -234,6 +235,7 @@ return [
         'timeout' => 'Таймаут соединения',
         'interval_number' => 'Отправлять письма подписчику в интервале',
         'license_key' => 'Лицензионный ключ',
+        'select_role' => 'Выберите роль',
     ],
     'note' => [
         'personalization' => '<strong>Персонализация:</strong> %NAME% - имя подписчика, %EMAIL% - E-mail адрес, %UNSUB% - ссылка для удаления рассылки, %SERVER_NAME% - адрес сайта, %REFERRAL:http://my_website.com/% - ссылка для статистика переходов по ссылкам'
@@ -265,6 +267,7 @@ return [
         'template_edit' => 'Редактирование шаблона',
         'users_index' => 'Пользователи',
         'users_create' => 'Добавление пользователя',
+        'users_edit' => 'Редактирование пользователя',
         'subform' => 'Подписка',
         'auth' => 'Авторизация',
         'update' => 'Обновление',

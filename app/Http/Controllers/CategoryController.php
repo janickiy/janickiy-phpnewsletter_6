@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\LicenseHelpers;
 use Illuminate\Http\Request;
 use App\Models\{Category, ScheduleCategory, Subscriptions};
 use Illuminate\Support\Facades\Validator;

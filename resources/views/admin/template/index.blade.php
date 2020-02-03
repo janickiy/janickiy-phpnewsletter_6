@@ -163,7 +163,7 @@
                             process();
                         } else {
                             completeProcess();
-                            $("#divStatus").html("trans('frontend.str.error_server')");
+                            $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                         }
                     });
 
@@ -410,7 +410,7 @@
                 },
                 error: function(error) {
                     completeProcess();
-                    $("#divStatus").html("trans('frontend.str.error_server')");
+                    $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                 },
             });
         }
@@ -458,7 +458,7 @@
                     },
                     error: function(error) {
                         completeProcess();
-                        $("#divStatus").html("trans('frontend.str.error_server')");
+                        $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                     },
                 });
             }

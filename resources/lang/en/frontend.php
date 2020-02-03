@@ -139,8 +139,9 @@ return [
         'stop_newsletter' => 'Stop email newsletter',
         'no_newsletter_selected' => 'No newsletter selected!',
         'not_sent' => 'Not sent',
-        "error_server" => " Error server",
-        'remember_me' => "Запомнить меня",
+        "error_server" => "Error server",
+        'remember_me' => "Remember me",
+        'editor' => 'Editor',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -234,6 +235,7 @@ return [
         'day' => 'day',
         'timeout' => 'Timeout connection',
         'license_key' => 'License key',
+        'select_role' => 'Select role',
     ],
     'note' => [
         'personalization' => '<strong>Personalization:</strong> %NAME% - subscriber name, %EMAIL% - Email address, %UNSUB% - link to unsubscribe, %SERVER_NAME% - url address, %REFERRAL:http://my_website.com/% - link to the referral logs'
@@ -262,9 +264,10 @@ return [
         'ip_address_information' => 'IP Address Information',
         'template_index' => 'Templates',
         'template_create' => 'Template Adding',
-        'template_edit' => 'Template eding',
+        'template_edit' => 'Template editing',
         'users_index' => 'Users',
         'users_create' => 'User adding',
+        'users_edit' => 'User editing',
         'subform' => 'Subscription',
         'auth' => 'Login',
         'update' => 'Update',
