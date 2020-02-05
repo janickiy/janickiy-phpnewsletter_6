@@ -42,11 +42,9 @@ class FrontendController extends Controller
 
         $subscribers = Subscribers::find($subscriber);
 
-        if (!$subscribers) abort(404);
-
         $data['url'] = $url;
         $data['time'] = date("Y-m-d H:i:s");
-        $data['email'] = isset($subscribers->email) ? $subscribers->email : '';
+        $data['email'] = isset($subscribers->email) ? $subscribers->email : 'test';
 
         Redirect::create($data);
 
@@ -63,11 +61,11 @@ class FrontendController extends Controller
         $subscribers = Subscribers::where('id', $subscriber);
         $result = $subscribers->first();
 
-        if (!$result) abort(404);
+        if ($result) {
+            if ($result->token != $token) abort(400);
 
-        if ($result->token != $token) abort(400);
-
-        $subscribers->update(['active' => 0]);
+            $subscribers->update(['active' => 0]);
+        }
 
         return view('frontend.unsubscribe')->with('title', trans('frontend.title.unsubscribe'));
 

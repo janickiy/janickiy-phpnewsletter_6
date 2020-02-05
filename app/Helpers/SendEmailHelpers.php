@@ -269,7 +269,7 @@ class SendEmailHelpers
         elseif (SettingsHelpers::getSetting('PRECEDENCE') == 'list')
             $m->addCustomHeader("Precedence: list");
 
-        if (SettingsHelpers::getSetting('URL') != '') $UNSUB = (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . "://" . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . "/unsubscribe/" . $subscriberId . "/" . $token;
+        if (SettingsHelpers::getSetting('URL') != '') $UNSUB = SettingsHelpers::getSetting('URL') . "unsubscribe/" . $subscriberId . "/" . $token;
         $unsublink = str_replace('%UNSUB%', $UNSUB, SettingsHelpers::getSetting('UNSUBLINK'));
 
         $customheaders  = Customheaders::get();
