@@ -269,10 +269,10 @@ class SubscribersController extends Controller
 
             // Add some data
             $oSpreadsheet_Out->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'User email')
-                ->setCellValue('B2', 'Name');
+                ->setCellValue('A1', 'Email')
+                ->setCellValue('B1', trans('frontend.str.name'));
 
-            $i = 0;
+            $i = 1;
 
             foreach ($subscribers as $subscriber) {
                 $i++;
@@ -293,6 +293,9 @@ class SubscribersController extends Controller
         }
 
         if ($request->compress == 'zip') {
+
+            header('Content-type: application/zip');
+            header('Content-Disposition: attachment; filename=emailexport_' . date("d_m_Y") . '.zip');
 
             $fout = fopen("php://output", "wb");
 
@@ -321,10 +324,7 @@ class SubscribersController extends Controller
 
                 fclose($fout);
 
-                return response('', 200, [
-                    'Content-Type' => 'application/zip',
-                    'Content-Disposition' => 'filename=emailexport_' . date("d_m_Y") . '.zip',
-                ]);
+                exit();
             }
 
         } else {

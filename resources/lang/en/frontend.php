@@ -139,7 +139,9 @@ return [
         'stop_newsletter' => 'Stop email newsletter',
         'no_newsletter_selected' => 'No newsletter selected!',
         'not_sent' => 'Not sent',
-        "error_server" => " Error server",
+        "error_server" => "Error server",
+        'remember_me' => "Remember me",
+        'editor' => 'Editor',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -157,6 +159,9 @@ return [
         'cannot_read_zip_archive' => 'Error! Cannot read .zip archive',
         'update_completed' => 'Update is completed.',
         'cache_cleared' => 'Cache cleared',
+        'demo_version_will_expire' => 'Duration of the demo version will expire in %DAYS% day(s)',
+        'demo_version_will_expire_today' => 'Duration of the demo version  will expire today',
+        'subscription_is_formed' => 'Subscription to the newsletter is formed. Thanks for signing up to receive our emails.',
     ],
     'form' => [
         'required_fields' => 'required fields',
@@ -184,7 +189,8 @@ return [
         'high_secrecy' => 'high secrecy',
         'remove' => 'Remove',
         'add' => 'Add',
-        'show_admin_email_in_sent_emails' => "Show sender 's e-mail in sent e-mails",
+        'edit' => 'Edit',
+        'show_admin_email_in_sent_emails' => "Show sender's e-mail in sent e-mails",
         'admin_email_name' => 'Administrator E-mail name (from)',
         'return_path' => 'Return path',
         'list_owner' => 'Email list owner',
@@ -229,6 +235,7 @@ return [
         'day' => 'day',
         'timeout' => 'Timeout connection',
         'license_key' => 'License key',
+        'select_role' => 'Select role',
     ],
     'note' => [
         'personalization' => '<strong>Personalization:</strong> %NAME% - subscriber name, %EMAIL% - Email address, %UNSUB% - link to unsubscribe, %SERVER_NAME% - url address, %REFERRAL:http://my_website.com/% - link to the referral logs'
@@ -257,13 +264,14 @@ return [
         'ip_address_information' => 'IP Address Information',
         'template_index' => 'Templates',
         'template_create' => 'Template Adding',
-        'template_edit' => 'Template eding',
+        'template_edit' => 'Template editing',
         'users_index' => 'Users',
         'users_create' => 'User adding',
+        'users_edit' => 'User editing',
         'subform' => 'Subscription',
         'auth' => 'Login',
         'update' => 'Update',
-        'expired_index' => 'License Key Expired',
+        'expired' => 'License Key Expired',
     ],
     'menu' => [
         'templates' => 'Templates',
@@ -309,5 +317,6 @@ return [
         'template_edit' => '',
         'log_info' => '',
         'expired_index' => '',
+        'redirectlog_info' => '',
     ],
 ];

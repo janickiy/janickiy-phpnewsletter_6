@@ -19,6 +19,7 @@ class CreateAttachTable extends Migration
             $table->string('file_name');
             $table->integer('templateId')->index('templateId');
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 

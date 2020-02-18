@@ -155,7 +155,7 @@
                 },
                 'createdRow': function (row, data, dataIndex) {
                     $(row).attr('id', 'rowid_' + data['id']);
-                    if (data['subStatus'] == '0') $(row).attr('class', 'danger');
+                    if (data['activeStatus'] == 0) $(row).attr('class', 'danger');
                 },
                 aaSorting: [[1, 'asc']],
                 processing: true,
@@ -167,7 +167,7 @@
                     {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
-                    {data: 'active', name: 'active'},
+                    {data: 'active', name: 'active', searchable: false},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ],

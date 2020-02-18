@@ -137,7 +137,7 @@ class LicenseHelpers
      */
     public function getUpdateLink()
     {
-        $out = $this->getDataContentsn($this->getUrlInfo());
+        $out = $this->getDataContents($this->getUrlInfo());
         return $out['update'];
     }
 
@@ -195,7 +195,6 @@ class LicenseHelpers
 
         return $ip;
     }
-
 
     /**
      * @return string|null
@@ -282,7 +281,7 @@ class LicenseHelpers
     public function checkLicenseKey($licenseKey)
     {
         $domain = (substr($_SERVER['SERVER_NAME'], 0, 4)) == "www." ? str_replace('www.','', $_SERVER['SERVER_NAME']) : $_SERVER['SERVER_NAME'];
-        $data = $this->getDataContents($this->url . '?t=check_licensekey&licensekey=' . $licenseKey . '&domain=' . $domain . '&s=phpnewsletter&version=' . urlencode($this->currenversion), 5);
+        $data = $this->getDataContents($this->url . '?t=check_licensekey&licensekey=' . $licenseKey . '&domain=' . $domain . '&s=phpnewsletter&version=6', 5);
 
         if ($data)  {
             return $data;
@@ -300,6 +299,17 @@ class LicenseHelpers
 
         if ($lisense_info['licensekey'] != $licenseKey) {
             $this->makeLicensekey($licenseKey);
+        }
+    }
+
+    /**
+     * @return false|float
+     */
+    public function expiredDayCount()
+    {
+        $lisense_info = $this->getLicenseInfo();
+        if ($lisense_info['license_type'] == 'demo' && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false) {
+            return round((strtotime($lisense_info['date_to']) - strtotime(date("Y-m-d H:i:s"))) / 3600 / 24);
         }
     }
 }

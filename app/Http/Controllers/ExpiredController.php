@@ -40,7 +40,7 @@ class ExpiredController extends Controller
             $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
             $check = $update->checkLicenseKey($licenseKey);
 
-            if (isset($check['error'])) {
+            if (isset($check['error']) && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false) {
                 $check['error'] = str_replace('LICENSE_IS_USED', trans('license.error.license_is_used'), $check['error']);
                 $check['error'] = str_replace('LICENSE_NOT_FOUND', trans('license.error.license_not_found'), $check['error']);
                 $check['error'] = str_replace('ERROR_CHECKING_LICENSE', trans('license.error.error_checking_license'), $check['error']);

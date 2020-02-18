@@ -109,7 +109,7 @@ Use search to find needed section.
     <div id="logo-group">
 
         <!-- PLACE YOUR LOGO HERE -->
-        <span id="logo"> <img src="{{ url('/admin/img/logo.png') }}" alt="SmartAdmin"> </span>
+        <span id="logo"> <img src="{{ url('/admin/img/logo.png') }}" alt=""> </span>
 
     </div>
 
@@ -209,15 +209,15 @@ Use search to find needed section.
 <aside id="left-panel">
 
     <!-- User info -->
-    <!-- User info -->
     <div class="login-info">
-		<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
-
-            {{ Auth::user()->name }}
-
-		</span>
+				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
+					<a>
+						<span>
+							{{ Auth::user()->login }}
+						</span>
+					</a>
+				</span>
     </div>
-    <!-- end user info -->
     <!-- end user info -->
 
     <nav>
@@ -241,7 +241,7 @@ Use search to find needed section.
                 </a>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('subscribers*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.subscribers.index') }}" title="{{ trans('frontend.menu.subscribers') }}">
@@ -251,7 +251,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('category*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.category.index') }}" title="{{ trans('frontend.menu.subscribers_category') }}">
@@ -261,7 +261,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{ Request::is('smtp*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.smtp.index') }}" title="SMTP">
@@ -292,7 +292,7 @@ Use search to find needed section.
                 </ul>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{  Request::is('settings*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.settings.index') }}" title="{{ trans('frontend.menu.settings') }}">
@@ -302,7 +302,7 @@ Use search to find needed section.
 
             @endif
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
                 <li {{ Request::is('users*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.users.index') }}" title="{{ trans('frontend.menu.users') }}">
@@ -324,7 +324,7 @@ Use search to find needed section.
                 </a>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->login,'admin|moderator'))
+            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li class="">
                     <a href="#">
@@ -489,7 +489,7 @@ Use search to find needed section.
             success: function(data){
                 if (data.msg != '' && $.cookie('alertshow') != 'no'){
                     $('#alert_msg_block').fadeIn('700');
-                    $("#alert_warning_msg").append(data[0].msg);
+                    $("#alert_warning_msg").append(data.msg);
                 }
             }
         });
@@ -543,6 +543,18 @@ Use search to find needed section.
         setTimeout(function(){
             setTimeout(function(){$('.alert-success').fadeOut('700')},5000);
         });
+    });
+
+    $(document).on( "click", "a.opislink:not(.active)", function() {
+        $(this).addClass('active');
+        $(this).parent().find('div.opis').slideDown(760);
+        return false;
+    });
+
+    $(document).on( "click", "a.opislink.active", function() {
+        $(this).removeClass('active');
+        $(this).parent().find('div.opis').slideUp(760);
+        return false;
     });
 
 </script>

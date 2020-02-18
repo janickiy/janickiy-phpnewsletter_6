@@ -16,6 +16,7 @@ class CreateSubscriptionsTable extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->integer('subscriberId')->index('subscriberId');
             $table->integer('categoryId')->index('categoryId');
+            $table->engine = 'MyISAM';
         });
     }
 

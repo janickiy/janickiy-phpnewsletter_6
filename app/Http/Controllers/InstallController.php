@@ -6,9 +6,11 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
+use App\Helpers\{ResponseHelpers};
 use Session;
 use Hash;
 use Artisan;
+use Cookie;
 use DB;
 
 class InstallController extends Controller
@@ -92,8 +94,7 @@ class InstallController extends Controller
         if (!$this->dbCredentialsAreValid($dbCredentials)) {
             return redirect()->route('install.database')
                 ->withInput()
-                ->withErrors("Connection to your database cannot be established.
-                Please provide correct database credentials.");
+                ->withErrors("Connection to your database cannot be established. Please provide correct database credentials.");
         }
 
         Session::put('install.db_credentials', $dbCredentials);
@@ -132,7 +133,7 @@ class InstallController extends Controller
             $env = str_replace('DB_DATABASE=' . env('DB_DATABASE'), 'DB_DATABASE=' . $db['database'], $env);
             $env = str_replace('DB_USERNAME=' . env('DB_USERNAME'), 'DB_USERNAME=' . $db['username'], $env);
             $env = str_replace('DB_PASSWORD=' . env('DB_PASSWORD'), 'DB_PASSWORD="' . $db['password'] . '"', $env);
-            $env = str_replace('VERSION=', '"VERSION=6.0.0 alfa"', $env);
+            $env = str_replace('VERSION=', 'VERSION="6.0.8"', $env);
 
             file_put_contents($path, $env);
 
@@ -284,7 +285,6 @@ class InstallController extends Controller
             "database.connections.{$default}.password" => $credentials['password']
         ]);
     }
-
 
     /**
      * @param Request $request

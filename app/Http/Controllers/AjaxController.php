@@ -15,12 +15,12 @@ class AjaxController extends Controller
 {
     public function action(Request $request)
     {
+        $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
+
         if ($request->input('action')) {
             switch ($request->input('action')) {
 
                 case 'start_update':
-
-                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($request->p == 'start') {
 
@@ -56,25 +56,25 @@ class AjaxController extends Controller
                     if ($request->p == 'update_bd') {
                         Artisan::call('migrate', ['--force' => true]);
                         $content['status'] = trans('frontend.msg.update_completed');
+                        $content['result'] = true;
                     }
 
                     if ($request->p == 'clear_cache') {
+                        StringHelpers::setEnvironmentValue('VERSION', $update->getUpgradeVersion());
                         Artisan::call('cache:clear');
                         Artisan::call('route:cache');
                         Artisan::call('route:clear');
                         Artisan::call('view:clear');
-                        $content['status'] = trans('frontend.msg.cache_cleared');
+
+                        $content['status'] = $update->getUpgradeVersion();
+                        $content['result'] = true;
                     }
 
-                    return ResponseHelpers::jsonResponse([
-                        $content
-                    ]);
+                    return ResponseHelpers::jsonResponse($content);
 
                     break;
 
                 case 'alert_update':
-
-                    $update = new LicenseHelpers(app()->getLocale(), env('VERSION'));
 
                     if ($update->checkNewVersion()) {
                         $update_warning = str_replace('%SCRIPTNAME%', trans('frontend.str.script_name'), trans('frontend.str.update_warning'));
@@ -83,9 +83,7 @@ class AjaxController extends Controller
                         $update_warning = str_replace('%DOWNLOADLINK%', $update->getDownloadLink(), $update_warning);
                         $update_warning = str_replace('%MESSAGE%', $update->getMessage(), $update_warning);
 
-                        return ResponseHelpers::jsonResponse([
-                            ["msg" => $update_warning]
-                        ]);
+                        return ResponseHelpers::jsonResponse(["msg" => $update_warning]);
                     }
 
                     break;
@@ -135,10 +133,10 @@ class AjaxController extends Controller
 
                     $errors = [];
 
-                    if (empty($subject)) $errors[] = trans('error.empty_subject');
-                    if (empty($body)) $errors[] = trans('error.empty_content');
-                    if (empty($email)) $errors[] = trans('error.empty_email');
-                    if (!empty($email) && StringHelpers::isEmail($email) === false) $errors[] = trans('error.empty_email');
+                    if (empty($subject)) $errors[] = trans('validation.empty_name');
+                    if (empty($body)) $errors[] = trans('validation.empty_template');
+                    if (empty($email)) $errors[] = trans('validation.empty_email');
+                    if (!empty($email) && StringHelpers::isEmail($email) === false) $errors[] = trans('validation.wrong_email');
 
                     if (count($errors) == 0) {
                         SendEmailHelpers::setBody($body);
@@ -146,27 +144,31 @@ class AjaxController extends Controller
                         SendEmailHelpers::setPrior($prior);
                         SendEmailHelpers::setEmail($email);
                         SendEmailHelpers::setToken(md5($email));
+                        SendEmailHelpers::setTemplateId(0);
                         $result = SendEmailHelpers::sendEmail();
-                        $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('msg.email_wasnt_sent') : trans('msg.email_sent')];
+                        $result_send = ['result' => $result['result'] === true ? 'success' : 'error', 'msg' => $result['error'] ? trans('frontend.msg.email_wasnt_sent') : trans('frontend.msg.email_sent')];
                     } else {
                         $msg = implode(",", $errors);
-                        $result_send = ['result' => 'errors', 'msg' => $msg];
+
+                        return ResponseHelpers::jsonResponse(
+                            ['result' => 'errors', 'msg' => $msg]
+                        );
                     }
 
                     $data['subscriberId'] = 0;
                     $data['email'] = $email;
                     $data['templateId'] = 0;
                     $data['template'] = $subject;
-                    $data['success'] = 0;
-                    $data['errorMsg'] = $result['result'] !== true ? $result['error'] : '';
+                    $data['success'] = isset($result['result']) && $result['result'] !== true ? 0 : 1;
+                    $data['errorMsg'] = isset($result['result']) && $result['result'] !== true ? $result['error'] : '';
                     $data['scheduleId'] = 0;
                     $data['logId'] = 0;
 
                     ReadySent::create($data);
 
-                    return ResponseHelpers::jsonResponse([
+                    return ResponseHelpers::jsonResponse(
                         $result_send
-                    ]);
+                    );
 
                     break;
 
@@ -197,7 +199,7 @@ class AjaxController extends Controller
                     $mailcount = 0;
 
                     $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
-                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
                     switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                         case "minute":
@@ -253,7 +255,7 @@ class AjaxController extends Controller
                                 ->groupBy('subscribers.token')
                                 ->groupBy('subscribers.name')
                                 ->orderByRaw($order)
-                                ->limit($limit)
+                                ->take($limit)
                                 ->get();
                         } else {
                             $subscribers = Subscribers::select('subscribers.email', 'subscribers.token', 'subscribers.id', 'subscribers.name')
@@ -274,7 +276,7 @@ class AjaxController extends Controller
                                 ->groupBy('subscribers.token')
                                 ->groupBy('subscribers.name')
                                 ->orderByRaw($order)
-                                ->limit($limit)
+                                ->take($limit)
                                 ->get();
                         }
 
@@ -297,7 +299,7 @@ class AjaxController extends Controller
                             SendEmailHelpers::setToken($subscriber->token);
                             SendEmailHelpers::setSubscriberId($subscriber->id);
                             SendEmailHelpers::setName($subscriber->name);
-
+                            SendEmailHelpers::setTemplateId($template->id);
                             $result = SendEmailHelpers::sendEmail($template->id);
 
                             $data = [];
@@ -379,7 +381,7 @@ class AjaxController extends Controller
 
                     $logId = $request->input('logId');
 
-                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+                    $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
                     switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                         case "minute":
@@ -402,7 +404,7 @@ class AjaxController extends Controller
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->whereRaw($interval)
                             ->groupBy('subscribers.id')
-                            ->limit($limit)
+                            ->take($limit)
                             ->get()
                             ->count();
                     } else {
@@ -411,7 +413,7 @@ class AjaxController extends Controller
                             ->where('subscribers.active', 1)
                             ->whereIN('subscriptions.categoryId', $categoryId)
                             ->groupBy('subscribers.id')
-                            ->limit($limit)
+                            ->take($limit)
                             ->get()
                             ->count();
                     }

@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @if(Helpers::has_permission(Auth::user()->login,'admin'))
+    @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">
@@ -90,9 +90,6 @@
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
                 "autoWidth": true,
-                'createdRow': function (row, data, dataIndex) {
-                    $(row).attr('id', 'rowid_' + data['id']);
-                },
                 aaSorting: [[0, 'asc']],
                 processing: true,
                 serverSide: true,

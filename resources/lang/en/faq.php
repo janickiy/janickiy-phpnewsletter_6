@@ -19,8 +19,6 @@ return [
 <strong>Q: What is SMTP server?</strong>
 <p>A: SMTP (Simple Mail Transfer Protocol) - is the server in a network, global or
     local which accepts e-mail on further transfer, and also accepts e-mail from other servers for his local users.</p>
-<strong>Q: Attachments are not displayed in sent emails. How to fix it?</strong>
-<p>A: Change file permissions (CHMOD) for the file index.php, and also for the directories "attach" to 755.</p>
 <strong>Q: The mailing log is not considered sending the number of read emails. Why?</strong>
 <p>A: Check the mail format in the settings. This feature only works if you selected HTML format.</p>
 '

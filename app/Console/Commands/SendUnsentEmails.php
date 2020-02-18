@@ -57,7 +57,7 @@ class SendUnsentEmails extends Command
         foreach ($schedule as $row) {
 
             $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
-            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
             switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                 case "minute":
@@ -95,7 +95,7 @@ class SendUnsentEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
+                    ->take($limit)
                     ->get();
             } else {
                 $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
@@ -118,7 +118,7 @@ class SendUnsentEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
+                    ->take($limit)
                     ->get();
             }
 

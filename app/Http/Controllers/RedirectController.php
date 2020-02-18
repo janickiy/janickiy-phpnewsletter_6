@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Redirect;
 use App\Helpers\StringHelpers;
+use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use URL;
 
 class RedirectController extends Controller
 {
@@ -30,7 +32,7 @@ class RedirectController extends Controller
     }
 
     /**
-     * @param $url
+     * @param Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
@@ -41,7 +43,9 @@ class RedirectController extends Controller
         $filename = 'redirect_' . date("d_m_Y") . '.xlsx';
         $oSpreadsheet_Out = new Spreadsheet();
 
-        $redirectLog = Redirect::where('url',$url)->get();
+        $url = base64_decode($url);
+
+        $redirectLog = Redirect::where('url', $url)->get();
 
         if (!$redirectLog) abort(404);
 
@@ -55,9 +59,9 @@ class RedirectController extends Controller
 
         $oSpreadsheet_Out->setActiveSheetIndex(0)
             ->setCellValue('A1', 'E-mail')
-            ->setCellValue('B1', trans('str.time'));
+            ->setCellValue('B1', trans('frontend.str.time'));
 
-        $i = 0;
+        $i = 1;
 
         foreach ($redirectLog as $row) {
             $i++;
@@ -91,6 +95,6 @@ class RedirectController extends Controller
     {
         $infoAlert = trans('frontend.hint.redirectlog_info') ? trans('frontend.hint.redirectlog_info') : null;
 
-        return view('admin.redirect.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_inf'));
+        return view('admin.redirect.info', compact('url','infoAlert'))->with('title', trans('frontend.title.redirect_info'));
     }
 }

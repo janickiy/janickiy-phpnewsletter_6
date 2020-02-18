@@ -14,14 +14,14 @@ class CreateSubscribersTable extends Migration
     public function up()
     {
         Schema::create('subscribers', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name', 100)->nullable();
-            $table->string('email')->index('email');
-            $table->string('ip', 100)->nullable();
+            $table->string('email');
             $table->tinyInteger('active')->default(1);
             $table->string('token', 32);
             $table->timestamp('timeSent')->nullable();
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 
