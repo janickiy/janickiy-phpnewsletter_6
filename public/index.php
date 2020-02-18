@@ -9,6 +9,8 @@
 
 define('LARAVEL_START', microtime(true));
 
+if (version_compare(phpversion(), '7.2.0', '>=') === false) exit('Error: php version 7.2 or higher is required');
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
