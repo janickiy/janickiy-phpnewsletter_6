@@ -219,23 +219,25 @@ class LicenseHelpers
         $domain = (substr($_SERVER["SERVER_NAME"], 0, 4)) == "www." ? str_replace('www.','', $_SERVER["SERVER_NAME"]) : $_SERVER["SERVER_NAME"];
         $lisenseInfo = $this->getDataContents($this->url . '?t=licensekey&licensekey=' . $licenseKey . '&domain=' . $domain, 5);
 
-        if (!isset($lisenseInfo['error'])) {
-            $data = [
-                'domain' => $domain,
-                'license_type' => $lisenseInfo['license_type'],
-                'licensekey'   => $licenseKey,
-                'created'   => $lisenseInfo['date_created'],
-                'date_from' => $lisenseInfo['date_active_from'],
-                'date_to'   => $lisenseInfo['date_active_to']
-            ];
+        if ($lisenseInfo) {
+            if (!isset($lisenseInfo['error'])) {
+                $data = [
+                    'domain' => $domain,
+                    'license_type' => $lisenseInfo['license_type'],
+                    'licensekey'   => $licenseKey,
+                    'created'   => $lisenseInfo['date_created'],
+                    'date_from' => $lisenseInfo['date_active_from'],
+                    'date_to'   => $lisenseInfo['date_active_to']
+                ];
 
-            $encodeStr = self::encodeStr(json_encode($data));
+                $encodeStr = self::encodeStr(json_encode($data));
 
-            if (Storage::disk('local')->put(self::licenseKey, $encodeStr) === false) {
-                return ['result' => false, 'msg' => trans('license.error.cannot_create_licensekey_file')];
+                if (Storage::disk('local')->put(self::licenseKey, $encodeStr) === false) {
+                    return ['result' => false, 'msg' => trans('license.error.cannot_create_licensekey_file')];
+                }
+            } else {
+                return ['result' => false, 'msg' => trans('license.error.check_licensekey')];
             }
-        } else {
-            return ['result' => false, 'msg' => trans('license.error.check_licensekey')];
         }
 
         return ['result' => true];
@@ -308,7 +310,7 @@ class LicenseHelpers
     public function expiredDayCount()
     {
         $lisense_info = $this->getLicenseInfo();
-        if ($lisense_info['license_type'] == 'demo' && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false) {
+        if ($lisense_info && $lisense_info['license_type'] == 'demo' && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false) {
             return round((strtotime($lisense_info['date_to']) - strtotime(date("Y-m-d H:i:s"))) / 3600 / 24);
         }
     }
