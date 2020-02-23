@@ -185,7 +185,7 @@ class SendEmailHelpers
             $smtp_q = Smtp::query();
 
             if ($smtp_q->count() > 1) {
-                $smtp_r = $smtp_q->orderBy()->limit(1)->get();
+                $smtp_r = $smtp_q->inRandomOrder()->limit(1)->get();
             } else {
                 $smtp_r = $smtp_q->limit(1)->get();
             }
