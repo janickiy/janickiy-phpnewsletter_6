@@ -106,9 +106,9 @@
 
                                 {!! Form::label('role', trans('frontend.form.role'), ['class' => 'label']) !!}
 
-                                <label class="select">
+                                <label class="input">
 
-                                    {!! Form::select('role', $options, isset($user) ? $user->role : 'admin', ['placeholder' => trans('frontend.form.select_role'), 'id'=> "role"]) !!}
+                                    {!! Form::select('role', $options, isset($user) ? $user->role : 'admin', ['placeholder' => trans('frontend.form.select_role'), 'id'=> "role", "class" => 'form-control custom-scroll']) !!}
 
                                 </label>
 
