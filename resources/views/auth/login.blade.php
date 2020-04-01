@@ -22,9 +22,13 @@
     <div class="login-block">
         <img src="{{ url('/admin/img/logo.png') }}" alt="">
 
-        <h1>Admin area PHP Newsletter</h1>
+        <h1>{{ trans('auth.admin_area') }}</h1>
 
         {!! Form::open(['url' => URL::route('login'), 'method' => 'post']) !!}
+
+        @if ($errors->has('message'))
+            <p class="text-danger">{{ $errors->first('message') }}</p>
+        @endif
 
         <div class="form-group">
             <div class="input-group">
@@ -68,7 +72,6 @@
                 </div>
             </div>
         </div>
-
 
         {!! Form::submit(trans('frontend.str.singin'), ['class' => 'btn btn-primary btn-block']) !!}
 
