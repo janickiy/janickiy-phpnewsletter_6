@@ -185,7 +185,7 @@ class SendEmailHelpers
             $smtp_q = Smtp::query();
 
             if ($smtp_q->count() > 1) {
-                $smtp_r = $smtp_q->orderBy()->limit(1)->get();
+                $smtp_r = $smtp_q->inRandomOrder()->limit(1)->get();
             } else {
                 $smtp_r = $smtp_q->limit(1)->get();
             }
@@ -269,7 +269,7 @@ class SendEmailHelpers
         elseif (SettingsHelpers::getSetting('PRECEDENCE') == 'list')
             $m->addCustomHeader("Precedence: list");
 
-        if (SettingsHelpers::getSetting('URL') != '') $UNSUB = (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . "://" . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . "/unsubscribe/" . $subscriberId . "/" . $token;
+        if (SettingsHelpers::getSetting('URL') != '') $UNSUB = SettingsHelpers::getSetting('URL') . "unsubscribe/" . $subscriberId . "/" . $token;
         $unsublink = str_replace('%UNSUB%', $UNSUB, SettingsHelpers::getSetting('UNSUBLINK'));
 
         $customheaders  = Customheaders::get();

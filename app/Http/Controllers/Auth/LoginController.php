@@ -39,9 +39,11 @@ class LoginController extends Controller
         if (\Auth::guard('web')->attempt(['login' => $request->login, 'password' => $request->password], $request->remember)) {
             // if successful, then redirect to their intended location
             return redirect()->intended(route('admin.template.index'));
+        } else {
+            // if unsuccessful, then redirect back to the login with the form data
+            return redirect()->back()->withErrors(['message' => trans('auth.failed')])->withInput($request->only('login', 'remember'));
         }
 
-        // if unsuccessful, then redirect back to the login with the form data
         return redirect()->back()->withInput($request->only('login', 'remember'));
     }
 

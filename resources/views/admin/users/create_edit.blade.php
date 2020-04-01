@@ -100,7 +100,7 @@
 
                             </section>
 
-                           @if (isset($user->id) && $user->id != Auth::user()->id)
+                           @if ((isset($user->id) && $user->id != Auth::user()->id) || !isset($user->id))
 
                             <section>
 

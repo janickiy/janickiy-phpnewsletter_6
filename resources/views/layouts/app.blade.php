@@ -210,13 +210,13 @@ Use search to find needed section.
 
     <!-- User info -->
     <div class="login-info">
-				<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
-					<a>
-						<span>
-							{{ Auth::user()->login }}
-						</span>
-					</a>
+		<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
+			<a>
+				<span>
+					{{ Auth::user()->login }}
 				</span>
+			</a>
+		</span>
     </div>
     <!-- end user info -->
 
