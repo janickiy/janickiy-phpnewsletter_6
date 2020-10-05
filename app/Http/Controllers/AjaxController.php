@@ -24,11 +24,57 @@ class AjaxController extends Controller
 
                     if ($request->p == 'start') {
 
-                        if ($update->getUpdateLink() && Storage::disk('public')->put('update.zip', file_get_contents($update->getUpdateLink()))) {
-                            $content['status'] = 'download_completed';
+                        $download_completed = false;
+
+                        if ($update->getUpdateLink()) {
+                            if (Storage::disk('public')->put('update.zip', file_get_contents($update->getUpdateLink() . 'update.zip'))) {
+                                $download_completed = true;
+                            }
+                        }
+
+                        if ($download_completed == true) {
+                            $content['status'] = trans('frontend.msg.download_completed');
                             $content['result'] = true;
                         } else {
-                            $content['status'] = 'failed_to_update';
+                            $content['status'] = trans('frontend.msg.failed_to_update');
+                            $content['result'] = false;
+                        }
+                    }
+
+                    if ($request->p == 'uploap_files_2') {
+
+                        $download_completed = false;
+
+                        if ($update->getUpdateLink()) {
+                            if (Storage::disk('public')->put('public.zip', file_get_contents($update->getUpdateLink() . 'public.zip'))) {
+                                $download_completed = true;
+                            }
+                        }
+
+                        if ($download_completed == true) {
+                            $content['status'] = trans('frontend.msg.download_completed');
+                            $content['result'] = true;
+                        } else {
+                            $content['status'] = trans('frontend.msg.failed_to_update');
+                            $content['result'] = false;
+                        }
+                    }
+
+                    if ($request->p == 'uploap_files_3') {
+
+                        $download_completed = false;
+
+                        if ($update->getUpdateLink()) {
+                            if (Storage::disk('public')->put('vendor.zip', file_get_contents($update->getUpdateLink() . 'vendor.zip'))) {
+                                $download_completed = true;
+                            }
+                        }
+
+                        if ($download_completed == true) {
+                            $content['status'] = trans('frontend.msg.download_completed');
+                            $content['result'] = true;
+                        } else {
+                            $content['status'] = trans('frontend.msg.failed_to_update');
                             $content['result'] = false;
                         }
                     }
@@ -37,12 +83,52 @@ class AjaxController extends Controller
 
                         $zip = new ZipArchive();
 
-                        if (Storage::disk('public')->exists('update.zip') && $zip->open(Storage::disk('public')->path('update.zip')) === TRUE) {
+                        if (Storage::disk('public')->exists('update.zip') && $zip->open(Storage::disk('public')->path('update.zip')) === true) {
                             if (is_writeable(base_path())) {
                                 $zip->extractTo(base_path());
-                                $zip->close();
                                 $content['status'] = trans('frontend.msg.files_unzipped_successfully');
                                 $content['result'] = true;
+                                $zip->close();
+                            } else {
+                                $content['status'] = trans('frontend.msg.directory_not_writeable');
+                                $content['result'] = false;
+                            }
+                        } else {
+                            $content['status'] = trans('frontend.msg.cannot_read_zip_archive');
+                            $content['result'] = false;
+                        }
+                    }
+
+                    if ($request->p == 'update_files_2') {
+
+                        $zip = new ZipArchive();
+
+                        if (Storage::disk('public')->exists('public.zip') && $zip->open(Storage::disk('public')->path('public.zip')) === true) {
+                            if (is_writeable(base_path())) {
+                                $zip->extractTo(base_path());
+                                $content['status'] = trans('frontend.msg.files_unzipped_successfully');
+                                $content['result'] = true;
+                                $zip->close();
+                            } else {
+                                $content['status'] = trans('frontend.msg.directory_not_writeable');
+                                $content['result'] = false;
+                            }
+                        } else {
+                            $content['status'] = trans('frontend.msg.cannot_read_zip_archive');
+                            $content['result'] = false;
+                        }
+                    }
+
+                    if ($request->p == 'update_files_3') {
+
+                        $zip = new ZipArchive();
+
+                        if (Storage::disk('public')->exists('vendor.zip') && $zip->open(Storage::disk('public')->path('vendor.zip')) === true) {
+                            if (is_writeable(base_path())) {
+                                $zip->extractTo(base_path());
+                                $content['status'] = trans('frontend.msg.files_unzipped_successfully');
+                                $content['result'] = true;
+                                $zip->close();
                             } else {
                                 $content['status'] = trans('frontend.msg.directory_not_writeable');
                                 $content['result'] = false;

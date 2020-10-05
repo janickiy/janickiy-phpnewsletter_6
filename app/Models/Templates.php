@@ -7,7 +7,6 @@ use App\Helpers\StringHelpers;
 
 class Templates extends Model
 {
-
 	protected $table = 'templates';
 
     protected $primaryKey = 'id';
@@ -38,6 +37,14 @@ class Templates extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public static function getOption()
+    {
+        return Templates::orderBy('name')->get()->pluck('name', 'id');
+    }
+
+    /**
      * @param $prior
      * @return string
      */
@@ -45,14 +52,11 @@ class Templates extends Model
     {
         switch ($prior) {
             case 1:
-                return 'высокая';
-
+                return trans('frontend.str.high');
             case 2:
-                return 'низкая';
-
+                return trans('frontend.str.low');
             case 3:
-                return 'нормальная';
+                return trans('frontend.str.normal');
         }
     }
-
 }

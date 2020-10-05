@@ -142,6 +142,10 @@ return [
         "error_server" => "Error server",
         'remember_me' => "Remember me",
         'editor' => 'Editor',
+        'accept_license' => 'Accept license',
+        'high' => 'high',
+        'low' => 'low',
+        'normal' => 'normal',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -162,6 +166,12 @@ return [
         'demo_version_will_expire' => 'Duration of the demo version will expire in %DAYS% day(s)',
         'demo_version_will_expire_today' => 'Duration of the demo version  will expire today',
         'subscription_is_formed' => 'Subscription to the newsletter is formed. Thanks for signing up to receive our emails.',
+        'download_completed' => 'Download completed',
+        'unzipping' => 'Unzipping',
+        'update_bd' => 'Updating Database ...',
+        'completing_update' => 'Completing the update ...',
+        'downloading' => 'Downloading',
+        'failed_to_update' => 'Failed to update',
     ],
     'form' => [
         'required_fields' => 'required fields',

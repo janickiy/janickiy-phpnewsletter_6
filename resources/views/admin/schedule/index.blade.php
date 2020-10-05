@@ -4,10 +4,7 @@
 
 @section('css')
 
-    {!! Html::style('/admin/js/plugin/fullcalendar/fullcalendar.min.css') !!}
-
     <style>
-
         .remove_schedule {
             position: relative;
             left: 10px;
@@ -17,6 +14,7 @@
             width: 32px;
             cursor: pointer
         }
+
     </style>
 
 @endsection
@@ -44,6 +42,17 @@
                     </div>
                     <br><br>
 
+                    <div class="widget-body-toolbar">
+
+                        <div id="calendar-buttons">
+
+                            <div class="btn-group">
+                                <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id='calendar'></div>
 
                 </div>
@@ -65,34 +74,70 @@
 
     {!! Html::script('/admin/js/plugin/fullcalendar/fullcalendar.min.js') !!}
 
-    {!! Html::script('/admin/js/plugin/fullcalendar/lang/ru.js') !!}
+    {{ app()->getLocale() != 'en' ? Html::script('/admin/js/plugin/fullcalendar/lang/' . app()->getLocale() . '.js') : '' }}
 
     <script>
 
-        $(document).ready(function () {
-            // page is now ready, initialize the calendar...
+        $(document).ready(function() {
+
             $('#calendar').fullCalendar({
                 // put your options and callbacks here
                 defaultView: 'agendaWeek',
-                locale: '{{ app()->getLocale() }}',
+                {!! app()->getLocale() != 'en' ? "locale: '" . app()->getLocale() . "',":"" !!}
                 timeFormat: "HH:mm",
                 slotLabelFormat: "HH:mm",
+                allDaySlot: false,
                 events: [
-                    @foreach($schedule as $o)
+                        @foreach($schedule as $o)
+                        @if (isset($o->template->name) && $o->template->name)
                     {
                         title: '<span class="remove_schedule" id="schedule_{{ $o->id }}" data-id="{{ $o->id }}"><i class="text-danger fa fa-times"></i></span><span class="font-sm"><a class="text-warning font-md" href="{{ URL::route('admin.schedule.edit',['id' => $o->id]) }}"><ins>{{ $o->template->name }}</ins></a></span>',
                         start: '{{ $o->value_from_start_date }}',
                         end: '{{ $o->value_from_end_date }}',
                         content: '{{ $o->value_from_start_date }} - {{ $o->value_from_end_date }}',
+                            className: ["event", "bg-color-blue"],
+                            icon: 'fa-clock-o'
                     }
                     ,
+                    @endif
                     @endforeach
                 ],
 
-                eventRender: function (event, element) {
+                eventRender: function (event, element, icon) {
                     element.html('');
                     element.append(event.start.format('HH:mm') + ' ' +  event.title);
-                }
+                },
+            });
+
+            /* hide default buttons */
+            $('.fc-right, .fc-center').hide();
+
+
+            $('#calendar-buttons #btn-prev').click(function () {
+                $('.fc-prev-button').click();
+                return false;
+            });
+
+            $('#calendar-buttons #btn-next').click(function () {
+                $('.fc-next-button').click();
+                return false;
+            });
+
+            $('#calendar-buttons #btn-today').click(function () {
+                $('.fc-today-button').click();
+                return false;
+            });
+
+            $('#mt').click(function () {
+                $('#calendar').fullCalendar('changeView', 'month');
+            });
+
+            $('#ag').click(function () {
+                $('#calendar').fullCalendar('changeView', 'agendaWeek');
+            });
+
+            $('#td').click(function () {
+                $('#calendar').fullCalendar('changeView', 'agendaDay');
             });
 
             $(document).on("click", ".remove_schedule", function () {
@@ -109,9 +154,8 @@
                     },
                 });
             });
-        });
+        })
 
     </script>
 
 @endsection
-

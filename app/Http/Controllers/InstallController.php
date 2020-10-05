@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
@@ -12,6 +12,7 @@ use Hash;
 use Artisan;
 use Cookie;
 use DB;
+use Log;
 
 class InstallController extends Controller
 {
@@ -94,11 +95,20 @@ class InstallController extends Controller
         if (!$this->dbCredentialsAreValid($dbCredentials)) {
             return redirect()->route('install.database')
                 ->withInput()
-                ->withErrors("Connection to your database cannot be established. Please provide correct database credentials.");
+                ->withErrors(trans('install.str.connection_to_database_cannot_be_established'));
         }
 
         Session::put('install.db_credentials', $dbCredentials);
 
+        return redirect()->route('install.admin');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function admin(Request $request)
+    {
         return view('install.installation');
     }
 
@@ -128,12 +138,11 @@ class InstallController extends Controller
 
             $path = base_path('.env');
             $env = file_get_contents($path);
-
             $env = str_replace('DB_HOST=' . env('DB_HOST'), 'DB_HOST=' . $db['host'], $env);
             $env = str_replace('DB_DATABASE=' . env('DB_DATABASE'), 'DB_DATABASE=' . $db['database'], $env);
             $env = str_replace('DB_USERNAME=' . env('DB_USERNAME'), 'DB_USERNAME=' . $db['username'], $env);
             $env = str_replace('DB_PASSWORD=' . env('DB_PASSWORD'), 'DB_PASSWORD="' . $db['password'] . '"', $env);
-            $env = str_replace('VERSION=', 'VERSION="6.0.11"', $env);
+            $env = str_replace('VERSION=', 'VERSION="6.0.13"', $env);
 
             file_put_contents($path, $env);
 
@@ -150,8 +159,8 @@ class InstallController extends Controller
 
         } catch (\Exception $e) {
             @unlink(base_path('.env'));
-            \Log::error($e->getMessage());
-            \Log::error($e->getTraceAsString());
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
             return redirect()->route('install.error');
         }
     }
@@ -264,7 +273,7 @@ class InstallController extends Controller
         try {
             DB::statement("SHOW TABLES");
         } catch (\Exception $e) {
-            \Log::info($e->getMessage());
+            Log::info($e->getMessage());
             return false;
         }
 
@@ -297,7 +306,7 @@ class InstallController extends Controller
                 case 'change_lng':
 
                     if ($request->input('locale')) {
-                        if (in_array($request->input('locale'), \Config::get('app.locales'))) {
+                        if (in_array($request->input('locale'), Config::get('app.locales'))) {
                             Cookie::queue(
                                 Cookie::forever('lang', $request->input('locale')));
                         }
@@ -310,7 +319,6 @@ class InstallController extends Controller
                     break;
 
                 case 'check_license':
-
 
                     break;
             }

@@ -152,8 +152,12 @@ Route::group(['prefix' => 'install'], function () {
     Route::get('requirements', 'InstallController@requirements')->name('install.requirements');
     Route::get('permissions', 'InstallController@permissions')->name('install.permissions');
     Route::get('database', 'InstallController@databaseInfo')->name('install.database');
-    Route::get('start-installation', 'InstallController@installation')->name('install.installation');
+    Route::get('admin', 'InstallController@admin')->name('install.admin');
     Route::post('start-installation', 'InstallController@installation')->name('install.installation');
+
+
+
+
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
     Route::get('error', 'InstallController@error')->name('install.error');

@@ -28,6 +28,7 @@ return [
         'permissions' => 'Permissions',
         'database_info' => 'Database Info',
         'installation' => 'Installation',
+        'connection_to_database_cannot_be_established' => 'Connection to your database cannot be established. Please provide correct database credentials.',
     ],
     'button' => [
         'next' => 'Next',

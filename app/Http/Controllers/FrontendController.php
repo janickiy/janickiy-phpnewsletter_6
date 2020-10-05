@@ -58,14 +58,13 @@ class FrontendController extends Controller
      */
     public function unsubscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if ($result) {
-            if ($result->token != $token) abort(400);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-            $subscribers->update(['active' => 0]);
-        }
+        $subscriber->active = 0;
+        $subscriber->save();
 
         return view('frontend.unsubscribe')->with('title', trans('frontend.title.unsubscribe'));
 
@@ -78,14 +77,13 @@ class FrontendController extends Controller
      */
     public function subscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if (!$result) abort(404);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-        if ($result->token != $token) abort(400);
-
-        $subscribers->update(['active' => 1]);
+        $subscriber->active = 1;
+        $subscriber->save();
 
         return view('frontend.subscribe')->with('title', trans('frontend.title.subscribe'));
     }
@@ -114,7 +112,6 @@ class FrontendController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-
             return json_encode([
                 'result' => 'errors',
                 'msg' => $validator->messages()]);

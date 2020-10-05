@@ -71,7 +71,7 @@ class LicenseHelpers
      */
     public function getUrlInfo()
     {
-        return $this->url . '?id=3&version=' . urlencode($this->currenversion) . '&lang=' . $this->language . '&ip=' . $this->getIP();
+        return $this->url . '?id=4&version=' . urlencode($this->currenversion) . '&lang=' . $this->language . '&ip=' . $this->getIP();
     }
 
     /**

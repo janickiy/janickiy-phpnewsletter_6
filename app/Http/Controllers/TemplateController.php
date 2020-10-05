@@ -24,7 +24,7 @@ class TemplateController extends Controller
             $category_options[$row->id] = $row->name;
         }
 
-        return view('admin.template.index', compact('infoAlert','category_options'))->with('title', trans('frontend.title.template_index'));
+        return view('admin.template.index', compact('infoAlert', 'category_options'))->with('title', trans('frontend.title.template_index'));
     }
 
     /**
@@ -53,29 +53,28 @@ class TemplateController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
+        }
 
-            $id = Templates::create($request->all())->id;
-            $attachFile = $request->file('attachfile');
+        $id = Templates::create($request->all())->id;
+        $attachFile = $request->file('attachfile');
 
-            if (isset($attachFile)) {
-                foreach ($attachFile as $file) {
-                    $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
+        if (isset($attachFile)) {
+            foreach ($attachFile as $file) {
+                $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
 
-                    if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
-                        $attach = [
-                            'name' => $file->getClientOriginalName(),
-                            'file_name' => $filename,
-                            'templateId' => $id,
-                        ];
+                if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
+                    $attach = [
+                        'name' => $file->getClientOriginalName(),
+                        'file_name' => $filename,
+                        'templateId' => $id,
+                    ];
 
-                        Attach::create($attach);
-                    }
+                    Attach::create($attach);
                 }
             }
-
-            return redirect(URL::route('admin.template.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        return redirect(URL::route('admin.template.index'))->with('success', trans('message.information_successfully_added'));
     }
 
     /**
@@ -92,7 +91,7 @@ class TemplateController extends Controller
 
         $infoAlert = trans('frontend.hint.template_edit') ? trans('frontend.hint.template_edit') : null;
 
-        return view('admin.template.create_edit', compact('template','attachment', 'infoAlert'))->with('title', trans('frontend.title.template_edit'));
+        return view('admin.template.create_edit', compact('template', 'attachment', 'infoAlert'))->with('title', trans('frontend.title.template_edit'));
     }
 
     /**
@@ -113,34 +112,36 @@ class TemplateController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
+        }
+        $attachFile = $request->file('attachfile');
 
-            $attachFile = $request->file('attachfile');
+        if (isset($attachFile)) {
+            foreach ($attachFile as $file) {
+                $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
 
-            if (isset($attachFile)) {
-                foreach ($attachFile as $file) {
-                    $filename = StringHelpers::randomText(10) . '.' . $file->getClientOriginalExtension();
+                if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
+                    $attach = [
+                        'name' => $file->getClientOriginalName(),
+                        'file_name' => $filename,
+                        'templateId' => $request->id,
+                    ];
 
-                    if (Storage::putFileAs(Attach::DIRECTORY, $file, $filename)) {
-                        $attach = [
-                            'name' => $file->getClientOriginalName(),
-                            'file_name' => $filename,
-                            'templateId' => $request->id,
-                        ];
-
-                        Attach::create($attach);
-                    }
+                    Attach::create($attach);
                 }
             }
-
-            $data['name'] = $request->input('name');
-            $data['body'] = $request->input('body');
-            $data['prior'] = $request->input('prior');
-
-            Templates::where('id',$request->id)->update($data);
-
-            return redirect(URL::route('admin.template.index'))->with('success', trans('message.data_updated'));
         }
+
+        $templates = Templates::find($request->id);
+
+        if (!$templates) abort(404);
+
+        $templates->name = $request->input('name');
+        $templates->body = $request->input('body');
+        $templates->prior = $request->input('prior');
+        $templates->save();
+
+        return redirect(URL::route('admin.template.index'))->with('success', trans('message.data_updated'));
+
     }
 
     /**
