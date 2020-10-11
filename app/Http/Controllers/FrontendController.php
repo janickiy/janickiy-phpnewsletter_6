@@ -58,17 +58,15 @@ class FrontendController extends Controller
      */
     public function unsubscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if ($result) {
-            if ($result->token != $token) abort(400);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-            $subscribers->update(['active' => 0]);
-        }
+        $subscriber->active = 0;
+        $subscriber->save();
 
-        return view('frontend.unsubscribe')->with('title', trans('frontend.title.unsubscribe'));
-
+        return view('frontend.unsubscribe');
     }
 
     /**
@@ -78,16 +76,15 @@ class FrontendController extends Controller
      */
     public function subscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if (!$result) abort(404);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-        if ($result->token != $token) abort(400);
+        $subscriber->active = 1;
+        $subscriber->save();
 
-        $subscribers->update(['active' => 1]);
-
-        return view('frontend.subscribe')->with('title', trans('frontend.title.subscribe'));
+        return view('frontend.subscribe');
     }
 
     /**
@@ -97,7 +94,7 @@ class FrontendController extends Controller
     {
         $category = Category::get();
 
-        return view('frontend.subform', compact('category'))->with('title', trans('frontend.title.subform'));
+        return view('frontend.subform', compact('category'));
     }
 
     /**
@@ -114,7 +111,6 @@ class FrontendController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-
             return json_encode([
                 'result' => 'errors',
                 'msg' => $validator->messages()]);
@@ -134,6 +130,5 @@ class FrontendController extends Controller
             'result' => 'success',
             'msg' => trans('frontend.msg.subscription_is_formed')
         ]);
-
     }
 }

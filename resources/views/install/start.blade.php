@@ -28,7 +28,7 @@
 
                     {!! Form::checkbox('accept_license', 1, false, ['id' => "accept_license"] ) !!}
 
-                    {!! Form::label('accept_license', trans('frontend.str.remember_me'), ['class' => 'form-check-label']) !!}
+                    {!! Form::label('accept_license', trans('frontend.str.accept_license'), ['class' => 'form-check-label']) !!}
 
                     <span></span>
                 </div>

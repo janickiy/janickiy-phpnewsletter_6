@@ -26,17 +26,8 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $options = [];
-
-        foreach (Templates::get() as $row) {
-            $options[$row->id] = $row->name;
-        }
-
-        $category_options = [];
-
-        foreach (Category::get() as $row) {
-            $category_options[$row->id] = $row->name;
-        }
+        $options = Templates::getOption();
+        $category_options = Category::getOption();
 
         $infoAlert = trans('frontend.hint.schedule_create') ? trans('frontend.hint.schedule_create') : null;
 
@@ -61,20 +52,20 @@ class ScheduleController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-            $id = Schedule::create(array_merge($request->all(), ['value_from_start_date' => date("Y-m-d H:i:s", strtotime($request->value_from_start_date)), 'value_from_end_date' => date("Y-m-d H:i:s", strtotime($request->value_from_end_date))]))->id;
+        }
 
-            if ($request->categoryId && $id) {
+        $id = Schedule::create(array_merge($request->all(), ['value_from_start_date' => date("Y-m-d H:i:s", strtotime($request->value_from_start_date)), 'value_from_end_date' => date("Y-m-d H:i:s", strtotime($request->value_from_end_date))]))->id;
 
-                foreach ($request->categoryId as $categoryId) {
-                    if (is_numeric($categoryId)) {
-                        ScheduleCategory::create(['scheduleId' => $id, 'categoryId' => $categoryId]);
-                    }
+        if ($request->categoryId && $id) {
+            foreach ($request->categoryId as $categoryId) {
+                if (is_numeric($categoryId)) {
+                    ScheduleCategory::create(['scheduleId' => $id, 'categoryId' => $categoryId]);
                 }
             }
-
-            return redirect(URL::route('admin.schedule.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        return redirect(URL::route('admin.schedule.index'))->with('success', trans('message.information_successfully_added'));
+
     }
 
     /**
@@ -83,27 +74,18 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        $schedule = Schedule::where('id', $id)->first();
+        $schedule = Schedule::find($id);
 
         if (!$schedule) abort(404);
 
         $categoryId = [];
 
         foreach ($schedule->categories as $category) {
-            $categoryId[] =  $category->id;
+            $categoryId[] = $category->id;
         }
 
-        $options = [];
-
-        foreach (Templates::get() as $row) {
-            $options[$row->id] = $row->name;
-        }
-
-        $category_options = [];
-
-        foreach (Category::get() as $row) {
-            $category_options[$row->id] = $row->name;
-        }
+        $options = Templates::getOption();
+        $category_options = Category::getOption();
 
         $infoAlert = trans('frontend.hint.schedule_edit') ? trans('frontend.hint.schedule_edit') : null;
 
@@ -116,8 +98,6 @@ class ScheduleController extends Controller
      */
     public function update(Request $request)
     {
-        if (!is_numeric($request->id)) return abort(500);
-
         $rules = [
             'templateId' => 'required|numeric',
             'categoryId' => 'required|array',
@@ -129,25 +109,28 @@ class ScheduleController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-            $data['value_from_start_date'] = date("Y-m-d H:i:s", strtotime($request->value_from_start_date));
-            $data['value_from_end_date'] = date("Y-m-d H:i:s", strtotime($request->value_from_end_date));
-            $date['templateId'] = $request->templateId;
+        }
 
-            Schedule::where('id', $request->id)->update($data);
-            ScheduleCategory::where('scheduleId', $request->id)->delete();
+        $schedule = Schedule::find($request->id);
 
-            if ($request->categoryId) {
-                foreach ($request->categoryId as $categoryId) {
-                    if (is_numeric($categoryId)) {
+        if (!$schedule) abort(404);
 
-                        ScheduleCategory::create(['scheduleId' => $request->id, 'categoryId' => $categoryId]);
-                    }
+        $schedule->value_from_start_date = date("Y-m-d H:i:s", strtotime($request->value_from_start_date));
+        $schedule->value_from_end_date = date("Y-m-d H:i:s", strtotime($request->value_from_end_date));
+        $schedule->templateId = $request->templateId;
+        $schedule->save();
+
+        ScheduleCategory::where('scheduleId', $request->id)->delete();
+
+        if ($request->categoryId) {
+            foreach ($request->categoryId as $categoryId) {
+                if (is_numeric($categoryId)) {
+                    ScheduleCategory::create(['scheduleId' => $request->id, 'categoryId' => $categoryId]);
                 }
             }
-
-            return redirect(URL::route('admin.schedule.index'))->with('success', trans('message.data_updated'));
         }
+
+        return redirect(URL::route('admin.schedule.index'))->with('success', trans('message.data_updated'));
     }
 
     /**
@@ -156,6 +139,6 @@ class ScheduleController extends Controller
     public function destroy($id)
     {
         Schedule::where('id', $id)->delete();
-        ScheduleCategory::where('scheduleId',$id)->delete();
+        ScheduleCategory::where('scheduleId', $id)->delete();
     }
 }

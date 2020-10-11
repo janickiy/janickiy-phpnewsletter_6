@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, Redirect};
 use App\Helpers\StringHelpers;
 use Illuminate\Support\Facades\Auth;

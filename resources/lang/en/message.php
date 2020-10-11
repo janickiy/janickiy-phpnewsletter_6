@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'data_updated' => 'Данные обновлены',
-    'information_successfully_added' => 'Информация успешно добавлена',
-    'log_cleared' => 'Журнал очищен',
-    'statistics_cleared' => 'Статистика очищена',
-    'actions_completed' => 'Действия были выполнены',
-    'data_successfully_deleted' => 'Данные успешно удалены',
-    'error_import_file' => 'Ошибка импорта! Невозможно прочитать файл',
-    'import_completed' => 'Импорт завершен. Всего импортировано: ',
+    'data_updated' => 'Data has been updated',
+    'information_successfully_added' => 'Information added successfully',
+    'log_cleared' => 'Log has been cleared',
+    'statistics_cleared' => 'Statistic has been cleared',
+    'actions_completed' => 'Actions have been taken',
+    'data_successfully_deleted' => 'Data deleted successfully',
+    'error_import_file' => 'Import error! Unable to read file',
+    'import_completed' => 'The import is complete. Total imported: ',
 ];

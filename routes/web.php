@@ -19,12 +19,12 @@ Route::group(['middleware' => ['install']], function () {
     Route::get('subscribe/{subscriber}/{token}', 'FrontendController@subscribe')->name('frontend.subscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::any('form', 'FrontendController@form')->name('frontend.form');
     Route::post('addsub', 'FrontendController@addSub')->name('frontend.addsub');
+    Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
 
     Auth::routes();
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
-        Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');
             Route::post('store', 'TemplateController@store')->name('admin.template.store');
@@ -152,8 +152,12 @@ Route::group(['prefix' => 'install'], function () {
     Route::get('requirements', 'InstallController@requirements')->name('install.requirements');
     Route::get('permissions', 'InstallController@permissions')->name('install.permissions');
     Route::get('database', 'InstallController@databaseInfo')->name('install.database');
-    Route::get('start-installation', 'InstallController@installation')->name('install.installation');
+    Route::get('admin', 'InstallController@admin')->name('install.admin');
     Route::post('start-installation', 'InstallController@installation')->name('install.installation');
+
+
+
+
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
     Route::get('error', 'InstallController@error')->name('install.error');

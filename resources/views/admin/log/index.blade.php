@@ -10,14 +10,15 @@
 
     @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
-    <div class="row">
-        <div class="col-lg-12"><p class="text-center">
-                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" href="{{ URL::route('admin.log.clear') }}" onclick="return confirm('{{ trans('frontend.str.want_to_log_clear') }}');">
-                    <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.log_clear') }}
-                </a>
-            </p>
+        <div class="row">
+            <div class="col-lg-12"><p class="text-center">
+                    <a class="btn btn-outline btn-danger btn-lg" onclick="confirmation()"
+                       title="{{ trans('frontend.str.log_clear') }}">
+                        <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.log_clear') }}
+                    </a>
+                </p>
+            </div>
         </div>
-    </div>
 
     @endif
 
@@ -46,24 +47,22 @@
                         </tbody>
                     </table>
 
-
-                <table id="logList" class="table table-striped table-bordered table-hover" width="100%">
-                    <thead>
-                    <tr>
-                        <th>{{ trans('frontend.str.newsletter') }}</th>
-                        <th>E-mail</th>
-                        <th>{{ trans('frontend.str.time') }}</th>
-                        <th>{{ trans('frontend.str.status') }}</th>
-                        <th>{{ trans('frontend.str.read') }}</th>
-                        <th>{{ trans('frontend.str.error') }}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                    <table id="logList" class="table table-striped table-bordered table-hover" width="100%">
+                        <thead>
+                        <tr>
+                            <th>{{ trans('frontend.str.newsletter') }}</th>
+                            <th>E-mail</th>
+                            <th>{{ trans('frontend.str.time') }}</th>
+                            <th>{{ trans('frontend.str.status') }}</th>
+                            <th>{{ trans('frontend.str.read') }}</th>
+                            <th>{{ trans('frontend.str.error') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
 
                 </div>
-
 
             </div>
             <!-- end widget div -->
@@ -82,30 +81,6 @@
         $(document).ready(function () {
 
             pageSetUp();
-
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
 
             $('#itemList').dataTable({
                 "sDom": "lrtip",
@@ -157,6 +132,21 @@
                 ],
             });
         })
+
+        function confirmation(event) {
+            swal({
+                title: "{{ trans('frontend.str.clear_confirmation') }}",
+                text: "{{ trans('frontend.str.want_to_log_clear')  }}",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('frontend.str.yes') }}",
+                cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                closeOnConfirm: false
+            }, function () {
+                window.location.href = "{{ URL::route('admin.log.clear') }}";
+            });
+        }
 
     </script>
 
