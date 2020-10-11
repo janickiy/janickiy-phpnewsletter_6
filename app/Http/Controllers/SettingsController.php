@@ -44,6 +44,7 @@ class SettingsController extends Controller
         $array['RANDOM_REPLACEMENT_BODY'] = $request->input('RANDOM_REPLACEMENT_BODY') ? 1 : 0;
         $array['ADD_DKIM'] = $request->input('ADD_DKIM') ? 1 : 0;
         $array['LIMIT_SEND'] = $request->input('LIMIT_SEND') ? 1 : 0;
+        $array['REQUEST_REPLY']  = $request->input('REQUEST_REPLY') ? 1 : 0;
         $array['REMOVE_SUBSCRIBER'] = $request->input('REMOVE_SUBSCRIBER') ? 1 : 0;
 
         foreach ($array as $key => $value) {

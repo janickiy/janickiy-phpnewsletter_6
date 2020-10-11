@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use App\Models\{Smtp, Templates, Category, Subscribers, Schedule, ReadySent, Redirect};
 use App\Helpers\StringHelpers;
 use Illuminate\Support\Facades\Auth;
@@ -85,13 +85,16 @@ class DataTableController extends Controller
                 return $row->active == 1 ? trans('frontend.str.yes') : trans('frontend.str.no');
             })
 
+            ->editColumn('activeStatus', function ($row) {
+                return $row->active;
+            })
+
             ->addColumn('action', function ($row) {
                 $editBtn = '<a title="' . trans('frontend.str.edit') . '" class="btn btn-xs btn-primary"  href="' . URL::route('admin.subscribers.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-
                 return $editBtn;
             })
 
-            ->rawColumns(['action', 'checkbox', 'check'])->make(true);
+            ->rawColumns(['action', 'checkbox'])->make(true);
     }
 
     /**
@@ -113,6 +116,26 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' .$editBtn . $deleteBtn . '</div>';
             })
+
+            ->editColumn('role', function ($row) {
+
+                switch ($row->role) {
+                    case 'admin':
+                        $role = trans('frontend.str.admin');
+                        break;
+                    case 'editor':
+                        $role = trans('frontend.str.editor');
+                        break;
+                    case 'moderator':
+                        $role = trans('frontend.str.moderator');
+                        break;
+                    default:
+                        $role = '';
+                }
+
+                return $role;
+            })
+
             ->rawColumns(['action', 'id'])->make(true);
     }
 
@@ -144,11 +167,11 @@ class DataTableController extends Controller
      */
     public function getLog()
     {
-        $row = Schedule::selectRaw('schedule.id, schedule.start, schedule.end, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
+        $row = Schedule::selectRaw('schedule.id, schedule.value_from_start_date, schedule.value_from_end_date, count(ready_sent.id) as count,sum(ready_sent.success=1) as sent,sum(ready_sent.readMail=1) as read_mail')
             ->join('ready_sent', 'schedule.id', '=', 'ready_sent.scheduleId')
             ->groupBy('ready_sent.scheduleId')
-            ->groupBy('schedule.start')
-            ->groupBy('schedule.end')
+            ->groupBy('schedule.value_from_start_date')
+            ->groupBy('schedule.value_from_end_date')
             ->groupBy('schedule.id')
         ;
 
@@ -163,7 +186,7 @@ class DataTableController extends Controller
                 return $row->read_mail ? $row->read_mail : 0;
             })
             ->addColumn('report', function ($row) {
-                return Helpers::has_permission(Auth::user()->login,'admin') ? '<a href="' . URL::route('admin.log.report', ['id' => $row->id]) . '">' . trans('frontend.str.download') . '</a>' : '';
+                return Helpers::has_permission(Auth::user()->role,'admin') ? '<a href="' . URL::route('admin.log.report', ['id' => $row->id]) . '">' . trans('frontend.str.download') . '</a>' : '';
             })
             ->rawColumns(['count', 'report'])->make(true);
     }
@@ -203,20 +226,19 @@ class DataTableController extends Controller
     public function getRedirectLog()
     {
         $row = Redirect::query()
-            ->selectRaw('DISTINCT url, COUNT(email) as count')
+            ->selectRaw('url,COUNT(email) as count')
             ->groupBy('url')
+            ->distinct()
         ;
 
         return Datatables::of($row)
 
             ->editColumn('count', function ($row) {
-                return '<a href="' . URL::route('admin.redirect.info', ['url' => $row->url]) . '">' . $row->count . '</a>';
+                return '<a href="' . URL::route('admin.redirect.info', ['url' => base64_encode($row->url)]) . '">' . $row->count . '</a>';
             })
-
             ->addColumn('report', function ($row) {
-                return '<a href="' . URL::route('admin.redirect.report', ['url' => $row->url]) . '">скачать</a>';
+                return Helpers::has_permission(Auth::user()->role,'admin') ? '<a href="' . URL::route('admin.redirect.report', ['url' => base64_encode($row->url)]) . '">' . trans('frontend.str.download') . '</a>' : '';
             })
-
             ->rawColumns(['count', 'report'])->make(true);
 
     }
@@ -227,6 +249,8 @@ class DataTableController extends Controller
      */
     public function getInfoRedirectLog($url)
     {
+        $url = base64_decode($url);
+
         $row = Redirect::query()->where('url', $url);
 
         return Datatables::of($row)

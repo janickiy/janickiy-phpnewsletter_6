@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    {!! Form::open(['url' => URL::route('admin.template.status'), 'method' => 'post', 'onSubmit' => 'if (this.action.value == \'0\') { return false; } if(this.action.value == \'\') { window.alert(\'' . trans('frontend.str.select_action') . '\'); return false; } if (this.action.value == \'1\') { return confirm(\'' . trans('frontend.str.confirm_remove') .'\') }']) !!}
+                    {!! Form::open(['url' => URL::route('admin.template.status'), 'method' => 'post']) !!}
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
@@ -86,7 +86,7 @@
         <div id="sendmail" class="modal_div">
             <input id="logId" type="hidden" value="0">
             <span class="modal_close">X</span>
-            <h3>{{ trans('frontend.str.online_newsletter_log') }}</h3>
+            <h3>{{ trans('frontend.str.online_newsletter_log') }}<span id="process"></span></h3>
             <div id="onlinelog"></div>
             <div class="row">
                 <div class="col-sm-12 padding-top-10 padding-bottom-10">
@@ -163,7 +163,7 @@
                             process();
                         } else {
                             completeProcess();
-                            $("#divStatus").html("trans('frontend.str.error_server')");
+                            $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                         }
                     });
 
@@ -175,15 +175,45 @@
             open_modal.click(function (event) {
                 var idSelect = $('#select_action').val();
 
-                if (idSelect == 0) {
+                if (idSelect == '') {
                     event.preventDefault();
-                    var div = $('.open_modal').attr('data-id');
-                    overlay.fadeIn(400,
-                        function () {
-                            $('#' + div)
-                                .css('display', 'block')
-                                .animate({opacity: 1, top: '50%'}, 200);
+                    swal({
+                        title: "Error",
+                        text: "{{ trans('frontend.str.select_action') }}",
+                        type: "error",
+                        showCancelButton: false,
+                        cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnConfirm: false
+                    });
+                } else {
+                    if (idSelect == 1) {
+                        event.preventDefault();
+                        var form = $(this).parents('form');
+                        swal({
+                            title: "{{ trans('frontend.str.delete_confirmation') }}",
+                            text: "{{ trans('frontend.str.confirm_remove') }}",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "{{ trans('frontend.str.yes') }}",
+                            cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                            closeOnConfirm: false
+                        }, function(isConfirm){
+                            if (isConfirm) form.submit();
                         });
+                    }
+
+                    if (idSelect == 0) {
+                        event.preventDefault();
+                        var div = $('.open_modal').attr('data-id');
+                        overlay.fadeIn(400,
+                            function () {
+                                $('#' + div)
+                                    .css('display', 'block')
+                                    .animate({opacity: 1, top: '50%'}, 200);
+                            });
+                    }
                 }
             });
 
@@ -212,50 +242,11 @@
 
             pageSetUp();
 
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
-
             $('#itemList').dataTable({
                 "sDom": "flrtip",
                 "autoWidth": true,
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-                },
-                "preDrawCallback": function () {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#itemList'), breakpointDefinition);
-                    }
-                },
-                "rowCallback": function (nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback": function (oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                },
-                'createdRow': function (row, data, dataIndex) {
-                    $(row).attr('id', 'rowid_' + data['id']);
                 },
                 aaSorting: [[1, 'asc']],
                 processing: true,
@@ -275,8 +266,6 @@
             });
 
             $('#itemList').on('click', 'a.deleteRow', function () {
-
-                var btn = this;
                 var rowid = $(this).attr('id');
                 swal({
                         title: "{{ trans('frontend.msg.are_you_sure') }}",
@@ -405,11 +394,12 @@
                         $('#timer2').text('00:00:00');
                         $('.progress-bar').css('width', '0%');
                         $('#leftsend').text(0);
+                        $("#process").removeClass();
                     }
                 },
                 error: function(error) {
                     completeProcess();
-                    $("#divStatus").html("trans('frontend.str.error_server')");
+                    $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                 },
             });
         }
@@ -422,6 +412,7 @@
             $("#timer2").text('00:00:00');
             $('#leftsend').text(100);
             $('.progress-bar').css('width', '0%');
+            $("#process").removeClass();
         }
 
         function process() {
@@ -456,7 +447,7 @@
                     },
                     error: function(error) {
                         completeProcess();
-                        $("#divStatus").html("trans('frontend.str.error_server')");
+                        $("#divStatus").html("{{ trans('frontend.str.error_server') }}");
                     },
                 });
             }

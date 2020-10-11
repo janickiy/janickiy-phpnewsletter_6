@@ -8,7 +8,7 @@
 
 @section('content')
 
-    @if(Helpers::has_permission(Auth::user()->login,'admin'))
+    @if(Helpers::has_permission(Auth::user()->role,'admin'))
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">
@@ -60,39 +60,12 @@
 
             pageSetUp();
 
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
-
             $('#itemList').dataTable({
                 "sDom": "flrtip",
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
                 },
                 "autoWidth": true,
-                'createdRow': function (row, data, dataIndex) {
-                    $(row).attr('id', 'rowid_' + data['id']);
-                },
                 aaSorting: [[0, 'asc']],
                 processing: true,
                 serverSide: true,

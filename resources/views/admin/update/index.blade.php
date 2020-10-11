@@ -117,10 +117,12 @@
 
     <script>
 
-        $(document).ready(function(){
+        $(document).ready(function () {
 
-            $("#start_update").on("click", function(){
+            $("#start_update").on("click", function () {
                 $("#btn_refresh").html('<div id="progress_bar" class="progress progress-sm progress-striped active"><div class="progress-bar bg-color-darken" role="progressbar" style="width: 1%"></div></div><span style="padding: 10px" id="status_process">{{ trans('frontend.str.start_update') }}</span>');
+
+                $("#status_process").text('{{ trans('frontend.msg.downloading') }} update.zip ...');
 
                 $.ajax({
                     type: "POST",
@@ -131,21 +133,73 @@
                         action: "start_update",
                         p: "start",
                     },
-                    success: function(data){
-                        if (data[0].result == true) {
-                            $('.progress-bar').css('width', '20%');
-                            $("#status_process").text(data[0].status);
-                            updateFiles();
+                    success: function (data) {
+                        if (data.result == true) {
+                            $('.progress-bar').css('width', '15%');
+                            $("#status_process").text(data.status);
+                            uploapFiles2();
                         } else {
-                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                            $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                         }
                     }
                 });
             });
         });
 
-        function updateFiles()
-        {
+        function uploapFiles2() {
+
+            $("#status_process").text('{{ trans('frontend.msg.downloading') }} puplic.zip ...');
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "uploap_files_2",
+                },
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '30%');
+                        $("#status_process").text(data.status);
+                        uploadFiles3();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function uploadFiles3() {
+
+            $("#status_process").text('{{ trans('frontend.msg.downloading') }} vendor.zip ...');
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "uploap_files_3",
+                },
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '40%');
+                        $("#status_process").text(data.status);
+                        updateFiles();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function updateFiles() {
+
+            $("#status_process").text('{{ trans('frontend.msg.unzipping') }} update.zip ...');
+
             $.ajax({
                 type: "POST",
                 cache: false,
@@ -155,19 +209,70 @@
                     action: "start_update",
                     p: "update_files",
                 },
-                success: function(data){
-                    if (data[0].result == true) {
-                        $('.progress-bar').css('width', '60%');
-                        updateBD();
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '50%');
+                        $("#status_process").text(data.status);
+                        updateFiles2();
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });
         }
 
-        function updateBD()
-        {
+        function updateFiles2() {
+            $("#status_process").text('{{ trans('frontend.msg.unzipping') }} puplic.zip ...');
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_files_2",
+                },
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '60%');
+                        $("#status_process").text(data.status);
+                        updateFiles3();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function updateFiles3() {
+            $("#status_process").text('{{ trans('frontend.msg.unzipping') }} vendor.zip ...');
+
+            $.ajax({
+                type: "POST",
+                cache: false,
+                url: "{{ URL::route('admin.ajax.action') }}",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    action: "start_update",
+                    p: "update_files_3",
+                },
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '70%');
+                        $("#status_process").text(data.status);
+                        updateBD();
+                    } else {
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
+                    }
+                }
+            });
+        }
+
+        function updateBD() {
+
+            $("#status_process").text('{{ trans('frontend.msg.update_bd') }}');
+
             $.ajax({
                 type: "POST",
                 cache: false,
@@ -177,19 +282,21 @@
                     action: "start_update",
                     p: "update_bd",
                 },
-                success: function(data){
-                    if (data[0].result == true) {
-                        $('.progress-bar').css('width', '80%');
+                success: function (data) {
+                    if (data.result == true) {
+                        $('.progress-bar').css('width', '90%');
+                        $("#status_process").text(data.status);
                         clearCache();
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });
         }
 
-        function clearCache()
-        {
+        function clearCache() {
+            $("#status_process").text('{{ trans('frontend.msg.completing_update') }}');
+
             $.ajax({
                 type: "POST",
                 cache: false,
@@ -199,13 +306,13 @@
                     action: "start_update",
                     p: "clear_cache",
                 },
-                success: function(data){
-                    if (data[0].result == true) {
+                success: function (data) {
+                    if (data.result == true) {
                         $('.progress-bar').css('width', '100%');
                         $('#progress_bar').delay(3000).fadeOut();
                         $('#status_process').delay(3000).text('{{ trans('frontend.msg.update_completed') }}');
                     } else {
-                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data[0].status + '</span>');
+                        $("#btn_refresh").html('<a id="start_update" class="btn btn-outline btn-default" href="#"><i class="fa fa-refresh"></i> {!! $button_update !!}</a><span style="padding: 10px">' + data.status + '</span>');
                     }
                 }
             });

@@ -12,7 +12,7 @@ class CategoryController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
         $infoAlert = trans('frontend.hint.category_index') ? trans('frontend.hint.category_index') : null;
 
@@ -43,12 +43,12 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-
-            Category::create($request->all());
-
-            return redirect(URL::route('admin.category.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        Category::create($request->all());
+
+        return redirect(URL::route('admin.category.index'))->with('success', trans('message.information_successfully_added'));
+
     }
 
     /**
@@ -80,13 +80,16 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-            $data['name'] = $request->input('name');
-
-            Category::where('id', $request->id)->update($data);
-
-            return redirect(URL::route('admin.category.index'))->with('success', trans('message.data_updated'));
         }
+
+        $category = Category::find($request->id);
+
+        if (!$category) abort(404);
+
+        $category->name = $request->input('name');
+        $category->save();
+
+        return redirect(URL::route('admin.category.index'))->with('success', trans('message.data_updated'));
     }
 
     /**

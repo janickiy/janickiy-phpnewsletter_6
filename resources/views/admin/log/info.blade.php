@@ -54,30 +54,6 @@
 
             pageSetUp();
 
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
-
             $('#itemList').dataTable({
                 "sDom": "flrtip",
                 "autoWidth": true,
@@ -89,7 +65,7 @@
                     if (data['status'] == 0) $(row).attr('class', 'danger');
                     else if (data['read'] == 1) $(row).attr('class', 'success');
                 },
-                aaSorting: [[2, 'asc']],
+                aaSorting: [[2, 'desc']],
                 processing: true,
                 serverSide: true,
                 ajax: {

@@ -13,21 +13,18 @@
 
 Route::group(['middleware' => ['install']], function () {
 
-    Route::get('pic/{subscriber}/{template}', 'FrontendController@pic')->name('frontend.pic')->where('subscriber', '[0-9]+')->where('template', '[0-9]+');
+    Route::get('pic/{subscriber}_{template}', 'FrontendController@pic')->name('frontend.pic')->where('subscriber', '[0-9]+')->where('template', '[0-9]+');
     Route::get('referral/{ref}/{subscriber}', 'FrontendController@redirectLog')->name('frontend.referral')->where('subscriber', '[0-9]+');
     Route::get('unsubscribe/{subscriber}/{token}', 'FrontendController@unsubscribe')->name('frontend.unsubscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::get('subscribe/{subscriber}/{token}', 'FrontendController@subscribe')->name('frontend.subscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::any('form', 'FrontendController@form')->name('frontend.form');
     Route::post('addsub', 'FrontendController@addSub')->name('frontend.addsub');
+    Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
 
     Auth::routes();
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
-
-
-
-        Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');
             Route::post('store', 'TemplateController@store')->name('admin.template.store');
@@ -110,7 +107,7 @@ Route::group(['middleware' => ['install']], function () {
         Route::group(['prefix' => 'redirect'], function () {
             Route::get('', 'RedirectController@index')->name('admin.redirect.index');
             Route::get('clear', 'RedirectController@clear')->name('admin.redirect.clear');
-            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.download');
+            Route::get('download/{url}', 'RedirectController@download')->name('admin.redirect.report');
             Route::get('info/{url}', 'RedirectController@info')->name('admin.redirect.info');
         });
 
@@ -155,8 +152,12 @@ Route::group(['prefix' => 'install'], function () {
     Route::get('requirements', 'InstallController@requirements')->name('install.requirements');
     Route::get('permissions', 'InstallController@permissions')->name('install.permissions');
     Route::get('database', 'InstallController@databaseInfo')->name('install.database');
-    Route::get('start-installation', 'InstallController@installation')->name('install.installation');
+    Route::get('admin', 'InstallController@admin')->name('install.admin');
     Route::post('start-installation', 'InstallController@installation')->name('install.installation');
+
+
+
+
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
     Route::get('error', 'InstallController@error')->name('install.error');

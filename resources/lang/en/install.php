@@ -23,11 +23,12 @@ return [
         'well_done' => 'Well done',
         'app_is_successfully_installed' => 'You application is now successfully installed! You can login by clicking on "Log In" button below.',
         'important' => '<strong>Important!</strong> Since your root directory is still writable, you can change the permissions to 755 to make it writable only by root user.',
-        'log_in' => 'Войти',
+        'log_in' => 'Login',
         'welcome' => 'Welcome',
         'permissions' => 'Permissions',
         'database_info' => 'Database Info',
         'installation' => 'Installation',
+        'connection_to_database_cannot_be_established' => 'Connection to your database cannot be established. Please provide correct database credentials.',
     ],
     'button' => [
         'next' => 'Next',

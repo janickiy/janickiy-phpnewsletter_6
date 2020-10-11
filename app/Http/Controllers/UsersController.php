@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use URL;
@@ -55,12 +55,11 @@ class UsersController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-
-            User::create(array_merge($request->all(), ['password' => Hash::make($request->password)]));
-
-            return redirect(URL::route('admin.users.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        User::create(array_merge($request->all(), ['password' => Hash::make($request->password)]));
+
+        return redirect(URL::route('admin.users.index'))->with('success', trans('message.information_successfully_added'));
     }
 
     /**
@@ -95,7 +94,6 @@ class UsersController extends Controller
         $rules = [
             'login' => 'required|max:255|unique:users,login,' . $request->id,
             'name' => 'required',
-            'role' => 'required',
             'password' => 'min:6|nullable',
             'password_again' => 'min:6|same:password|nullable',
         ];
@@ -104,19 +102,24 @@ class UsersController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-            $data['login'] = $request->input('login');
-            $data['name'] = $request->input('name');
-            $data['role'] = $request->input('role');
-
-            if (!empty($request->password)) {
-                $data['password'] = Hash::make($request->password);
-            }
-
-            User::where('id', $request->id)->update($data);
-
-            return redirect(URL::route('admin.users.index'))->with('success', trans('message.data_updated'));
         }
+
+        $user = User::find($request->id);
+
+        if (!$user) abort(404);
+
+        $user->login = $request->input('login');
+        $user->name = $request->input('name');
+
+        if (!empty($request->role)) $user->role = $request->input('role');
+
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect(URL::route('admin.users.index'))->with('success', trans('message.data_updated'));
     }
 
     /**

@@ -27,7 +27,6 @@ class MiscellaneousController extends Controller
     public function phpinfo()
     {
         $phpinfo = StringHelpers::phpinfoArray();
-
         $infoAlert = trans('frontend.hint.phpinfo') ? trans('frontend.hint.phpinfo') : null;
 
         return view('admin.miscellaneous.phpinfo', compact('phpinfo', 'infoAlert'))->with('title', 'PHP Info');

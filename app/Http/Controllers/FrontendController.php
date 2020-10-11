@@ -6,6 +6,7 @@ use App\Helpers\StringHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\{ReadySent, Redirect, Subscribers, Category, Subscriptions};
+use ImageCreateTrueColor;
 
 class FrontendController extends Controller
 {
@@ -18,14 +19,14 @@ class FrontendController extends Controller
     {
         ReadySent::where('templateId', $template)->where('subscriberId', $subscriber)->update(['readmail' => 1]);
 
-        $img = ImageCreateTrueColor(1, 1);
-        ob_start();
-        imagegif($img);
-        $image = ob_get_clean();
+        $im = imagecreatetruecolor(1, 1);
 
-        return response($image, 200, [
-            'Content-Type', 'image/gif',
-        ]);
+        imagefilledrectangle($im, 0, 0, 99, 99, 0xFFFFFF);
+        header('Content-Type: image/gif');
+
+        imagegif($im);
+        imagedestroy($im);
+        exit;
     }
 
     /**
@@ -37,15 +38,13 @@ class FrontendController extends Controller
     {
         if (!$ref) abort(404);
 
-        $url = isset($parameter['ref']) ? base64_decode($ref) : '';
+        $url = isset($ref) ? base64_decode($ref) : '';
 
         $subscribers = Subscribers::find($subscriber);
 
-        if (!$subscribers) abort(404);
-
         $data['url'] = $url;
         $data['time'] = date("Y-m-d H:i:s");
-        $data['email'] = isset($subscriber->email) ? $subscriber->email : '';
+        $data['email'] = isset($subscribers->email) ? $subscribers->email : 'test';
 
         Redirect::create($data);
 
@@ -59,17 +58,15 @@ class FrontendController extends Controller
      */
     public function unsubscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if (!$result) abort(404);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-        if ($result->token != $token) abort(400);
+        $subscriber->active = 0;
+        $subscriber->save();
 
-        $subscribers->update(['active' => 0]);
-
-        return view('frontend.unsubscribe')->with('title', trans('frontend.title.unsubscribe'));
-
+        return view('frontend.unsubscribe');
     }
 
     /**
@@ -79,16 +76,15 @@ class FrontendController extends Controller
      */
     public function subscribe($subscriber, $token)
     {
-        $subscribers = Subscribers::where('id', $subscriber);
-        $result = $subscribers->first();
+        $subscriber = Subscribers::find($subscriber);
 
-        if (!$result) abort(404);
+        if (!$subscriber) abort(404);
+        if ($subscriber->token != $token) abort(400);
 
-        if ($result->token != $token) abort(400);
+        $subscriber->active = 1;
+        $subscriber->save();
 
-        $subscribers->update(['active' => 1]);
-
-        return view('frontend.subscribe')->with('title', trans('frontend.title.subscribe'));
+        return view('frontend.subscribe');
     }
 
     /**
@@ -98,7 +94,7 @@ class FrontendController extends Controller
     {
         $category = Category::get();
 
-        return view('frontend.subform', compact('category'))->with('title', trans('frontend.title.subform'));
+        return view('frontend.subform', compact('category'));
     }
 
     /**
@@ -115,7 +111,6 @@ class FrontendController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-
             return json_encode([
                 'result' => 'errors',
                 'msg' => $validator->messages()]);
@@ -133,7 +128,7 @@ class FrontendController extends Controller
 
         return json_encode([
             'result' => 'success',
-            'msg' => 'Подписка оформлена. Спасибо, что подписались на получение наших электронных сообщений']);
-
+            'msg' => trans('frontend.msg.subscription_is_formed')
+        ]);
     }
 }

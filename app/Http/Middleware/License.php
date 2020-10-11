@@ -28,7 +28,7 @@ class License
      */
     public function handle($request, Closure $next)
     {
-        if ($this->helper->check_license() == false && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false && $request->is('expired') == false){
+        if ($request->is('expired/add_license_key') == false && $request->is('login') == false && $request->is('logout') == false &&  $request->is('expired') == false && $this->helper->check_license() == false && in_array($_SERVER['REMOTE_ADDR'], ['::1', '127.0.0.1']) == false){
             return redirect()->route('admin.expired.index');
         }
 

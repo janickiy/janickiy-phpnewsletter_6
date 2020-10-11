@@ -57,20 +57,19 @@ class SubscribersController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
+        }
 
-            $id = Subscribers::create(array_merge($request->all(), ['timeSent' => date('Y-m-d H:i:s'), 'active' => 1, 'token' => StringHelpers::token()]))->id;
+        $id = Subscribers::create(array_merge($request->all(), ['timeSent' => date('Y-m-d H:i:s'), 'active' => 1, 'token' => StringHelpers::token()]))->id;
 
-            if ($request->categoryId && $id) {
-                foreach ($request->categoryId as $categoryId) {
-                    if (is_numeric($categoryId)) {
-                        Subscriptions::create(['subscriberId' => $id, 'categoryId' => $categoryId]);
-                    }
+        if ($request->categoryId && $id) {
+            foreach ($request->categoryId as $categoryId) {
+                if (is_numeric($categoryId)) {
+                    Subscriptions::create(['subscriberId' => $id, 'categoryId' => $categoryId]);
                 }
             }
-
-            return redirect(URL::route('admin.subscribers.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        return redirect(URL::route('admin.subscribers.index'))->with('success', trans('message.information_successfully_added'));
     }
 
     /**
@@ -83,11 +82,7 @@ class SubscribersController extends Controller
 
         if (!$subscriber) abort(404);
 
-        $options = [];
-
-        foreach (Category::orderBy('name')->get() as $row) {
-            $options[$row->id] = $row->name;
-        }
+        $options = Category::getOption();
 
         $subscriberCategoryId = [];
 
@@ -117,24 +112,25 @@ class SubscribersController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-
-            if ($request->categoryId) {
-
-                Subscriptions::where('subscriberId', $request->id)->delete();
-
-                foreach ($request->categoryId as $categoryId) {
-                    if (is_numeric($categoryId)) Subscriptions::create(['subscriberId' => $request->id, 'categoryId' => $categoryId]);
-                }
-            }
-
-            $data['name'] = $request->input('name');
-            $data['email'] = $request->input('email');
-
-            Subscribers::where('id', $request->id)->update($data);
-
-            return redirect(URL::route('admin.subscribers.index'))->with('success', trans('message.data_updated'));
         }
+
+        $subscribers = Subscribers::find($request->id);
+
+        if (!$subscribers) abort(404);
+
+        if ($request->categoryId) {
+            Subscriptions::where('subscriberId', $request->id)->delete();
+
+            foreach ($request->categoryId as $categoryId) {
+                if (is_numeric($categoryId)) Subscriptions::create(['subscriberId' => $request->id, 'categoryId' => $categoryId]);
+            }
+        }
+
+        $subscribers->name = $request->input('name');
+        $subscribers->email = $request->input('email');
+        $subscribers->save();
+
+        return redirect(URL::route('admin.subscribers.index'))->with('success', trans('message.data_updated'));
     }
 
     /**
@@ -154,17 +150,8 @@ class SubscribersController extends Controller
     {
         @set_time_limit(0);
 
-        $charsets = [];
-
-        foreach (Charset::get() as $row) {
-            $charsets[$row->charset] = StringHelpers::charsetList($row->charset);
-        }
-
-        $category_options = [];
-
-        foreach (Category::get() as $row) {
-            $category_options[$row->id] = $row->name;
-        }
+        $charsets = Charset::getOption();
+        $category_options = Category::getOption();
 
         $maxUploadFileSize = StringHelpers::maxUploadFileSize();
 
@@ -221,11 +208,7 @@ class SubscribersController extends Controller
      */
     public function export()
     {
-        $options = [];
-
-        foreach (Category::orderBy('name')->get() as $row) {
-            $options[$row->id] = $row->name;
-        }
+        $options = Category::getOption();
 
         $infoAlert = trans('frontend.hint.subscribers_export') ? trans('frontend.hint.subscribers_export') : null;
 
@@ -269,10 +252,10 @@ class SubscribersController extends Controller
 
             // Add some data
             $oSpreadsheet_Out->setActiveSheetIndex(0)
-                ->setCellValue('A1', 'User email')
-                ->setCellValue('B2', 'Name');
+                ->setCellValue('A1', 'Email')
+                ->setCellValue('B1', trans('frontend.str.name'));
 
-            $i = 0;
+            $i = 1;
 
             foreach ($subscribers as $subscriber) {
                 $i++;
@@ -293,6 +276,8 @@ class SubscribersController extends Controller
         }
 
         if ($request->compress == 'zip') {
+            header('Content-type: application/zip');
+            header('Content-Disposition: attachment; filename=emailexport_' . date("d_m_Y") . '.zip');
 
             $fout = fopen("php://output", "wb");
 
@@ -321,14 +306,10 @@ class SubscribersController extends Controller
 
                 fclose($fout);
 
-                return response('', 200, [
-                    'Content-Type' => 'application/zip',
-                    'Content-Disposition' => 'filename=emailexport_' . date("d_m_Y") . '.zip',
-                ]);
+                exit();
             }
 
         } else {
-
             return response($contents, 200, [
                 'Content-Disposition' => 'attachment; filename=' . $filename,
                 'Cache-Control' => 'max-age=0',
@@ -346,7 +327,6 @@ class SubscribersController extends Controller
         Subscriptions::truncate();
 
         return redirect(URL::route('admin.subscribers.index'))->with('success', trans('message.data_successfully_deleted'));
-
     }
 
     /**
@@ -433,7 +413,6 @@ class SubscribersController extends Controller
                             }
                         }
                     } else {
-
                         $data['name'] = $name;
                         $data['email'] = $email;
                         $data['token'] = StringHelpers::token();

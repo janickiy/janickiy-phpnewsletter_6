@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Helpers\{SendEmailHelpers, SettingsHelpers};
 use App\Models\{ReadySent, Schedule, Subscribers};
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
 class SendEmails extends Command
 {
@@ -50,14 +51,14 @@ class SendEmails extends Command
         $mailcountno = 0;
         $mailcount = 0;
 
-        $schedule = Schedule::where('value_from_start_date', '<=', date('Y-m-d H:i:s'))
-            ->where('value_from_end_date', '>=', date('Y-m-d H:i:s'))
+        $schedule = Schedule::where('value_from_start_date' , '<=' , Carbon::now()->toDateTimeString())
+            ->where('value_from_end_date', '>=', Carbon::now()->toDateTimeString())
             ->get();
 
         foreach ($schedule as $row) {
 
             $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
-            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? "LIMIT " . SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
+            $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
             switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
                 case "minute":
@@ -96,8 +97,9 @@ class SendEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
-                    ->get();
+                    ->take($limit)
+                    ->get()
+                ;
             } else {
                 $subscribers = Subscribers::select(['subscribers.email', 'subscribers.id', 'subscribers.token', 'subscribers.name'])
                     ->join('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
@@ -120,8 +122,9 @@ class SendEmails extends Command
                     ->groupBy('subscribers.token')
                     ->groupBy('subscribers.name')
                     ->orderByRaw($order)
-                    ->limit($limit)
-                    ->get();
+                    ->take($limit)
+                    ->get()
+                ;
             }
 
             foreach ($subscribers as $subscriber) {
@@ -135,6 +138,7 @@ class SendEmails extends Command
                 SendEmailHelpers::setToken($subscriber->token);
                 SendEmailHelpers::setSubscriberId($subscriber->id);
                 SendEmailHelpers::setName($subscriber->name);
+                SendEmailHelpers::setTemplateId($row->template->id);
 
                 $result = SendEmailHelpers::sendEmail($row->templateId);
 
@@ -147,6 +151,7 @@ class SendEmails extends Command
                     $data['template'] = $row->template->name;
                     $data['success'] = 1;
                     $data['scheduleId'] = $row->id;
+                    $data['logId'] = 0;
 
                     Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
@@ -159,6 +164,7 @@ class SendEmails extends Command
                     $data['success'] = 0;
                     $data['errorMsg'] = $result['error'];
                     $data['scheduleId'] = $row->id;
+                    $data['logId'] = 0;
 
                     $mailcountno++;
                 }

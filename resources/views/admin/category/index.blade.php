@@ -61,109 +61,13 @@
 
         $(document).ready(function () {
 
-
-
-            $(document).on("click", ".robot", function () {
-                var status = 'start';
-                var code = $(this).attr('data-cod');
-                var id = $(this).attr('data-id');
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{ URL::route('admin.ajax.action') }}",
-                    data: {
-                        action: 'process',
-                        status: status,
-                        code: code,
-                        id: id,
-                    },
-                    dataType: "json",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    success: function (data) {
-                        $("#mailing_status").html('<span title="Рассылка остановлена" class="stopmailing"></span>');
-                    }
-                });
-            });
-
-            setInterval(function () {
-                $.ajax({
-                    type: "POST",
-                    cache: false,
-                    url: "{{ URL::route('admin.ajax.action') }}",
-                    data: {action: 'daemonstat'},
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    dataType: "json",
-                    success: function (data) {
-                        $.each(data, function(i, val) {
-
-                            alert(data[i].name);
-
-
-                            if (data.id != '') {
-
-                              //  alert(data[0].id);
-
-                                if (data.status == 1) {
-                                    $('#robot-'.data.id).removeClass("stop").addClass("start");
-                                } else {
-                                    $('#robot-'.data.id).removeClass("start").addClass("stop");
-                                }
-                            }
-                        });
-
-
-
-                    }
-                });
-            }, 5000);
-
-
             pageSetUp();
-
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
 
             $('#itemList').dataTable({
                 "sDom": "flrtip",
                 "autoWidth": true,
                 "oLanguage": {
                     "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-                },
-                "preDrawCallback": function () {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#itemList'), breakpointDefinition);
-                    }
-                },
-                "rowCallback": function (nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback": function (oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                },
-                'createdRow': function (row, data, dataIndex) {
-                    $(row).attr('id', 'rowid_' + data['id']);
                 },
                 processing: true,
                 serverSide: true,
@@ -179,7 +83,6 @@
 
             $('#itemList').on('click', 'a.deleteRow', function () {
 
-                var btn = this;
                 var rowid = $(this).attr('id');
                 swal({
                         title: "{{ trans('frontend.msg.are_you_sure') }}",
@@ -187,6 +90,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
+                        cancelButtonText: "{{ trans('frontend.str.cancel') }}",
                         confirmButtonText: "{{ trans('frontend.msg.yes_remove') }}",
                         closeOnConfirm: false
                     },

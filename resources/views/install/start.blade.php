@@ -9,13 +9,30 @@
         <hr>
         <fieldset>
             <div class="form-group">
-                <textarea class="form-control" name="readonly" rows="13">{!! trans('license.agreement') !!}</textarea>
+
+                {!! Form::textarea('readonly', trans('license.agreement'), ['class' => "form-control", 'rows' => "13"]) !!}
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-6 offset-md-4">
+                    <div class="form-check">
+
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
-                <label class="checkbox-inline" for="accept_license">
-                    <input type="checkbox" id="accept_license" /> {{ trans('install.str.accept_terms') }}
-                </label>
+
+                <div class="chiller_cb">
+
+                    {!! Form::checkbox('accept_license', 1, false, ['id' => "accept_license"] ) !!}
+
+                    {!! Form::label('accept_license', trans('frontend.str.accept_license'), ['class' => 'form-check-label']) !!}
+
+                    <span></span>
+                </div>
+
             </div>
         </fieldset>
 

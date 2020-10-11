@@ -105,7 +105,9 @@
 
                             <footer>
                                 <button type="submit" class="btn btn-primary">
-                                    {{ trans('frontend.form.send') }}
+
+                                    {{ isset($subscriber) ? trans('frontend.form.edit') : trans('frontend.form.add') }}
+
                                 </button>
 
                                 <a class="btn btn-default" href="{{ URL::route('admin.subscribers.index') }}">

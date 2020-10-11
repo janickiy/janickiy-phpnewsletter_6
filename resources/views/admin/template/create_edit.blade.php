@@ -87,7 +87,7 @@
                                         @endif
 
                                         <div class="note">
-                                            {{ trans('frontend.note.personalization') }}
+                                            {!! trans('frontend.note.personalization') !!}
                                         </div>
                                     </section>
 
@@ -160,7 +160,7 @@
 
                                 <footer>
                                     <button type="submit" class="btn btn-primary">
-                                        {{ trans('frontend.form.send') }}
+                                        {{ isset($template) ? trans('frontend.form.edit') : trans('frontend.form.add') }}
                                     </button>
                                     <a class="btn btn-default" href="{{ URL::route('admin.category.index') }}">
                                         {{ trans('frontend.form.back') }}
@@ -171,13 +171,12 @@
 
                             <div class="well bg-color-blueLight">
                                 <div id="resultSend"></div>
-                                <h3>{{ trans('frontend.str.send_test_letter') }}</h3>
+                                <h3>{{ trans('frontend.str.send_test_letter') }}<span id="process"></span></h3>
                                 <div class="input-group">
 
                                     {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Email', 'id' => 'email']) !!}
 
                                     <div class="input-group-btn">
-
                                         <button class="btn btn-default" id="send_test" type="button">
                                             <i class="fa fa-send"></i> {{ trans('frontend.str.send') }}
                                         </button>
@@ -241,6 +240,8 @@
                 var arr = $("#tmplForm").serializeArray();
                 var aParams = [];
                 var sParam;
+                $("#process").removeClass().addClass('showprocess');
+                $("#send_test").attr('disabled','disabled');
 
                 for (var i = 0, count = arr.length; i < count; i++) {
                     sParam = encodeURIComponent(arr[i].name);
@@ -282,13 +283,13 @@
                         } else if (data.result == 'error'){
                             alert_msg += '<div class="alert alert-danger fade in">';
                             alert_msg += '<button class="close" data-dismiss="alert">×</button>';
-                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }} </strong>';
                             alert_msg += data.msg;
                             alert_msg += '</div>';
                         } else if (data.result == 'errors'){
                             alert_msg += '<div class="alert alert-danger fade in">';
                             alert_msg += '<button class="close" data-dismiss="alert">×</button>';
-                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }}</strong>';
+                            alert_msg += '<strong>{{ trans('frontend.str.error_alert') }} </strong>';
                             alert_msg += '<ul>';
 
                             var arr = data.msg.split(',');
@@ -302,6 +303,8 @@
                         }
 
                         $("#resultSend").html(alert_msg);
+                        $("#process").removeClass();
+                        $("#send_test").removeAttr('disabled');
                     }
                 });
             });

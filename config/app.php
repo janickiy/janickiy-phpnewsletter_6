@@ -225,6 +225,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Helpers' => App\Http\Start\Helpers::class,
+        'SettingsHelpers' => App\Helpers\SettingsHelpers::class,
     ],
 
 ];

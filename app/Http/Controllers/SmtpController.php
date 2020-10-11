@@ -48,12 +48,11 @@ class SmtpController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-
-            Smtp::create($request->all());
-
-            return redirect(URL::route('admin.smtp.index'))->with('success', trans('message.information_successfully_added'));
         }
+
+        Smtp::create($request->all());
+
+        return redirect(URL::route('admin.smtp.index'))->with('success', trans('message.information_successfully_added'));
     }
 
     /**
@@ -68,7 +67,7 @@ class SmtpController extends Controller
 
         $infoAlert = trans('frontend.hint.smtp_edit') ? trans('frontend.hint.smtp_edit') : null;
 
-        return view('admin.smtp.create_edit', compact('smtp','infoAlert'))->with('title', trans('frontend.title.smtp_edit'));
+        return view('admin.smtp.create_edit', compact('smtp', 'infoAlert'))->with('title', trans('frontend.title.smtp_edit'));
     }
 
     /**
@@ -89,21 +88,25 @@ class SmtpController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
-        } else {
-            $data['host'] = $request->input('host');
-            $data['email'] = $request->input('email');
-            $data['username'] = $request->input('username');
-            $data['password'] = $request->input('password');
-            $data['port'] = $request->input('port');
-            $data['authentication'] = $request->input('authentication');
-            $data['secure'] = $request->input('secure');
-            $data['timeout'] = $request->input('timeout');
-
-            Smtp::where('id', $request->id)->update($data);
-
-            return redirect(URL::route('admin.smtp.index'))->with('success', trans('message.data_updated'));
         }
+
+        $smtp = Smtp::find($request->id);
+
+        if (!$smtp) abort(404);
+
+        $smtp->host = $request->input('host');
+        $smtp->email = $request->input('email');
+        $smtp->username = $request->input('username');
+        $smtp->password = $request->input('password');
+        $smtp->port = $request->input('port');
+        $smtp->authentication = $request->input('authentication');
+        $smtp->secure = $request->input('secure');
+        $smtp->timeout = $request->input('timeout');
+        $smtp->save();
+
+        return redirect(URL::route('admin.smtp.index'))->with('success', trans('message.data_updated'));
     }
+
 
     /**
      * @param $id

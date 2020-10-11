@@ -25,6 +25,7 @@ class CreateSmtpTable extends Migration
             $table->integer('timeout');
             $table->tinyInteger('active')->default(1);
             $table->timestamps();
+            $table->engine = 'MyISAM';
         });
     }
 
