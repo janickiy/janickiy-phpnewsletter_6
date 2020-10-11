@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    {!! Form::open(['url' => URL::route('admin.subscribers.status'), 'method' => 'post', 'onSubmit' => 'if(this.action.value == \'\') { window.alert(\'' . trans('frontend.str.select_action') . '\'); return false; } if (this.action.value == 2) { return confirm(\'' . trans('frontend.str.confirm_remove') .'\') }']) !!}
+                    {!! Form::open(['url' => URL::route('admin.subscribers.status'), 'method' => 'post']) !!}
 
                     <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                         <thead>
@@ -107,6 +107,39 @@
     <script>
 
         $(document).ready(function () {
+            $("#apply").click(function (event) {
+                var idSelect = $('#select_action').val();
+
+                if (idSelect == '') {
+                    event.preventDefault();
+                    swal({
+                        title: "Error",
+                        text: "{{ trans('frontend.str.select_action') }}",
+                        type: "error",
+                        showCancelButton: false,
+                        cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                        confirmButtonColor: "#DD6B55",
+                        closeOnConfirm: false
+                    });
+                } else {
+                    if (idSelect == 2) {
+                        event.preventDefault();
+                        var form = $(this).parents('form');
+                        swal({
+                            title: "{{ trans('frontend.str.delete_confirmation') }}",
+                            text: "{{ trans('frontend.str.confirm_remove') }}",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "{{ trans('frontend.str.yes') }}",
+                            cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                            closeOnConfirm: false
+                        }, function(isConfirm){
+                            if (isConfirm) form.submit();
+                        });
+                    }
+                }
+            });
 
             $("#checkAll").click(function () {
                 $('input:checkbox').not(this).prop('checked', this.checked);
@@ -122,30 +155,6 @@
             });
 
             pageSetUp();
-
-            /* // DOM Position key index //
-
-            l - Length changing (dropdown)
-            f - Filtering input (search)
-            t - The Table! (datatable)
-            i - Information (records)
-            p - Pagination (paging)
-            r - pRocessing
-            < and > - div elements
-            <"#id" and > - div with an id
-            <"class" and > - div with a class
-            <"#id.class" and > - div with an id and class
-
-            Also see: http://legacy.datatables.net/usage/features
-            */
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-
-            var breakpointDefinition = {
-                tablet: 1024,
-                phone: 480
-            };
 
             $('#itemList').dataTable({
                 "sDom": "flrtip",
@@ -175,7 +184,6 @@
 
             $('#itemList').on('click', 'a.deleteRow', function () {
 
-                var btn = this;
                 var rowid = $(this).attr('id');
                 swal({
                         title: "{{ trans('frontend.msg.are_you_sure') }}",

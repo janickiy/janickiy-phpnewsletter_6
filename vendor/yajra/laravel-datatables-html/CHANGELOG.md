@@ -8,6 +8,26 @@
 
 ## CHANGELOG
 
+### v4.32.0 - 10-10-2020
+
+- Add function argument to override the default options from php scripts. [#144]
+
+### v4.31.0 - 10-09-2020
+
+- Add button customize option value. [#142], credits to @gredimano
+- Fix https://github.com/yajra/laravel-datatables/issues/1541
+- Add template and method to wrap scripts with a function. [#143]
+
+### v4.30.3 - 10-06-2020
+
+- Wait for DOM before executing script using jQuery [#138]
+- Fix [#133]
+
+### v4.30.2 - 10-06-2020
+
+- Fix chrome bfcache issue with editor. [#139], credits to @jiwom
+- Allow using callbacks as a data value. [#127], credits to @mgralikowski
+
 ### v4.30.1 - 09-29-2020
 
 - Fix [#134] laravel 8 dependencies [#135], credits to @dyanakiev.
@@ -668,6 +688,13 @@ To `created_at` with title `Created At`
 [#125]: https://github.com/yajra/laravel-datatables-html/pull/125
 [#131]: https://github.com/yajra/laravel-datatables-html/pull/131
 [#135]: https://github.com/yajra/laravel-datatables-html/pull/135
+[#127]: https://github.com/yajra/laravel-datatables-html/pull/127
+[#139]: https://github.com/yajra/laravel-datatables-html/pull/139
+[#138]: https://github.com/yajra/laravel-datatables-html/pull/138
+[#133]: https://github.com/yajra/laravel-datatables-html/pull/133
+[#142]: https://github.com/yajra/laravel-datatables-html/pull/142
+[#143]: https://github.com/yajra/laravel-datatables-html/pull/143
+[#144]: https://github.com/yajra/laravel-datatables-html/pull/144
 
 [#134]: https://github.com/yajra/laravel-datatables-html/issues/134
 [#3]: https://github.com/yajra/laravel-datatables-html/issues/3

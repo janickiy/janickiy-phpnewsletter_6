@@ -66,8 +66,7 @@ class FrontendController extends Controller
         $subscriber->active = 0;
         $subscriber->save();
 
-        return view('frontend.unsubscribe')->with('title', trans('frontend.title.unsubscribe'));
-
+        return view('frontend.unsubscribe');
     }
 
     /**
@@ -85,7 +84,7 @@ class FrontendController extends Controller
         $subscriber->active = 1;
         $subscriber->save();
 
-        return view('frontend.subscribe')->with('title', trans('frontend.title.subscribe'));
+        return view('frontend.subscribe');
     }
 
     /**
@@ -95,7 +94,7 @@ class FrontendController extends Controller
     {
         $category = Category::get();
 
-        return view('frontend.subform', compact('category'))->with('title', trans('frontend.title.subform'));
+        return view('frontend.subform', compact('category'));
     }
 
     /**
@@ -131,6 +130,5 @@ class FrontendController extends Controller
             'result' => 'success',
             'msg' => trans('frontend.msg.subscription_is_formed')
         ]);
-
     }
 }

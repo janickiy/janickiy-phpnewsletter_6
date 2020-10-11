@@ -19,12 +19,12 @@ Route::group(['middleware' => ['install']], function () {
     Route::get('subscribe/{subscriber}/{token}', 'FrontendController@subscribe')->name('frontend.subscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::any('form', 'FrontendController@form')->name('frontend.form');
     Route::post('addsub', 'FrontendController@addSub')->name('frontend.addsub');
+    Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
 
     Auth::routes();
 
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'TemplateController@index')->name('admin.template.index');
-        Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
         Route::group(['prefix' => 'template'], function () {
             Route::get('create', 'TemplateController@create')->name('admin.template.create');
             Route::post('store', 'TemplateController@store')->name('admin.template.store');

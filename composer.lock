@@ -1678,16 +1678,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.40.1",
+            "version": "2.41.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "d9a76d8b7eb0f97cf3a82529393245212f40ba3b"
+                "reference": "91d8d8dca31936a137213d7c48f8ac981e501ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/d9a76d8b7eb0f97cf3a82529393245212f40ba3b",
-                "reference": "d9a76d8b7eb0f97cf3a82529393245212f40ba3b",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/91d8d8dca31936a137213d7c48f8ac981e501ff4",
+                "reference": "91d8d8dca31936a137213d7c48f8ac981e501ff4",
                 "shasum": ""
             },
             "require": {
@@ -1753,7 +1753,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2020-09-23T08:17:37+00:00"
+            "time": "2020-10-10T11:06:56+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -1915,21 +1915,22 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.1.7",
+            "version": "v6.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "2c2370ba3df7034f9eb7b8f387c97b52b2ba5ad0"
+                "reference": "917ab212fa00dc6eacbb26e8bc387ebe40993bc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/2c2370ba3df7034f9eb7b8f387c97b52b2ba5ad0",
-                "reference": "2c2370ba3df7034f9eb7b8f387c97b52b2ba5ad0",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/917ab212fa00dc6eacbb26e8bc387ebe40993bc1",
+                "reference": "917ab212fa00dc6eacbb26e8bc387ebe40993bc1",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
                 "ext-filter": "*",
+                "ext-hash": "*",
                 "php": ">=5.5.0"
             },
             "require-dev": {
@@ -1973,7 +1974,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2020-07-14T18:50:27+00:00"
+            "time": "2020-10-09T14:55:58+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -4313,16 +4314,16 @@
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "77ce1c3627c9f39643acd9af086631f842c50c4d"
+                "reference": "e2eaa60b558f26a4b0354e1bbb25636efaaad105"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/77ce1c3627c9f39643acd9af086631f842c50c4d",
-                "reference": "77ce1c3627c9f39643acd9af086631f842c50c4d",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/e2eaa60b558f26a4b0354e1bbb25636efaaad105",
+                "reference": "e2eaa60b558f26a4b0354e1bbb25636efaaad105",
                 "shasum": ""
             },
             "require": {
@@ -4334,7 +4335,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -4370,7 +4371,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2020-09-07T11:33:47+00:00"
+            "time": "2020-09-28T13:05:58+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -4627,16 +4628,16 @@
         },
         {
             "name": "yajra/laravel-datatables-html",
-            "version": "v4.30.1",
+            "version": "v4.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-html.git",
-                "reference": "c663ea3478a027afde7d866b2f439259a1a2b47f"
+                "reference": "6affef4e7ecbf63b1e34c13fd749116731dd6b79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-html/zipball/c663ea3478a027afde7d866b2f439259a1a2b47f",
-                "reference": "c663ea3478a027afde7d866b2f439259a1a2b47f",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-html/zipball/6affef4e7ecbf63b1e34c13fd749116731dd6b79",
+                "reference": "6affef4e7ecbf63b1e34c13fd749116731dd6b79",
                 "shasum": ""
             },
             "require": {
@@ -4683,20 +4684,20 @@
                 "jquery",
                 "laravel"
             ],
-            "time": "2020-09-29T03:56:29+00:00"
+            "time": "2020-10-10T09:11:22+00:00"
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v9.11.0",
+            "version": "v9.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "fb12721a46dd9071236d7e7e6de440413bc69087"
+                "reference": "d85285c87cd9c02dfaee2a1201a05e002e148e1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/fb12721a46dd9071236d7e7e6de440413bc69087",
-                "reference": "fb12721a46dd9071236d7e7e6de440413bc69087",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/d85285c87cd9c02dfaee2a1201a05e002e148e1a",
+                "reference": "d85285c87cd9c02dfaee2a1201a05e002e148e1a",
                 "shasum": ""
             },
             "require": {
@@ -4754,7 +4755,7 @@
                 "jquery",
                 "laravel"
             ],
-            "time": "2020-09-09T02:36:16+00:00"
+            "time": "2020-10-06T03:24:30+00:00"
         }
     ],
     "packages-dev": [

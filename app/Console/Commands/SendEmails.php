@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Helpers\{SendEmailHelpers, SettingsHelpers};
 use App\Models\{ReadySent, Schedule, Subscribers};
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
 class SendEmails extends Command
 {
@@ -50,8 +51,8 @@ class SendEmails extends Command
         $mailcountno = 0;
         $mailcount = 0;
 
-        $schedule = Schedule::where('value_from_start_date', '<=', date('Y-m-d H:i:s'))
-            ->where('value_from_end_date', '>=', date('Y-m-d H:i:s'))
+        $schedule = Schedule::where('value_from_start_date' , '<=' , Carbon::now()->toDateTimeString())
+            ->where('value_from_end_date', '>=', Carbon::now()->toDateTimeString())
             ->get();
 
         foreach ($schedule as $row) {
