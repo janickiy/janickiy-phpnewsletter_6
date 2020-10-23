@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-class StringHelpers
+class  StringHelpers
 {
     /**
      * @param $data
