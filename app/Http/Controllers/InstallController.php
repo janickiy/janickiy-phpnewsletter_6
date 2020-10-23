@@ -13,6 +13,7 @@ use Artisan;
 use Cookie;
 use DB;
 use Log;
+use Config;
 
 class InstallController extends Controller
 {
