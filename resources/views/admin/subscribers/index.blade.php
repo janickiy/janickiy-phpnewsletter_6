@@ -18,8 +18,9 @@
                    href="{{ URL::route('admin.subscribers.export') }}">
                     <span class="fa fa-upload fa-2x"></span> {{ trans('frontend.str.export') }}
                 </a>
-                <a class="btn btn-outline btn-danger btn-lg remove" title="{{ trans('frontend.str.delete_all_subscribers') }}"
-                  >
+                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.delete_all_subscribers') }}"
+                   href="{{ URL::route('admin.subscribers.remove_all') }}"
+                   onclick="return confirm('{{ trans('frontend.str.want_to_delete_all_subscribers') }}');">
                     <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.delete_all') }}
                 </a>
             </p>
@@ -106,24 +107,6 @@
     <script>
 
         $(document).ready(function () {
-
-            $(".remove").click(function (event) {
-
-                swal({
-                        title: "{{ trans('frontend.str.remove_subscribers') }}",
-                        text: "{{ trans('frontend.str.want_to_delete_all_subscribers') }}",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "{{ trans('frontend.msg.yes_remove') }}",
-                        closeOnConfirm: false
-                    },
-                    function (isConfirm) {
-                        if (!isConfirm) return;
-                        window.location = "{{ URL::route('admin.subscribers.remove_all') }}";
-                    });
-            });
-
             $("#apply").click(function (event) {
                 var idSelect = $('#select_action').val();
 
