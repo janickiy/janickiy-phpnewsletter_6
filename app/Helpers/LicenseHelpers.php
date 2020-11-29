@@ -25,23 +25,22 @@ class LicenseHelpers
      */
     public function checkNewVersion()
     {
+        $result = false;
+
         $newversion = $this->getVersion();
 
         if ($newversion) {
             preg_match("/(\d+)\.(\d+)\.(\d+)/", $this->currenversion, $out1);
             preg_match("/(\d+)\.(\d+)\.(\d+)/", $newversion, $out2);
 
-            if (!isset($out1[1]) || !isset($out2[1])) return false;
-
             $v1 = ($out1[1] * 10000 + $out1[2] * 100 + $out1[3]);
             $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
 
             if ($v2 > $v1)
-                return true;
-            else
-                return false;
-        } else
-            return false;
+                $result = true;
+        }
+
+        return $result;
     }
 
     /**
@@ -49,6 +48,7 @@ class LicenseHelpers
      */
     public function checkUpgrade()
     {
+        $result = false;
         $newversion = $this->getUpgradeVersion();
 
         if ($newversion) {
@@ -59,11 +59,11 @@ class LicenseHelpers
             $v2 = ($out2[1] * 10000 + $out2[2] * 100 + $out2[3]);
 
             if ($v2 > $v1)
-                return true;
-            else
-                return false;
-        } else
-            return false;
+                $result = true;
+        }
+
+        return  $result;
+
     }
 
     /**
@@ -98,7 +98,7 @@ class LicenseHelpers
 
         preg_match('/\{([^\}])+\}/',$data, $out);
 
-        return isset($out[0]) ? json_decode($out[0], true) : null;
+        return isset($out[0]) ? json_decode($out[0], true) : '';
     }
 
     /**
@@ -120,7 +120,7 @@ class LicenseHelpers
     public function getVersion()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out["version"];
+        return isset($out["version"]) ? $out["version"] : '';
     }
 
     /**
@@ -129,7 +129,7 @@ class LicenseHelpers
     public function getDownloadLink()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['download'];
+        return isset($out['download']) ? $out['download']:'';
     }
 
     /**
@@ -138,7 +138,7 @@ class LicenseHelpers
     public function getUpdateLink()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['update'];
+        return isset($out['update']) ? $out['update']:'';
     }
 
     /**
@@ -147,7 +147,7 @@ class LicenseHelpers
     public function getCreated()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['created'];
+        return isset($out['created'])?$out['created']:'';
     }
 
     /**
@@ -156,7 +156,7 @@ class LicenseHelpers
     public function getUpdate()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['update'];
+        return isset($out['update'])?$out['update']:'';
     }
 
     /**
@@ -165,7 +165,7 @@ class LicenseHelpers
     public function getUpgradeVersion()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['upgrade_version'];
+        return isset($out['upgrade_version'])?$out['upgrade_version']:'';
     }
 
     /**
@@ -174,7 +174,7 @@ class LicenseHelpers
     public function getMessage()
     {
         $out = $this->getDataContents($this->getUrlInfo());
-        return $out['message'];
+        return isset($out['message'])?$out['message']:'';
     }
 
     /**
@@ -207,7 +207,7 @@ class LicenseHelpers
 
             return json_decode(self::decodeStr($contents), true);
         } else
-            return null;
+            return '';
     }
 
     /**
@@ -299,7 +299,7 @@ class LicenseHelpers
     {
         $lisense_info = $this->getLicenseInfo();
 
-        if ($lisense_info['licensekey'] != $licenseKey) {
+        if (isset($lisense_info['licensekey']) && $lisense_info['licensekey'] != $licenseKey) {
             $this->makeLicensekey($licenseKey);
         }
     }

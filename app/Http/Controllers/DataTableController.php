@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use DataTables;
 use URL;
 use Helpers;
-use Carbon\Carbon;
 
 class DataTableController extends Controller
 {
@@ -39,11 +38,7 @@ class DataTableController extends Controller
             })
 
             ->editColumn('prior', function ($row) {
-                return Templates::getPrior($row->prior);
-            })
-
-            ->editColumn('created_at', function ($row) {
-                return Carbon::parse($row->created_at)->format('Y-m-d H:i');
+                return Templates::getPrior($row->id);
             })
 
             ->editColumn('attach.id', function ($row) {
