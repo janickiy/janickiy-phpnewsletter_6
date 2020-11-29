@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\StringHelpers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\{ReadySent, Redirect, Subscribers, Category, Subscriptions};
+use App\Models\{ReadySent, Redirect, Schedule, Subscribers, Category, Subscriptions};
 use ImageCreateTrueColor;
 
 class FrontendController extends Controller
@@ -130,5 +131,20 @@ class FrontendController extends Controller
             'result' => 'success',
             'msg' => trans('frontend.msg.subscription_is_formed')
         ]);
+    }
+
+    public function test()
+    {
+        $schedule = Schedule::where('value_from_start_date' , '<=' , Carbon::now()->toDateTimeString())
+            ->where('value_from_end_date', '>=', Carbon::now()->toDateTimeString())
+            ->get();
+
+        foreach ($schedule as $row) {
+            var_dump($row);
+            exit;
+        }
+
+
+
     }
 }

@@ -149,7 +149,6 @@ return [
         'high' => 'high',
         'low' => 'low',
         'normal' => 'normal',
-        'remove_subscribers' => 'Removing subscribers',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',

@@ -13,6 +13,8 @@
 
 Route::group(['middleware' => ['install']], function () {
 
+    Route::get('test', 'FrontendController@test')->name('frontend.test');
+
     Route::get('pic/{subscriber}_{template}', 'FrontendController@pic')->name('frontend.pic')->where('subscriber', '[0-9]+')->where('template', '[0-9]+');
     Route::get('referral/{ref}/{subscriber}', 'FrontendController@redirectLog')->name('frontend.referral')->where('subscriber', '[0-9]+');
     Route::get('unsubscribe/{subscriber}/{token}', 'FrontendController@unsubscribe')->name('frontend.unsubscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
@@ -154,9 +156,6 @@ Route::group(['prefix' => 'install'], function () {
     Route::get('database', 'InstallController@databaseInfo')->name('install.database');
     Route::get('admin', 'InstallController@admin')->name('install.admin');
     Route::post('start-installation', 'InstallController@installation')->name('install.installation');
-
-
-
 
     Route::post('install-app', 'InstallController@install')->name('install.install');
     Route::get('complete', 'InstallController@complete')->name('install.complete');
