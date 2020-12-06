@@ -56,7 +56,7 @@ class SendUnsentEmails extends Command
 
         foreach ($schedule as $row) {
 
-            $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
+            $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'RAND()' : 'subscribers.id';
             $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
             switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
@@ -137,12 +137,10 @@ class SendUnsentEmails extends Command
                 $result = SendEmailHelpers::sendEmail($row->templateId);
 
                 if ($result['result'] === true) {
-
                     ReadySent::where('scheduleId', $row->id)->update(['success' => 1]);
                     Subscribers::where('id', $subscriber->id)->update(['timeSent' => date('Y-m-d H:i:s')]);
 
                     $mailcount++;
-
                 } else {
                     $mailcountno++;
                 }
