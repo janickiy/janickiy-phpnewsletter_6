@@ -284,7 +284,7 @@ class AjaxController extends Controller
 
                     $mailcount = 0;
 
-                    $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'ORDER BY RAND()' : 'subscribers.id';
+                    $order = SettingsHelpers::getSetting('RANDOM_SEND') == 1 ? 'RAND()' : 'subscribers.id';
                     $limit = SettingsHelpers::getSetting('LIMIT_SEND') == 1 ? SettingsHelpers::getSetting('LIMIT_NUMBER') : null;
 
                     switch (SettingsHelpers::getSetting('INTERVAL_TYPE')) {
