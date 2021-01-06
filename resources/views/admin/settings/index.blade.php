@@ -85,25 +85,6 @@
 
                                     <div class="form-group">
 
-                                        {!! Form::label('SHOW_EMAIL', trans('frontend.form.show_admin_email_in_sent_emails'), ['class' => 'col-md-3 control-label']) !!}
-
-                                        <div class="col-md-9">
-                                            <label class="checkbox-inline">
-
-                                                {!! Form::checkbox('SHOW_EMAIL', 1, SettingsHelpers::getSetting('SHOW_EMAIL') == 1 ? true : false, ['class' => 'checkbox style-0']) !!}
-
-                                                <span></span>
-                                            </label>
-
-                                            @if ($errors->has('SHOW_EMAIL'))
-                                                <span class="text-danger">{{ $errors->first('SHOW_EMAIL') }}</span>
-                                            @endif
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-
                                         {!! Form::label('FROM', trans('frontend.str.sender_name'), ['class' => 'col-md-3 control-label']) !!}
 
                                         <div class="col-md-9">
@@ -527,7 +508,7 @@
 
                                     <div class="form-group">
 
-                                        {!! Form::label('SENDMAIL_PATH', trans('frontend.sendmail_path'), ['class' => 'col-md-3 control-label']) !!}
+                                        {!! Form::label('SENDMAIL_PATH', trans('frontend.form.sendmail_path'), ['class' => 'col-md-3 control-label']) !!}
 
                                         <div class="col-md-9">
 

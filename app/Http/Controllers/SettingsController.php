@@ -34,7 +34,6 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
         $array = $request->all();
-        $array['SHOW_EMAIL'] = $request->input('SHOW_EMAIL') ? 1 : 0;
         $array['REQUIRE_SUB_CONFIRMATION'] = $request->input('REQUIRE_SUB_CONFIRMATION') ? 1 : 0;
         $array['SHOW_UNSUBSCRIBE_LINK'] = $request->input('SHOW_UNSUBSCRIBE_LINK') ? 1 : 0;
         $array['REQUEST_REPLY'] = $request->input('REQUEST_REPL') ? 1 : 0;

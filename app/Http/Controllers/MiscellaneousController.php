@@ -31,4 +31,15 @@ class MiscellaneousController extends Controller
 
         return view('admin.miscellaneous.phpinfo', compact('phpinfo', 'infoAlert'))->with('title', 'PHP Info');
     }
+
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function subscription_form()
+    {
+        $infoAlert = trans('frontend.hint.phpinfo') ? trans('frontend.hint.subscription_form') : null;
+
+        return view('admin.miscellaneous.subscription_form', compact('infoAlert'))->with('title', trans('frontend.title.subscription_form'));
+    }
 }

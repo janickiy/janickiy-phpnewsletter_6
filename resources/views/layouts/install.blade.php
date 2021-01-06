@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>PHP Newsletter | {{ trans('str.install') }}</title>
+    <title>PHP Newsletter | {{ trans('install.str.installation') }}</title>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

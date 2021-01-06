@@ -9,4 +9,5 @@ return [
     'data_successfully_deleted' => 'Data deleted successfully',
     'error_import_file' => 'Import error! Unable to read file',
     'import_completed' => 'The import is complete. Total imported: ',
+    'unable_connect_to_smtp' => 'Unable connect to SMTP! Check connection SMTP details',
 ];

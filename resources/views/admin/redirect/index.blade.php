@@ -12,7 +12,7 @@
 
     <div class="row">
         <div class="col-lg-12"><p class="text-center">
-                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" href="{{ URL::route('admin.redirect.clear') }}" onclick="return confirm('{{ trans('frontend.str.want_to_redirect_clear') }}');">
+                <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.log_clear') }}" onclick="confirmation()">
                     <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.redirect_clear') }}
                 </a>
             </p>
@@ -79,6 +79,21 @@
                 ],
             });
         })
+
+        function confirmation(event) {
+            swal({
+                title: "{{ trans('frontend.str.clear_confirmation') }}",
+                text: "{{ trans('frontend.str.redirect_clear')  }}",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('frontend.str.yes') }}",
+                cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                closeOnConfirm: false
+            }, function () {
+                window.location.href = "{{ URL::route('admin.redirect.clear') }}";
+            });
+        }
 
     </script>
 
