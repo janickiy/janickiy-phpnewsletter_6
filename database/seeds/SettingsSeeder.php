@@ -14,7 +14,6 @@ class SettingsSeeder extends Seeder
     public function run()
     {
         $data_insert['en'][] = ['name' => 'EMAIL', 'value' => 'vasya-pupkin@my-domain.com'];
-        $data_insert['en'][] = ['name' => 'SHOW_EMAIL', 'value' => '1'];
         $data_insert['en'][] = ['name' => 'FROM',  'value' => 'my-domain.com'];
         $data_insert['en'][] = ['name' => 'RETURN_PATH', 'value' => ''];
         $data_insert['en'][] = ['name' => 'LIST_OWNER', 'value' => ''];
@@ -49,7 +48,6 @@ class SettingsSeeder extends Seeder
         $data_insert['en'][] = ['name' => 'INTERVAL_TYPE', 'value' => 'no'];
         $data_insert['en'][] = ['name' => 'INTERVAL_NUMBER', 'value' => '1'];
         $data_insert['ru'][] = ['name' => 'EMAIL', 'value' => 'vasya-pupkin@my-domain.com'];
-        $data_insert['ru'][] = ['name' => 'SHOW_EMAIL', 'value' => '1'];
         $data_insert['ru'][] = ['name' => 'FROM',  'value' => 'my-domain.com'];
         $data_insert['ru'][] = ['name' => 'RETURN_PATH', 'value' => ''];
         $data_insert['ru'][] = ['name' => 'LIST_OWNER', 'value' => ''];

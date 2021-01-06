@@ -3,7 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Attach, Logs, Process, ReadySent, Schedule, ScheduleCategory, Subscribers, Subscriptions, Templates};
+use App\Models\{Attach,
+    Category,
+    Logs,
+    Process,
+    ReadySent,
+    Schedule,
+    ScheduleCategory,
+    Subscribers,
+    Subscriptions,
+    Templates};
 use App\Helpers\{SendEmailHelpers, SettingsHelpers, StringHelpers, ResponseHelpers, LicenseHelpers};
 use Illuminate\Support\Facades\Storage;
 use Cookie;
@@ -570,6 +579,16 @@ class AjaxController extends Controller
                     return ResponseHelpers::jsonResponse([
                         'result' => true,
                         'logId' => $logId
+                    ]);
+
+                    break;
+
+                case 'get_categories':
+
+                    $category = Category::select('name','id')->get();
+
+                    return ResponseHelpers::jsonResponse([
+                        'items' => $category
                     ]);
 
                     break;

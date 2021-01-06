@@ -95,7 +95,7 @@ class FrontendController extends Controller
     {
         $category = Category::get();
 
-        return view('frontend.subform', compact('category'));
+        return view('frontend.subform', compact('category'))->with('title', 'Subform');
     }
 
     /**
@@ -132,19 +132,14 @@ class FrontendController extends Controller
             'msg' => trans('frontend.msg.subscription_is_formed')
         ]);
     }
-
-    public function test()
+	
+	 /**
+     * @return false|string
+     */
+    public function getCategories()
     {
-        $schedule = Schedule::where('value_from_start_date' , '<=' , Carbon::now()->toDateTimeString())
-            ->where('value_from_end_date', '>=', Carbon::now()->toDateTimeString())
-            ->get();
+        $category = Category::orderBy('name', 'desc')->get();
 
-        foreach ($schedule as $row) {
-            var_dump($row);
-            exit;
-        }
-
-
-
+        return json_encode(['items' => $category]);
     }
 }

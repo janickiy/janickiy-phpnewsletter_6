@@ -175,7 +175,7 @@
 
                                 <section>
 
-                                    {!! Form::label('authentication', trans('frontend.authentication_method'), ['class' => 'label']) !!}
+                                    {!! Form::label('authentication', trans('frontend.form.authentication_method'), ['class' => 'label']) !!}
 
                                     <div class="inline-group">
                                         <label class="radio">

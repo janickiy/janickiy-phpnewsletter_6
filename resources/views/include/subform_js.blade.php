@@ -1,64 +1,18 @@
-@extends('layouts.frontend')
+<script>
 
-@section('title', $title)
+    $(document).ready(function () {
 
-@section('css')
-
-    <style>
-        .vertical-center {
-            min-height: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-
-    </style>
-
-@endsection
-
-@section('content')
-
-    <div class="vertical-center">
-        <div class="container">
-
-            <div id="resultSub"></div>
-
-            {!! Form::open(['id' => 'addsub', 'autocomplete' => "off"]) !!}
-
-            @foreach($category as $row)
-
-                <div class="form-check">
-                    <label class="form-check-label">
-                        {!! Form::checkbox('categoryId[]', $row['id'], ['class' => "form-check-input"]) !!} {!! $row['name'] !!}
-                    </label>
-                </div>
-            @endforeach
-
-            <div class="form-group">
-                {!! Form::label('name', trans('frontend.str.name')) !!}
-                {!! Form::text('name',old('name'),['class'=>"form-control", 'autocomplete'=>"off"]) !!}
-            </div>
-
-            <div class="form-group">
-                {!! Form::label('email', 'E-mail') !!}
-                {!! Form::text('email',old('email'),['class'=>"form-control",'autocomplete'=>"off"]) !!}
-
-                <div id="error-email" class="text-danger"></div>
-            </div>
-
-            {{ Form::button(trans('frontend.str.subscribe'), ['id' => "sub",'class' => 'btn btn-primary']) }}
-
-            {!! Form::close() !!}
-
-        </div>
-
-    </div>
-
-@endsection
-
-@section('js')
-
-    <script>
+        $.ajax({
+            url: "{{ URL::route('frontend.categories') }}",
+            method: "get",
+            dataType: "json",
+            success: function (data) {
+                $.each(data.items, function (key, item) {
+                    var checkBox = '<div class="form-check"><label class="form-check-label"><input checked="checked" name="categoryId[]" type="checkbox" value="' + item.id + '"> ' + item.name + '</label></div>';
+                    $(checkBox).prependTo('#addsub');
+                });
+            }
+        });
 
         $(document).on("click", "#sub", function () {
             var arr = $("#addsub").serializeArray();
@@ -90,15 +44,8 @@
                             alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>';
                             alert_msg += data.msg;
                             alert_msg += '</div>';
-                        } else if (data.result == 'error') {
-                            alert_msg += '<div class="alert alert-danger alert-dismissable">';
-                            alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>';
-                            alert_msg += data.msg;
-                            alert_msg += '</div>';
                         } else if (data.result == 'errors') {
-
                             $.each(data.msg, function (index, val) {
-
                                 alert_msg += '<div class="alert alert-danger alert-dismissable">';
                                 alert_msg += '<button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>';
 
@@ -118,7 +65,6 @@
                 }
             });
         });
+    });
 
-    </script>
-
-@endsection
+</script>
