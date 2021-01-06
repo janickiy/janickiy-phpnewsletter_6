@@ -22,7 +22,11 @@
 
                     <div class="form-group">
 
-                        <textarea rows="3" id="myInput" name="body" cols="50">@include('include.subform')</textarea>
+                        <textarea rows="3" id="myInput" name="body" cols="50">
+                            @include('include.subform')
+                            &lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+                            @include('include.subform_js')
+                        </textarea>
 
                     </div>
 
@@ -44,7 +48,7 @@
 
 @endsection
 
-@section('include')
+@section('js')
 
     <script>
         function myFunction() {
