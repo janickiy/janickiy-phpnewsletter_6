@@ -14,39 +14,39 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {!! Html::style('/css/bootstrap.min.css') !!}
+{!! Html::style('/css/bootstrap.min.css') !!}
 
-    {!! Html::style('/admin/css/font-awesome.min.css') !!}
+{!! Html::style('/admin/css/font-awesome.min.css') !!}
 
-    {!! Html::style('/admin/css/admin.css') !!}
+{!! Html::style('/admin/css/admin.css') !!}
 
-    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
 
-    {!! Html::style('/admin/css/smartadmin-production-plugins.min.css') !!}
+{!! Html::style('/admin/css/smartadmin-production-plugins.min.css') !!}
 
-    {!! Html::style('/admin/css/smartadmin-production.min.css') !!}
+{!! Html::style('/admin/css/smartadmin-production.min.css') !!}
 
-    {!! Html::style('/admin/css/smartadmin-skins.min.css') !!}
+{!! Html::style('/admin/css/smartadmin-skins.min.css') !!}
 
-    <!-- SmartAdmin RTL Support -->
+<!-- SmartAdmin RTL Support -->
 
-    {!! Html::style('/admin/css/smartadmin-rtl.min.css') !!}
+{!! Html::style('/admin/css/smartadmin-rtl.min.css') !!}
 
-    {!! Html::style('/admin/js/plugin/daterangepicker/daterangepicker.css') !!}
+{!! Html::style('/admin/js/plugin/daterangepicker/daterangepicker.css') !!}
 
-    <!-- We recommend you use "your_style.css" to override SmartAdmin
+<!-- We recommend you use "your_style.css" to override SmartAdmin
          specific styles this will also ensure you retrain your customization with each SmartAdmin update.
     <link rel="stylesheet" type="text/css" media="screen" href="css/your_style.css"> -->
 
-    {!! Html::style('/admin/js/plugin/sweetalert/sweetalert.css') !!}
+{!! Html::style('/admin/js/plugin/sweetalert/sweetalert.css') !!}
 
-    {!! Html::style('/admin/js/plugin/jquery-treeview-master/jquery.treeview.css') !!}
+{!! Html::style('/admin/js/plugin/jquery-treeview-master/jquery.treeview.css') !!}
 
-    {!! Html::style('/admin/js/plugin/datetimepicker/jquery.datetimepicker.css') !!}
+{!! Html::style('/admin/js/plugin/datetimepicker/jquery.datetimepicker.css') !!}
 
-    {!! Html::style('/admin/js/plugin/jquery-treeview-master/jquery.treeview.css') !!}
+{!! Html::style('/admin/js/plugin/jquery-treeview-master/jquery.treeview.css') !!}
 
-    <!-- #GOOGLE FONT -->
+<!-- #GOOGLE FONT -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
     @yield('css')
@@ -119,7 +119,8 @@ Use search to find needed section.
 
         <!-- collapse menu button -->
         <div id="hide-menu" class="btn-header pull-right">
-            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+            <span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i
+                        class="fa fa-reorder"></i></a> </span>
         </div>
         <!-- end collapse menu -->
 
@@ -132,19 +133,22 @@ Use search to find needed section.
                 </a>
                 <ul class="dropdown-menu pull-right">
                     <li>
-                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut"><i class="fa fa-arrow-down"></i>
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"
+                           data-action="toggleShortcut"><i class="fa fa-arrow-down"></i>
                             <u>{{ trans('frontend.str.roll_up') }}</u>
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen">
+                        <a href="javascript:void(0);" class="padding-10 padding-top-0 padding-bottom-0"
+                           data-action="launchFullscreen">
                             <i class="fa fa-arrows-alt"></i><u>{{ trans('frontend.str.expand_full_screen') }}</u>
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="{{ URL::route('logout') }}" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i>
+                        <a href="{{ URL::route('logout') }}" class="padding-10 padding-top-5 padding-bottom-5"
+                           data-action="userLogout"><i class="fa fa-sign-out fa-lg"></i>
                             <strong><u>{{ trans('frontend.str.signout') }}</u></strong>
                         </a>
                     </li>
@@ -154,7 +158,8 @@ Use search to find needed section.
 
         <!-- logout button -->
         <div id="logout" class="btn-header transparent pull-right">
-            <span> <a href="{{ URL::route('logout') }}" title="{{ trans('frontend.str.signout') }}" data-action="userLogout"><i class="fa fa-sign-out"></i></a> </span>
+            <span> <a href="{{ URL::route('logout') }}" title="{{ trans('frontend.str.signout') }}"
+                      data-action="userLogout"><i class="fa fa-sign-out"></i></a> </span>
         </div>
         <!-- end logout button -->
 
@@ -167,7 +172,9 @@ Use search to find needed section.
 
         <!-- fullscreen button -->
         <div id="fullscreen" class="btn-header transparent pull-right">
-            <span> <a href="javascript:void(0);" data-action="launchFullscreen" title="{{ trans('frontend.str.expand_full_screen') }}"><i class="fa fa-arrows-alt"></i></a> </span>
+            <span> <a href="javascript:void(0);" data-action="launchFullscreen"
+                      title="{{ trans('frontend.str.expand_full_screen') }}"><i
+                        class="fa fa-arrows-alt"></i></a> </span>
         </div>
         <!-- end fullscreen button -->
 
@@ -176,21 +183,26 @@ Use search to find needed section.
             <li>
 
                 @if( Config::get('app.locale') == 'ru')
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-ru" alt="Русский (Russian)">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img
+                            src="{{ url('/admin/img/blank.gif') }}" class="flag flag-ru" alt="Русский (Russian)">
                         <span> Русский</span> <i class="fa fa-angle-down"></i>
                     </a>
                 @else
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-gb" alt="English">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img
+                            src="{{ url('/admin/img/blank.gif') }}" class="flag flag-gb" alt="English">
                         <span> English</span> <i class="fa fa-angle-down"></i>
                     </a>
                 @endif
 
                 <ul id="select-lang" class="dropdown-menu pull-right">
                     <li data-id="en" class="active">
-                        <a href="javascript:void(0);"><img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-gb" alt="English"> English</a>
+                        <a href="javascript:void(0);">
+                            <img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-gb"  alt="English"> English
+                        </a>
                     </li>
                     <li data-id="ru" class="">
-                        <a href="javascript:void(0);"><img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-ru" alt="Russia"> Русский (Russian)</a>
+                        <a href="javascript:void(0);"><img src="{{ url('/admin/img/blank.gif') }}" class="flag flag-ru"
+                                                           alt="Russia"> Русский (Russian)</a>
                     </li>
                 </ul>
             </li>
@@ -231,21 +243,25 @@ Use search to find needed section.
 
             <li {{ Request::is('template*') ? ' class=active' : '' }}>
                 <a href="{{ URL::route('admin.template.index') }}">
-                    <i class="fa fa-fw fa-envelope"></i> <span class="menu-item-parent">{{ trans('frontend.menu.templates') }}</span>
+                    <i class="fa fa-fw fa-envelope"></i> <span
+                        class="menu-item-parent">{{ trans('frontend.menu.templates') }}</span>
                 </a>
             </li>
 
             <li {{ Request::is('schedule*') ? ' class=active' : '' }}>
                 <a href="{{ URL::route('admin.schedule.index') }}" title="{{ trans('frontend.menu.schedule') }}">
-                    <i class="fa fa-fw fa-hourglass"></i> <span class="menu-item-parent">{{ trans('frontend.menu.schedule') }}</span>
+                    <i class="fa fa-fw fa-hourglass"></i> <span
+                        class="menu-item-parent">{{ trans('frontend.menu.schedule') }}</span>
                 </a>
             </li>
 
             @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('subscribers*') ? ' class=active' : '' }}>
-                    <a href="{{ URL::route('admin.subscribers.index') }}" title="{{ trans('frontend.menu.subscribers') }}">
-                        <i class="fa fa-fw fa-users"></i> <span class="menu-item-parent">{{ trans('frontend.menu.subscribers') }}</span>
+                    <a href="{{ URL::route('admin.subscribers.index') }}"
+                       title="{{ trans('frontend.menu.subscribers') }}">
+                        <i class="fa fa-fw fa-users"></i> <span
+                            class="menu-item-parent">{{ trans('frontend.menu.subscribers') }}</span>
                     </a>
                 </li>
 
@@ -254,8 +270,10 @@ Use search to find needed section.
             @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {{ Request::is('category*') ? ' class=active' : '' }}>
-                    <a href="{{ URL::route('admin.category.index') }}" title="{{ trans('frontend.menu.subscribers_category') }}">
-                        <i class="fa fa-fw fa-th-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.subscribers_category') }}</span>
+                    <a href="{{ URL::route('admin.category.index') }}"
+                       title="{{ trans('frontend.menu.subscribers_category') }}">
+                        <i class="fa fa-fw fa-th-list"></i> <span
+                            class="menu-item-parent">{{ trans('frontend.menu.subscribers_category') }}</span>
                     </a>
                 </li>
 
@@ -273,20 +291,24 @@ Use search to find needed section.
 
             <li class="">
                 <a href="#">
-                    <i class="fa fa-fw fa-area-chart"></i> <span class="menu-item-parent">{{ trans('frontend.menu.logs') }}</span>
+                    <i class="fa fa-fw fa-area-chart"></i> <span
+                        class="menu-item-parent">{{ trans('frontend.menu.logs') }}</span>
                 </a>
 
                 <ul class="treeview-menu">
 
                     <li {{ Request::is('log*') ? ' class=active' : '' }}>
                         <a href="{{ URL::route('admin.log.index') }}" title="{{ trans('frontend.menu.mailing_log') }}">
-                            <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.mailing_log') }}</span>
+                            <i class="fa fa-fw fa-list"></i> <span
+                                class="menu-item-parent">{{ trans('frontend.menu.mailing_log') }}</span>
                         </a>
                     </li>
 
                     <li {{ Request::is('redirect*') ? ' class=active' : '' }}>
-                        <a href="{{ URL::route('admin.redirect.index') }}" title="{{ trans('frontend.menu.referrens_log') }}">
-                            <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.referrens_log') }}</span>
+                        <a href="{{ URL::route('admin.redirect.index') }}"
+                           title="{{ trans('frontend.menu.referrens_log') }}">
+                            <i class="fa fa-fw fa-list"></i> <span
+                                class="menu-item-parent">{{ trans('frontend.menu.referrens_log') }}</span>
                         </a>
                     </li>
                 </ul>
@@ -296,7 +318,8 @@ Use search to find needed section.
 
                 <li {{  Request::is('settings*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.settings.index') }}" title="{{ trans('frontend.menu.settings') }}">
-                        <i class="fa fa-fw fa-gear"></i> <span class="menu-item-parent">{{ trans('frontend.menu.settings') }}</span>
+                        <i class="fa fa-fw fa-gear"></i> <span
+                            class="menu-item-parent">{{ trans('frontend.menu.settings') }}</span>
                     </a>
                 </li>
 
@@ -306,7 +329,8 @@ Use search to find needed section.
 
                 <li {{ Request::is('users*') ? ' class=active' : '' }}>
                     <a href="{{ URL::route('admin.users.index') }}" title="{{ trans('frontend.menu.users') }}">
-                        <i class="fa fa-fw fa-group"></i> <span class="menu-item-parent">{{ trans('frontend.menu.users') }}</span>
+                        <i class="fa fa-fw fa-group"></i> <span
+                            class="menu-item-parent">{{ trans('frontend.menu.users') }}</span>
                     </a>
                 </li>
 
@@ -314,7 +338,8 @@ Use search to find needed section.
 
             <li {{ Request::is('update*') ? ' class=active' : '' }}>
                 <a href="{{ URL::route('admin.update.index') }}" title="FAQ">
-                    <i class="fa fa-fw fa-refresh"></i> <span class="menu-item-parent">{{ trans('frontend.menu.update') }}</span>
+                    <i class="fa fa-fw fa-refresh"></i> <span
+                        class="menu-item-parent">{{ trans('frontend.menu.update') }}</span>
                 </a>
             </li>
 
@@ -324,18 +349,28 @@ Use search to find needed section.
                 </a>
             </li>
 
-            @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
+            <li class="">
+                <a href="#">
+                    <i class="fa fa-fw fa-bookmark"></i> <span class="menu-item-parent">{{ trans('frontend.menu.miscellaneous') }}</span>
+                </a>
 
-                <li class="">
-                    <a href="#">
-                        <i class="fa fa-fw fa-bookmark"></i> <span class="menu-item-parent">{{ trans('frontend.menu.miscellaneous') }}</span>
-                    </a>
+                <ul class="treeview-menu">
 
-                    <ul class="treeview-menu">
+                    <li {{ Request::is('miscellaneous/subscription_form*') ? ' class=active' : '' }}>
+                        <a href="{{ URL::route('admin.miscellaneous.subscription_form') }}"
+                           title="{{ trans('frontend.menu.subscription_form') }}">
+                            <i class="fa fa-fw fa-list"></i> <span
+                                class="menu-item-parent">{{ trans('frontend.menu.subscription_form') }}</span>
+                        </a>
+                    </li>
+
+                    @if(Helpers::has_permission(Auth::user()->role,'admin|moderator'))
 
                         <li {{ Request::is('miscellaneous/cron_job_list*') ? ' class=active' : '' }}>
-                            <a href="{{ URL::route('admin.miscellaneous.cron_job_list') }}" title="{{ trans('frontend.menu.cron_job_list') }}">
-                                <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">{{ trans('frontend.menu.cron_job_list') }}</span>
+                            <a href="{{ URL::route('admin.miscellaneous.cron_job_list') }}"
+                               title="{{ trans('frontend.menu.cron_job_list') }}">
+                                <i class="fa fa-fw fa-list"></i> <span
+                                    class="menu-item-parent">{{ trans('frontend.menu.cron_job_list') }}</span>
                             </a>
                         </li>
 
@@ -344,11 +379,11 @@ Use search to find needed section.
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent">PHP Info</span>
                             </a>
                         </li>
-                    </ul>
-                </li>
 
-            @endif
+                    @endif
 
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -408,7 +443,9 @@ Use search to find needed section.
 <div class="page-footer">
     <div class="row">
         <div class="col-xs-12 col-sm-6">
-            <p class="txt-color-white">© 2006-{{ date('Y') }} <a  href="http://janicky.com">PHP Newsletter</a> <span class="footer_version">{{ env('VERSION') }}</span>, {{ trans('frontend.str.author') }}</p>
+            <p class="txt-color-white">© 2006-{{ date('Y') }} <a href="http://janicky.com">PHP Newsletter</a>
+                <span class="footer_version">{{ env('VERSION') }}</span>, {{ trans('frontend.str.author') }}
+            </p>
         </div>
 
     </div>
@@ -475,7 +512,7 @@ Use search to find needed section.
 
 <script>
 
-    $(function() {
+    $(function () {
 
         $.ajax({
             cache: false,
@@ -486,15 +523,15 @@ Use search to find needed section.
             },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             dataType: "json",
-            success: function(data){
-                if (data.msg != '' && $.cookie('alertshow') != 'no'){
+            success: function (data) {
+                if (data.msg != '' && $.cookie('alertshow') != 'no') {
                     $('#alert_msg_block').fadeIn('700');
                     $("#alert_warning_msg").append(data.msg);
                 }
             }
         });
 
-        $('ul.dropdown-menu li').on('click', function() {
+        $('ul.dropdown-menu li').on('click', function () {
             $(this).parent().find('li.active').removeClass('active');
             $(this).addClass('active');
 
@@ -518,40 +555,42 @@ Use search to find needed section.
             });
         });
 
-        $('.close').on('click', function(){
+        $('.close').on('click', function () {
             var deleted_block = $(this).parent(),
                 bl_h = deleted_block.outerHeight(),
                 bk_index = deleted_block.index(),
-                next_bl = deleted_block.siblings(':eq('+bk_index+')'),
+                next_bl = deleted_block.siblings(':eq(' + bk_index + ')'),
                 marg = parseInt(deleted_block.css('margin-bottom'));
 
             deleted_block.fadeOut(500);
 
-            setTimeout(function(){
-                $(next_bl).css('margin-top', bl_h+marg);
+            setTimeout(function () {
+                $(next_bl).css('margin-top', bl_h + marg);
                 $(next_bl).animate({
                     marginTop: 0
-                },400);
+                }, 400);
             }, 505);
 
-            setTimeout(function(){
+            setTimeout(function () {
                 deleted_block.remove();
             }, 700);
             return false;
         });
 
-        setTimeout(function(){
-            setTimeout(function(){$('.alert-success').fadeOut('700')},5000);
+        setTimeout(function () {
+            setTimeout(function () {
+                $('.alert-success').fadeOut('700')
+            }, 5000);
         });
     });
 
-    $(document).on( "click", "a.opislink:not(.active)", function() {
+    $(document).on("click", "a.opislink:not(.active)", function () {
         $(this).addClass('active');
         $(this).parent().find('div.opis').slideDown(760);
         return false;
     });
 
-    $(document).on( "click", "a.opislink.active", function() {
+    $(document).on("click", "a.opislink.active", function () {
         $(this).removeClass('active');
         $(this).parent().find('div.opis').slideUp(760);
         return false;

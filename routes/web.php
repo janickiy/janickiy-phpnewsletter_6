@@ -12,14 +12,12 @@
 */
 
 Route::group(['middleware' => ['install']], function () {
-
-    Route::get('test', 'FrontendController@test')->name('frontend.test');
-
     Route::get('pic/{subscriber}_{template}', 'FrontendController@pic')->name('frontend.pic')->where('subscriber', '[0-9]+')->where('template', '[0-9]+');
     Route::get('referral/{ref}/{subscriber}', 'FrontendController@redirectLog')->name('frontend.referral')->where('subscriber', '[0-9]+');
     Route::get('unsubscribe/{subscriber}/{token}', 'FrontendController@unsubscribe')->name('frontend.unsubscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::get('subscribe/{subscriber}/{token}', 'FrontendController@subscribe')->name('frontend.subscribe')->where('subscriber', '[0-9]+')->where('token', '[a-z0-9]+');
     Route::any('form', 'FrontendController@form')->name('frontend.form');
+    Route::any('categories', 'FrontendController@getCategories')->name('frontend.categories');
     Route::post('addsub', 'FrontendController@addSub')->name('frontend.addsub');
     Route::any('ajax', 'AjaxController@action')->name('admin.ajax.action');
 
@@ -123,7 +121,8 @@ Route::group(['middleware' => ['install']], function () {
         });
 
         Route::group(['prefix' => 'miscellaneous'], function () {
-            Route::get('cron_job_list', 'MiscellaneousController@cron_job_list')->name('admin.miscellaneous.cron_job_list')->middleware(['permission:admin|moderator']);
+            Route::get('subscription-form', 'MiscellaneousController@subscription_form')->name('admin.miscellaneous.subscription_form');
+            Route::get('cron-job-list', 'MiscellaneousController@cron_job_list')->name('admin.miscellaneous.cron_job_list')->middleware(['permission:admin|moderator']);
             Route::get('phpinfo', 'MiscellaneousController@phpinfo')->name('admin.miscellaneous.phpinfo')->middleware(['permission:admin|moderator']);
         });
 

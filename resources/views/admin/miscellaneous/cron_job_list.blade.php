@@ -52,7 +52,7 @@
 @endsection
 
 
-@section('js')
+@section('include')
 
 
 @endsection

@@ -19,8 +19,7 @@
                     <span class="fa fa-upload fa-2x"></span> {{ trans('frontend.str.export') }}
                 </a>
                 <a class="btn btn-outline btn-danger btn-lg" title="{{ trans('frontend.str.delete_all_subscribers') }}"
-                   href="{{ URL::route('admin.subscribers.remove_all') }}"
-                   onclick="return confirm('{{ trans('frontend.str.want_to_delete_all_subscribers') }}');">
+                   onclick="confirmation()">
                     <span class="fa fa-trash-o fa-2x"></span> {{ trans('frontend.str.delete_all') }}
                 </a>
             </p>
@@ -219,6 +218,21 @@
                 $('#apply').attr('disabled',false);
             else
                 $('#apply').attr('disabled',true);
+        }
+
+        function confirmation(event) {
+            swal({
+                title: "{{ trans('frontend.str.delete_all_subscribers') }}",
+                text: "{{ trans('frontend.str.want_to_delete_all_subscribers')  }}",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "{{ trans('frontend.str.yes') }}",
+                cancelButtonText: "{{ trans('frontend.str.cancel') }}",
+                closeOnConfirm: false
+            }, function () {
+                window.location.href = "{{ URL::route('admin.subscribers.remove_all') }}";
+            });
         }
 
     </script>

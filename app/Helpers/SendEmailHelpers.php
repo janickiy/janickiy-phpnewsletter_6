@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use PHPMailer\PHPMailer;
-use App\Models\{Attach,Smtp, Customheaders};
+use App\Models\{Attach, Smtp, Customheaders};
 use Illuminate\Support\Facades\Storage;
 
 class SendEmailHelpers
@@ -29,53 +29,61 @@ class SendEmailHelpers
     /**
      * @return mixed
      */
-    public static function getSubject() {
+    public static function getSubject()
+    {
         return self::$subject;
     }
 
-    public static function getToken() {
+    public static function getToken()
+    {
         return self::$token;
     }
 
     /**
      * @return mixed
      */
-    public static function getBody() {
+    public static function getBody()
+    {
         return self::$body;
     }
 
     /**
      * @return mixed
      */
-    public static function getEmail() {
+    public static function getEmail()
+    {
         return self::$email;
     }
 
     /**
      * @return mixed
      */
-    public static function getPrior() {
+    public static function getPrior()
+    {
         return self::$prior;
     }
 
     /**
      * @return string
      */
-    public static function getName() {
+    public static function getName()
+    {
         return self::$name;
     }
 
     /**
      * @return int
      */
-    public static function getTemplateId() {
+    public static function getTemplateId()
+    {
         return self::$templateId;
     }
 
     /**
      * @return int
      */
-    public static function getSubscriberId() {
+    public static function getSubscriberId()
+    {
         return self::$subscriberId;
     }
 
@@ -226,13 +234,7 @@ class SendEmailHelpers
             $m->Priority = 5;
         else $m->Priority = 3;
 
-        if (SettingsHelpers::getSetting('HOW_TO_SEND') != 'smtp') {
-            if (SettingsHelpers::getSetting('SHOW_EMAIL') == 0)
-                $m->From = "noreply@" . StringHelpers::getDomain(SettingsHelpers::getSetting('URL'));
-            else
-                $m->From = SettingsHelpers::getSetting('EMAIL');
-        }
-
+        $m->From = SettingsHelpers::getSetting('EMAIL');
         $m->FromName = SettingsHelpers::getSetting('FROM');
 
         if (SettingsHelpers::getSetting('LIST_OWNER') == '') $m->addCustomHeader("List-Owner: <" . SettingsHelpers::getSetting('LIST_OWNER') . ">");
@@ -245,7 +247,7 @@ class SendEmailHelpers
         $subject = str_replace('%NAME%', $name, $subject);
         $subject = SettingsHelpers::getSetting('RENDOM_REPLACEMENT_SUBJECT') == 1 ? StringHelpers::encodeString($subject) : $subject;
 
-        if (SettingsHelpers::getSetting('CHARSET') != 'utf-8'){
+        if (SettingsHelpers::getSetting('CHARSET') != 'utf-8') {
             $subject = iconv('utf-8', SettingsHelpers::getSetting('CHARSET'), $subject);
         }
 
@@ -257,7 +259,7 @@ class SendEmailHelpers
 
         $m->AddAddress($email);
 
-        if (SettingsHelpers::getSetting('REQUEST_REPLY') == 1 && SettingsHelpers::getSetting('EMAIL') != ''){
+        if (SettingsHelpers::getSetting('REQUEST_REPLY') == 1 && SettingsHelpers::getSetting('EMAIL') != '') {
             $m->addCustomHeader("Disposition-Notification-To: " . SettingsHelpers::getSetting('EMAIL'));
             $m->ConfirmReadingTo = SettingsHelpers::getSetting('EMAIL');
         }
@@ -272,7 +274,7 @@ class SendEmailHelpers
         if (SettingsHelpers::getSetting('URL') != '') $UNSUB = SettingsHelpers::getSetting('URL') . "unsubscribe/" . $subscriberId . "/" . $token;
         $unsublink = str_replace('%UNSUB%', $UNSUB, SettingsHelpers::getSetting('UNSUBLINK'));
 
-        $customheaders  = Customheaders::get();
+        $customheaders = Customheaders::get();
 
         if ($customheaders) {
             foreach ($customheaders as $customheader) {
@@ -288,7 +290,9 @@ class SendEmailHelpers
 
         $url_info = parse_url(SettingsHelpers::getSetting('URL'));
 
-        $msg = preg_replace_callback("/%REFERRAL\:(.+)%/isU", function($matches) { return "%URL_PATH%referral/" . base64_encode($matches[1]) . "/%USERID%"; }, $msg);
+        $msg = preg_replace_callback("/%REFERRAL\:(.+)%/isU", function ($matches) {
+            return "%URL_PATH%referral/" . base64_encode($matches[1]) . "/%USERID%";
+        }, $msg);
         $msg = str_replace('%NAME%', $name, $msg);
         $msg = str_replace('%UNSUB%', $UNSUB, $msg);
         $msg = str_replace('%SERVER_NAME%', $url_info['host'], $msg);
@@ -297,13 +301,11 @@ class SendEmailHelpers
         $msg = SettingsHelpers::getSetting('RANDOM_REPLACEMENT_BODY') == 1 ? StringHelpers::encodeString($msg) : $msg;
 
         if ($attach) {
-            foreach (Attach::where('templateId',$attach)->get() as $f) {
-
+            foreach (Attach::where('templateId', $attach)->get() as $f) {
                 $path = Attach::DIRECTORY . '/' . $f->file_name;
 
                 if (Storage::exists($path)) {
-
-                    $storagePath  = Storage::disk('local')->path($path);
+                    $storagePath = Storage::disk('local')->path($path);
 
                     if (SettingsHelpers::getSetting('CHARSET') != 'utf-8') $f->name = iconv('utf-8', SettingsHelpers::getSetting('CHARSET'), $f->name);
 
@@ -316,7 +318,7 @@ class SendEmailHelpers
         }
 
         if (SettingsHelpers::getSetting('CHARSET') != 'utf-8') $msg = iconv('utf-8', SettingsHelpers::getSetting('CHARSET'), $msg);
-        if (SettingsHelpers::getSetting('CONTENT_TYPE') == 'html'){
+        if (SettingsHelpers::getSetting('CONTENT_TYPE') == 'html') {
             $msg .= $IMG;
         } else {
             $msg = preg_replace('/<br(\s\/)?>/i', "\n", $msg);
@@ -325,8 +327,8 @@ class SendEmailHelpers
 
         $m->Body = $msg;
 
-        if (!$m->Send()){
-            $result =  ['result' => false, 'error' => $m->ErrorInfo];
+        if (!$m->Send()) {
+            $result = ['result' => false, 'error' => $m->ErrorInfo];
 
         } else {
             $result = ['result' => true, 'error' => null];

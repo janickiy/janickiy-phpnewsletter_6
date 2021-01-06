@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Smtp};
 use Illuminate\Support\Facades\Validator;
+use PHPMailer\PHPMailer;
 use URL;
 
 class SmtpController extends Controller
@@ -33,6 +34,7 @@ class SmtpController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws PHPMailer\Exception
      */
     public function store(Request $request)
     {
@@ -45,6 +47,12 @@ class SmtpController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+
+        if ($this->checkConnection($request->host, $request->email, $request->username, $request->password, $request->port, $request->authentication, $request->secure, $request->timeout) === false) {
+            $validator->after(function ($validator) {
+                $validator->errors()->add('connection', trans('message.unable_connect_to_smtp'));
+            });
+        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -73,6 +81,7 @@ class SmtpController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws PHPMailer\Exception
      */
     public function update(Request $request)
     {
@@ -85,6 +94,12 @@ class SmtpController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+
+        if ($this->checkConnection($request->host, $request->email, $request->username, $request->password, $request->port, $request->authentication, $request->secure, $request->timeout) === false) {
+            $validator->after(function ($validator) {
+                $validator->errors()->add('connection', trans('message.unable_connect_to_smtp'));
+            });
+        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -133,19 +148,55 @@ class SmtpController extends Controller
         switch ($request->action) {
             case  0 :
             case  1 :
-
                 Smtp::whereIN('id', $temp)->update(['active' => $request->action]);
-
                 break;
 
             case 2 :
-
                 Smtp::whereIN('id', $temp)->delete();
-
                 break;
         }
 
         return redirect(URL::route('admin.smtp.index'))->with('success', trans('message.actions_completed'));
 
+    }
+
+    /**
+     * @param $host
+     * @param $email
+     * @param $username
+     * @param $password
+     * @param $port
+     * @param $authentication
+     * @param $secure
+     * @param int $timeout
+     * @return bool
+     * @throws PHPMailer\Exception
+     */
+    public function checkConnection($host, $email, $username, $password, $port, $authentication, $secure, $timeout = 5)
+    {
+        $m = new PHPMailer\PHPMailer();
+        $m->isSMTP();
+        $m->Host = $host;
+        $m->Port = $port;
+
+        if ($password) $m->SMTPAuth = true;
+        else
+            $m->SMTPAuth = false;
+
+        $m->SMTPKeepAlive = true;
+        $m->SMTPSecure = $secure;
+        $m->AuthType = $authentication;
+        $m->Username = $username;
+        $m->Password = $password;
+        $m->Timeout = $timeout;
+        $m->From = $email;
+        $m->FromName = $email;
+
+        if ($m->smtpConnect()) {
+            $m->smtpClose();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

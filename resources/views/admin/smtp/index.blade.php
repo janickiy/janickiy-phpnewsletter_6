@@ -135,6 +135,7 @@
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "{{ trans('frontend.msg.yes_remove') }}",
+                        cancelButtonText: "{{ trans('frontend.str.cancel') }}",
                         closeOnConfirm: false
                     },
                     function (isConfirm) {
@@ -146,7 +147,7 @@
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             success: function () {
                                 $("#rowid_" + rowid).remove();
-                                swal("{{ trans('msg.done') }}", "{{ trans('frontend.msg.data_successfully_deleted') }}", "success");
+                                swal("{{ trans('frontend.msg.done') }}", "{{ trans('frontend.msg.data_successfully_deleted') }}", "success");
                             },
                             error: function (xhr, ajaxOptions, thrownError) {
                                 swal("{{ trans('frontend.msg.error_eleting') }}", "{{ trans('frontend.msg.try_again') }}", "error");

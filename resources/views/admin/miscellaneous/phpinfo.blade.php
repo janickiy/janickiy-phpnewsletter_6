@@ -35,7 +35,7 @@
 
 @endsection
 
-@section('js')
+@section('include')
 
     <script>
         $(document).ready(function () {

@@ -148,6 +148,7 @@ return [
         'high' => 'высокая',
         'low' => 'низкая',
         'normal' => 'нормальная',
+        'copy_to_clipboard' => 'Скопировать в буфер обмена',
     ],
     'msg' => [
         'are_you_sure' => 'Вы уверены?',
@@ -289,6 +290,7 @@ return [
         'auth' => 'Авторизация',
         'update' => 'Обновление',
         'expired' => 'Лицензионный ключ истек',
+        'subscription_form' => 'Форма подписки',
     ],
     'menu' => [
         'templates' => 'Шаблоны',
@@ -303,6 +305,7 @@ return [
         'cron_job_list' => 'Crontab',
         'miscellaneous' => 'Разное',
         'update' => 'Обновление',
+        'subscription_form' => 'Форма подписки',
     ],
     'hint' => [
         'template_index' => 'В этом разделе отображается список шаблонов, которые Вы можете использовать для рассылок.',
@@ -335,5 +338,6 @@ return [
         'log_info' => '',
         'expired_index' => '',
         'redirectlog_info' => '',
+        'subscription_form' => '',
     ],
 ];

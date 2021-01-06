@@ -149,6 +149,7 @@ return [
         'high' => 'high',
         'low' => 'low',
         'normal' => 'normal',
+        'copy_to_clipboard' => 'Copy to clipboard',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
@@ -285,6 +286,7 @@ return [
         'auth' => 'Login',
         'update' => 'Update',
         'expired' => 'License Key Expired',
+        'subscription_form' => 'Форма подписки',
     ],
     'menu' => [
         'templates' => 'Templates',
@@ -299,6 +301,7 @@ return [
         'cron_job_list' => 'Ccron job list',
         'miscellaneous' => 'Miscellaneous',
         'update' => 'Update',
+        'subscription_form' => 'Subscription form',
     ],
     'hint' => [
         'template_index' => 'This section displays a list of templates that you can use for newsletters.',
@@ -331,5 +334,6 @@ return [
         'log_info' => '',
         'expired_index' => '',
         'redirectlog_info' => '',
+        'subscription_form' => '',
     ],
 ];
