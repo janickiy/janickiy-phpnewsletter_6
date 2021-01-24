@@ -234,7 +234,7 @@ class SendEmailHelpers
             $m->Priority = 5;
         else $m->Priority = 3;
 
-        $m->From = SettingsHelpers::getSetting('EMAIL');
+        if (SettingsHelpers::getSetting('HOW_TO_SEND') != 'smtp') $m->From = SettingsHelpers::getSetting('EMAIL');
         $m->FromName = SettingsHelpers::getSetting('FROM');
 
         if (SettingsHelpers::getSetting('LIST_OWNER') == '') $m->addCustomHeader("List-Owner: <" . SettingsHelpers::getSetting('LIST_OWNER') . ">");
