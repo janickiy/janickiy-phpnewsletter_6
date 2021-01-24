@@ -234,7 +234,7 @@ class SendEmailHelpers
             $m->Priority = 5;
         else $m->Priority = 3;
 
-        if (SettingsHelpers::getSetting('HOW_TO_SEND') != 'smtp') $m->From = SettingsHelpers::getSetting('EMAIL');
+        $m->From = SettingsHelpers::getSetting('EMAIL');
         $m->FromName = SettingsHelpers::getSetting('FROM');
 
         if (SettingsHelpers::getSetting('LIST_OWNER') == '') $m->addCustomHeader("List-Owner: <" . SettingsHelpers::getSetting('LIST_OWNER') . ">");
@@ -255,7 +255,7 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('SLEEP') > 0) sleep(SettingsHelpers::getSetting('SLEEP'));
         if (SettingsHelpers::getSetting('ORGANIZATION') != '') $m->addCustomHeader("Organization: " . SettingsHelpers::getSetting('ORGANIZATION'));
-        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img alt="" border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
+        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img alt="" border="0" src="' . SettingsHelpers::getSetting('URL') . 'pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
 
         $m->AddAddress($email);
 
