@@ -25,6 +25,9 @@ class SendEmailHelpers
 
     private static $token = '';
 
+    private static $tracking = true;
+
+    private static $unsub = true;
 
     /**
      * @return mixed
@@ -160,6 +163,24 @@ class SendEmailHelpers
     }
 
     /**
+     * @param $tracking
+     * @return mixed
+     */
+    public static function setTracking($tracking)
+    {
+        return self::$tracking = $tracking;
+    }
+
+    /**
+     * @param $unsub
+     * @return mixed
+     */
+    public static function setUnsub($unsub)
+    {
+        return self::$unsub = $unsub;
+    }
+
+    /**
      * @param $attach
      * @return bool
      * @throws PHPMailer\Exception
@@ -237,7 +258,7 @@ class SendEmailHelpers
         if (SettingsHelpers::getSetting('HOW_TO_SEND') != 'smtp') $m->From = SettingsHelpers::getSetting('EMAIL');
         $m->FromName = SettingsHelpers::getSetting('FROM');
 
-        if (SettingsHelpers::getSetting('LIST_OWNER') == '') $m->addCustomHeader("List-Owner: <" . SettingsHelpers::getSetting('LIST_OWNER') . ">");
+        if (SettingsHelpers::getSetting('LIST_OWNER') != '') $m->addCustomHeader("List-Owner: <" . SettingsHelpers::getSetting('LIST_OWNER') . ">");
         if (SettingsHelpers::getSetting('RETURN_PATH') != '') $m->addCustomHeader("Return-Path: <" . SettingsHelpers::getSetting('RETURN_PATH') . ">");
         if (SettingsHelpers::getSetting('CONTENT_TYPE') == 'html')
             $m->isHTML(true);
@@ -255,7 +276,6 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('SLEEP') > 0) sleep(SettingsHelpers::getSetting('SLEEP'));
         if (SettingsHelpers::getSetting('ORGANIZATION') != '') $m->addCustomHeader("Organization: " . SettingsHelpers::getSetting('ORGANIZATION'));
-        if (SettingsHelpers::getSetting('URL') != '') $IMG = '<img alt="" border="0" src="' . (StringHelpers::getScheme(SettingsHelpers::getSetting('URL'))) . '://' . StringHelpers::getDomain(SettingsHelpers::getSetting('URL')) . '/pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
 
         $m->AddAddress($email);
 
@@ -271,22 +291,19 @@ class SendEmailHelpers
         elseif (SettingsHelpers::getSetting('PRECEDENCE') == 'list')
             $m->addCustomHeader("Precedence: list");
 
-        if (SettingsHelpers::getSetting('URL') != '') $UNSUB = SettingsHelpers::getSetting('URL') . "unsubscribe/" . $subscriberId . "/" . $token;
+        $UNSUB = SettingsHelpers::getSetting('URL') . "unsubscribe/" . $subscriberId . "/" . $token;
         $unsublink = str_replace('%UNSUB%', $UNSUB, SettingsHelpers::getSetting('UNSUBLINK'));
 
-        $customheaders = Customheaders::get();
-
-        if ($customheaders) {
-            foreach ($customheaders as $customheader) {
-                $m->addCustomHeader($customheader->name . ": " . $customheader->value);
-            }
+        if (self::$unsub) {
+            if (SettingsHelpers::getSetting('SHOW_UNSUBSCRIBE_LINK') == 1 && SettingsHelpers::getSetting('UNSUBLINK') != '') $body .= "<br><br>" . $unsublink;
+            $m->addCustomHeader("List-Unsubscribe: " . $UNSUB);
         }
 
-        if (SettingsHelpers::getSetting('SHOW_UNSUBSCRIBE_LINK') == 1 && SettingsHelpers::getSetting('UNSUBLINK') != '') {
-            $msg = $body . "<br><br>" . $unsublink;
-            $m->addCustomHeader("List-Unsubscribe: " . $UNSUB);
-        } else
-            $msg = $body;
+        foreach (Customheaders::get() as $customheader) {
+            $m->addCustomHeader($customheader->name . ": " . $customheader->value);
+        }
+
+        $msg = $body;
 
         $url_info = parse_url(SettingsHelpers::getSetting('URL'));
 
@@ -319,7 +336,10 @@ class SendEmailHelpers
 
         if (SettingsHelpers::getSetting('CHARSET') != 'utf-8') $msg = iconv('utf-8', SettingsHelpers::getSetting('CHARSET'), $msg);
         if (SettingsHelpers::getSetting('CONTENT_TYPE') == 'html') {
-            $msg .= $IMG;
+            if (self::$tracking) {
+                $IMG = '<img alt="" border="0" src="' . SettingsHelpers::getSetting('URL') . 'pic/' . $subscriberId . '_' . $templateId . '" width="1" height="1">';
+                $msg .= $IMG;
+            }
         } else {
             $msg = preg_replace('/<br(\s\/)?>/i', "\n", $msg);
             $msg = StringHelpers::removeHtmlTags($msg);
@@ -329,7 +349,6 @@ class SendEmailHelpers
 
         if (!$m->Send()) {
             $result = ['result' => false, 'error' => $m->ErrorInfo];
-
         } else {
             $result = ['result' => true, 'error' => null];
         }
