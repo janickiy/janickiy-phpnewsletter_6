@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\StringHelpers;
-use Carbon\Carbon;
+use App\Helpers\{SendEmailHelpers, StringHelpers, SettingsHelpers};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\{ReadySent, Redirect, Schedule, Subscribers, Category, Subscriptions};
+use App\Models\{ReadySent, Redirect, Subscribers, Category, Subscriptions};
 use ImageCreateTrueColor;
 
 class FrontendController extends Controller
@@ -64,10 +63,14 @@ class FrontendController extends Controller
         if (!$subscriber) abort(404);
         if ($subscriber->token != $token) abort(400);
 
+        $email = $subscriber->email;
+
         $subscriber->active = 0;
         $subscriber->save();
 
-        return view('frontend.unsubscribe');
+        $msg = str_replace('%EMAIL%', $email, trans('frontend.str.address_has_been_deleted'));
+
+        return view('frontend.unsubscribe', compact('msg'));
     }
 
     /**
@@ -100,7 +103,8 @@ class FrontendController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return false|string
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     public function addSub(Request $request)
     {
@@ -117,13 +121,49 @@ class FrontendController extends Controller
                 'msg' => $validator->messages()]);
         }
 
-        $id = Subscribers::create(array_merge($request->all(), ['active' => 1, 'token' => StringHelpers::token()]))->id;
+        $token = StringHelpers::token();
 
-        if ($request->categoryId && $id) {
-            foreach ($request->categoryId as $categoryId) {
-                if (is_numeric($categoryId)) {
-                    Subscriptions::create(['subscriberId' => $id, 'categoryId' => $categoryId]);
-                }
+        $id = Subscribers::create(array_merge($request->all(), ['active' => SettingsHelpers::getSetting('REQUIRE_SUB_CONFIRMATION') == 1 ? 0 : 1, 'token' => $token]))->id;
+
+        if ($id) {
+            if (SettingsHelpers::getSetting('REQUIRE_SUB_CONFIRMATION') == 1) {
+                SendEmailHelpers::setSubject(SettingsHelpers::getSetting('SUBJECT_TEXT_CONFIRM'));
+
+                $CONFIRM = SettingsHelpers::getSetting('URL') . "subscribe/" . $id . "/" . $token;
+                $msg = str_replace(array("\r\n", "\r", "\n"), '<br>', SettingsHelpers::getSetting('TEXT_CONFIRMATION'));
+                $msg = str_replace('%CONFIRM%', $CONFIRM, $msg);
+
+                SendEmailHelpers::setBody($msg);
+                SendEmailHelpers::setEmail($request->email);
+                SendEmailHelpers::setToken($token);
+                SendEmailHelpers::setSubscriberId($id);
+                SendEmailHelpers::setName($request->name);
+                SendEmailHelpers::setUnsub(false);
+                SendEmailHelpers::setTracking(false);
+                SendEmailHelpers::sendEmail();
+            }
+
+            if (SettingsHelpers::getSetting('NEW_SUBSCRIBER_NOTIFY') == 1) {
+                $subject = trans('frontend.str.notification_newuser');
+                $subject = str_replace('%SITE%', $_SERVER['SERVER_NAME'], $subject);
+                $msg = trans('frontend.str.notification_newuser') . "\nName: " . $request->name . " \nE-mail: " . $request->email . "\n";
+                $msg = str_replace('%SITE%', $_SERVER['SERVER_NAME'], $msg);
+
+                SendEmailHelpers::setSubject($subject);
+                SendEmailHelpers::setBody($msg);
+                SendEmailHelpers::setEmail(SettingsHelpers::getSetting('EMAIL'));
+                SendEmailHelpers::setName(SettingsHelpers::getSetting('FROM'));
+                SendEmailHelpers::setTracking(false);
+                SendEmailHelpers::setUnsub(false);
+                SendEmailHelpers::sendEmail();
+            }
+
+            if ($request->categoryId) {
+                 foreach ($request->categoryId as $categoryId) {
+                     if (is_numeric($categoryId)) {
+                         Subscriptions::create(['subscriberId' => $id, 'categoryId' => $categoryId]);
+                     }
+                 }
             }
         }
 
@@ -132,7 +172,7 @@ class FrontendController extends Controller
             'msg' => trans('frontend.msg.subscription_is_formed')
         ]);
     }
-	
+
 	 /**
      * @return false|string
      */
