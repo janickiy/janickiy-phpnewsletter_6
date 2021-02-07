@@ -74,11 +74,24 @@ class DataTableController extends Controller
      */
     public function getSubscribers()
     {
-        $row = Subscribers::query();
+        $row = Subscribers::selectRaw('subscribers.*')
+            ->leftJoin('subscriptions', 'subscribers.id', '=', 'subscriptions.subscriberId')
+            ->distinct();
 
         return Datatables::of($row)
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" class="check" value="' . $row->id . '" name="activate[]">';
+            })
+
+            ->addColumn('categories', function ($row) {
+
+                $categories = [];
+
+                foreach ($row->subscriptions as $subscription) {
+                    $categories[] = $subscription->category->name;
+                }
+
+                return implode(', ', $categories);
             })
 
             ->editColumn('active', function ($row) {

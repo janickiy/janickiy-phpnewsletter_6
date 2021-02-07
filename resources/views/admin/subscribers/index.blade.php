@@ -58,6 +58,7 @@
                             </th>
                             <th>{{ trans('frontend.str.name') }}</th>
                             <th>E-mail</th>
+                            <th>{{ trans('frontend.str.category') }}</th>
                             <th>{{ trans('frontend.str.status') }}</th>
                             <th>{{ trans('frontend.str.added') }}</th>
                             <th width="20px">{{ trans('frontend.str.action') }}</th>
@@ -175,6 +176,7 @@
                     {data: 'checkbox', name: 'checkbox', orderable: false, searchable: false},
                     {data: 'name', name: 'name'},
                     {data: 'email', name: 'email'},
+                    {data: 'categories', name: 'categories', orderable: false, searchable: false},
                     {data: 'active', name: 'active', searchable: false},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}

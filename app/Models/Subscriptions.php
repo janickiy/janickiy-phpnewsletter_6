@@ -16,4 +16,20 @@ class Subscriptions extends Model
         'categoryId'
 	];
 
+    /**
+     * @return mixed
+     */
+	public function subscriber()
+    {
+        return $this->hasOne(Subscribers::class,'id','subscriberId');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function category()
+    {
+        return $this->hasOne(Category::class,'id','categoryId');
+    }
+
 }

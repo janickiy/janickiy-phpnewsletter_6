@@ -82,7 +82,7 @@ return [
         'subscription_activation' => 'Subscription activation',
         'subscription_activation_was_successful' => 'Thank you, subscription activation was successful!',
         'unsubscribe' => 'Unsubscribe from a subscription',
-        'address_has_been_deleted' => 'Mailing to this email address has been deleted',
+        'address_has_been_deleted' => 'Mailing to email address %EMAIL% has been deleted',
         'sendmail_path' => 'Sendmail path',
         'subscribe' => 'subscribe',
         'unsent' => 'Unsent',
@@ -150,6 +150,7 @@ return [
         'low' => 'low',
         'normal' => 'normal',
         'copy_to_clipboard' => 'Copy to clipboard',
+        'notification_newuser' => 'A new Subscriber was registered on your site %SITE%',
     ],
     'msg' => [
         'are_you_sure' => 'Are you sure?',
