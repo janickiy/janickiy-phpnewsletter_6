@@ -30,7 +30,7 @@
                     <h3 class="font-xl">
                         <strong>
                             <i class="fa fa-fw fa-warning fa-lg text-warning"></i>
-                            {{ trans('frontend.str.address_has_been_deleted') }}
+                            {!! $msg !!}
                         </strong>
                     </h3>
                 </div>

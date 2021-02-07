@@ -6,7 +6,7 @@
 </div>
 
 @if (\App\Helpers\StringHelpers::expiredDayAlert())
-    <div class="alert alert-info">
+    <div class="alert alert-warning">
         <i class="fa-fw fa fa-warning"></i>
         {!! \App\Helpers\StringHelpers::expiredDayAlert() !!}
     </div>
