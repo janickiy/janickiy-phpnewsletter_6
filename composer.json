@@ -12,7 +12,7 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "ixudra/curl": "6.*",
-        "laravel/framework": "6.0.*",
+        "laravel/framework": "6.20.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "6.0.*",
         "laravelcollective/remote": "^6.0",
