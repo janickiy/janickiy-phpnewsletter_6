@@ -212,6 +212,7 @@
 
         $(document).ready(function () {
             CKEDITOR.replace('body', {height: '380px', startupFocus: true});
+            CKEDITOR.config.allowedContent = true;
 
             $(document).on("click", ".remove_attach", function () {
                 var idAttach = $(this).attr('data-num');
